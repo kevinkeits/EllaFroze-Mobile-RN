@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import Help from './src/pages/Help';
 import Home from './src/pages/Home';
-import Profile from './src/pages/Profile';
+import Profile from './src/pages/Account';
 import Transaction from './src/pages/Transaction';
 import Router from './src/router';
 

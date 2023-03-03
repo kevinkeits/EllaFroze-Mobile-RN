@@ -1,7 +1,7 @@
 import Home from './Home'
 import Help from './Help'
 import Transaction from './Transaction'
-import Profile from './Profile'
+import Account from './Account'
 import Splash from './Splash'
 
-export {Home, Help, Transaction, Profile, Splash}
+export {Home, Help, Transaction, Account, Splash}

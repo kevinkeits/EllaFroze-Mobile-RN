@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Button } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import Home from '../pages/Home';
@@ -6,14 +6,38 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import Help from '../pages/Help';
 // import Profile from '../pages/Profile';
 // import Splash from '../pages/Splash';
-import {Home, Transaction, Help, Profile, Splash} from '../pages';
+import {Home, Transaction, Help, Account, Splash} from '../pages';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { HelpIcon, HomeIcon, ProfileIcon, TransactionIcon } from '../assets/icons';
+import { BackIcon, HelpIcon, HomeIcon, ProfileIcon, TransactionIcon } from '../assets/icons';
+import AccountAddress from '../pages/Account/components/account_address/AccountAddress';
+import AccountDetail from '../pages/Account/components/account_detail/AccountDetail';
 
 
   
 const Tab = createBottomTabNavigator();
 const RootStack = createNativeStackNavigator();
+const AccountStack = createNativeStackNavigator();
+
+
+const AccountApp = () => {
+  return(
+<AccountStack.Navigator initialRouteName='Account'>
+  <AccountStack.Screen name='Account' component={Account}/>
+  <AccountStack.Screen name='AccountDetail' component={AccountDetail} options={{
+          headerBackTitle: null,
+          headerRight: () => (
+            <Button
+              onPress={() => alert('This is a button!')}
+              title="Info"
+              color="black"
+            />
+          ),
+        }}/>
+  <AccountStack.Screen name='AccountAddress' component={AccountAddress}/>
+</AccountStack.Navigator>
+)
+}
+
 
 const MainApp = () => {
   return (
@@ -57,9 +81,7 @@ const MainApp = () => {
         headerTitleStyle: {
           fontWeight: 'bold',
         },}}/>
-      <Tab.Screen name='Profile' component={Profile} options={{title: "Profile", headerStyle: {
-          backgroundColor: '#FA0000',
-        },
+      <Tab.Screen name='AccountApp' component={AccountApp} options={{title: "AccountApp", headerShown: false,
         tabBarIcon: ({color, size}) => (
           <ProfileIcon color={color} size={size}  />
         ),
@@ -84,6 +106,7 @@ const Router = () => {
             fontWeight: 'bold',
           },}}/>
            <RootStack.Screen name='Splash' component={Splash} options={{title: "Splash", headerShown: false}}/>
+           {/* <RootStack.Screen name='AccountApp' component={AccountApp} options={{title: "AccountApp", headerShown: false}}/> */}
       </RootStack.Navigator>
   )
 }
