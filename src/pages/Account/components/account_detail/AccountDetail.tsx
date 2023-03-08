@@ -6,21 +6,27 @@ const AccountDetail = () => {
     <SafeAreaView>
     <View style={{ marginHorizontal: 10, marginTop: 10}}>
       <Text style={{fontWeight:"bold"}}>Nama Lengkap</Text>
-      <View style={{borderColor:"black", borderWidth: 1, alignItems: "center", justifyContent:"center", paddingVertical:8, marginVertical:5, backgroundColor:"white", borderRadius:6}}>
+      <TextInput 
+      placeholder='Rifqi Lazuardi'
+      style={{borderColor:"black", fontWeight:'bold', borderBottomWidth:1, alignItems: "center", justifyContent:"center", padding:8, marginVertical:5, borderRadius:6}}
+      />
+      {/* <View style={{borderColor:"black", borderWidth: 1, alignItems: "center", justifyContent:"center", paddingVertical:8, marginVertical:5, backgroundColor:"white", borderRadius:6}}>
         <Text style={{fontWeight:"500"}}>Rifqi Raihan Lazuardi</Text>
-      </View>
+      </View> */}
     </View>
     <View style={{ marginHorizontal: 10, marginTop: 10}}>
       <Text style={{fontWeight:"bold"}}>No Handphone</Text>
-      <View style={{borderColor:"black", borderWidth: 1, alignItems: "center", justifyContent:"center", paddingVertical:8, marginVertical:5, backgroundColor:"white", borderRadius:6}}>
-        <Text style={{fontWeight:"500"}}>0812123213</Text>
-      </View>
+      <TextInput 
+      placeholder='081806877801'
+      style={{borderColor:"black", fontWeight:'bold', borderBottomWidth:1, alignItems: "center", justifyContent:"center", padding:8, marginVertical:5, borderRadius:6}}
+      />
     </View>
     <View style={{ marginHorizontal: 10, marginTop: 10}}>
       <Text style={{fontWeight:"bold"}}>Email</Text>
-      <View style={{borderColor:"black", borderWidth: 1, alignItems: "center", justifyContent:"center", paddingVertical:8, marginVertical:5, backgroundColor:"white", borderRadius:6}}>
-        <Text style={{fontWeight:"500"}}>wirosableng@gmail.com</Text>
-      </View>
+      <TextInput 
+      placeholder='wirosableng@gmail.com'
+      style={{borderColor:"black", fontWeight:'bold', borderBottomWidth:1, alignItems: "center", justifyContent:"center", padding:8, marginVertical:5, borderRadius:6}}
+      />
     </View>
     <View style={{ marginHorizontal: 10, marginTop: 13}}>
       {/* <Button title='SIMPAN' onPress={()=> alert("TERSIMPAN")}/> */}

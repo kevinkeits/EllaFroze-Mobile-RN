@@ -11,6 +11,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { BackIcon, HelpIcon, HomeIcon, ProfileIcon, TransactionIcon } from '../assets/icons';
 import AccountAddress from '../pages/Account/components/account_address/AccountAddress';
 import AccountDetail from '../pages/Account/components/account_detail/AccountDetail';
+import Login from '../pages/Login';
 
 
   
@@ -97,6 +98,8 @@ const MainApp = () => {
 const Router = () => {
   return (
     <RootStack.Navigator initialRouteName='Splash'>
+        <RootStack.Screen name='Splash' component={Splash} options={{title: "Splash", headerShown: false}}/>
+        <RootStack.Screen name='Login' component={Login} options={{title: "Login", headerShown: false}}/>
         <RootStack.Screen name='MainApp' component={MainApp} options={{title: "Home", headerShown: false,
           // tabBarIcon: ({color, size}) => (
           //   <HomeIcon color={color} size={size}  />
@@ -105,8 +108,6 @@ const Router = () => {
           headerTitleStyle: {
             fontWeight: 'bold',
           },}}/>
-           <RootStack.Screen name='Splash' component={Splash} options={{title: "Splash", headerShown: false}}/>
-           {/* <RootStack.Screen name='AccountApp' component={AccountApp} options={{title: "AccountApp", headerShown: false}}/> */}
       </RootStack.Navigator>
   )
 }

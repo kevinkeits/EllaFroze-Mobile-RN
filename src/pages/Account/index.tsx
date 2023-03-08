@@ -24,7 +24,7 @@ export default function Account() {
       </View>
       <View style={{backgroundColor:"#148D2E", marginHorizontal:10, marginTop:10, borderRadius:10}}>
         <TouchableOpacity style={{flexDirection:"row", gap:10, paddingVertical:15, marginLeft:30}}
-       onPress={()=>{navigation.navigate('AccountAddress')}}
+       onPress={()=>{navigation.navigate('Login')}}
        >
           <HistoryIcon/>
           <Text style={{fontWeight:"700"}}>Riwayat Pesanan</Text>

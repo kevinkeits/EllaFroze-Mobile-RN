@@ -10,7 +10,7 @@ const Splash = () => {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
     useEffect(()=>{
         setTimeout(()=>{
-            navigation.navigate("MainApp");
+            navigation.navigate("Login");
         }, 3000)
     })
   return (
