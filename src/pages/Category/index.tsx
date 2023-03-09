@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Image } from 'react-native';
+import ProductCards from '../Home/components/ProductCards/ProductCards';
+import TopCategory from './components/TopCategory/TopCategory';
 
 const Category = () => {
   const [searchText, setSearchText] = useState('');
@@ -10,17 +12,7 @@ const Category = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
-        <TextInput
-          style={styles.searchBar}
-          onChangeText={handleSearchTextChange}
-          value={searchText}
-          placeholder="Search"
-        />
-      </View>
-      <Text style={styles.title}>Welcome to My App</Text>
-      {/* Add your content here */}
+      <ProductCards/>
     </View>
   );
 };
@@ -30,7 +22,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingTop: 40,
   },
   header: {
     flexDirection: 'row',

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button } from 'react-native'
+import { StyleSheet, Text,TextInput, View, Button, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import Home from '../pages/Home';
@@ -8,16 +8,21 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import Splash from '../pages/Splash';
 import {Home, Transaction, Help, Account, Splash} from '../pages';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { BackIcon, HelpIcon, HomeIcon, ProfileIcon, TransactionIcon } from '../assets/icons';
+import { BackIcon, CartIcon, HelpIcon, HomeIcon, ProfileIcon, TransactionIcon } from '../assets/icons';
 import AccountAddress from '../pages/Account/components/account_address/AccountAddress';
 import AccountDetail from '../pages/Account/components/account_detail/AccountDetail';
 import Login from '../pages/Login';
+import HomeHeader from '../pages/Home/components/HomeHeader/HomeHeader';
+import Category from '../pages/Category';
+import { useNavigation } from '@react-navigation/native';
 
 
   
 const Tab = createBottomTabNavigator();
 const RootStack = createNativeStackNavigator();
 const AccountStack = createNativeStackNavigator();
+const HomeStack = createNativeStackNavigator();
+
 
 
 const AccountApp = () => {
@@ -51,16 +56,15 @@ const MainApp = () => {
     tabBarInactiveTintColor: 'black',  
   }}
     >
-      <Tab.Screen name='Home' component={Home} options={{title: "Home", headerShown: false,
+      <Tab.Screen name='Home' component={Home} options={{title: "Home", headerTitle: () => <HomeHeader/>, headerStyle: {
+          backgroundColor: '#FA0000',
+          height: 120,
+        },
         tabBarIcon: ({color, size}) => (
           <HomeIcon color={color} size={size}  />
         ),
-        tabBarActiveBackgroundColor: "#BA0000",
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },}}/>
-        <Tab.Screen name='Transaction' component={Transaction} options={{title: "Transaction", headerStyle: {
+        tabBarActiveBackgroundColor: "#BA0000",}}/>
+        <Tab.Screen name='Transaction' component={Transaction} options={{title: "Transaction", headerTitle: () => <HomeHeader/>, headerStyle: {
           backgroundColor: '#FA0000',
         },
         tabBarIcon: ({color, size}) => (
@@ -96,6 +100,7 @@ const MainApp = () => {
 } 
 
 const Router = () => {
+  const navigation = useNavigation();
   return (
     <RootStack.Navigator initialRouteName='Splash'>
         <RootStack.Screen name='Splash' component={Splash} options={{title: "Splash", headerShown: false}}/>
@@ -108,10 +113,61 @@ const Router = () => {
           headerTitleStyle: {
             fontWeight: 'bold',
           },}}/>
+          <RootStack.Screen name='Category' component={Category} options={{
+            title: "Category",
+            headerTitle:()=>
+            <TextInput
+          style={styles.searchBar}
+          // onChangeText={handleSearchTextChange}
+          // value={searchText}
+          // placeholder="Search"
+        />,
+            headerRight:()=> <CartIcon/>,
+            headerLeft:()=> <TouchableOpacity onPress={()=>navigation.goBack()}><BackIcon /></TouchableOpacity>,
+            headerStyle:{
+              backgroundColor:"red",
+            }
+            }}/>
+
       </RootStack.Navigator>
   )
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    // paddingTop: 40,
+  },
+  header: {
+    flexDirection: 'row',
+    backgroundColor: 'rgba(255, 203, 0, 0.2);',
+    alignItems: 'center',
+    width:'100%',
+    height:'10%',
+    marginBottom: 20,
+  },
+  logo: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
+  },
+  searchBar: {
+    height: 30,
+    borderColor: 'gray',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingLeft: 10,
+    width: '83%'
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+});
+
 
 export default Router
 
-const styles = StyleSheet.create({})

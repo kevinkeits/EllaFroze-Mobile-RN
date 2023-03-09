@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView } from 'react-native';
 import { CartIcon, LocationIcon, MessageIcon } from '../../assets/icons';
+import ImageCarousel from './components/Carousel';
 import Carousel from './components/Carousel';
+import HomeCategory from './components/HomeCategory/HomeCategory';
+import HomeCharts from './components/HomeCharts/HomeCharts';
+import ProductCards from './components/ProductCards/ProductCards';
 
 const items= [
   {
@@ -15,53 +19,42 @@ const items= [
 ]
 
 const HomePage = () => {
-  const [searchText, setSearchText] = useState('');
-
-  const handleSearchTextChange = (text: string) => {
-    setSearchText(text);
-  };
+ 
+  const images = [
+    'https://source.unsplash.com/featured/?nature',
+    'https://source.unsplash.com/featured/?water',
+    'https://source.unsplash.com/featured/?mountain',
+  ];
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
-        <View style={{width:'100%'}}>
-          <View style={{flexDirection:'row', marginVertical:2, justifyContent:'space-between', width:300}}>
-            <View style={{flexDirection:'row', gap:8}}>
-            <LocationIcon  />
-            <Text>Cabang</Text>
-            </View>
-            <View style={{flexDirection:'row', gap:10}}>
-              <TouchableOpacity>
-                <MessageIcon/>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <CartIcon />
-              </TouchableOpacity>
-            </View>
-
-          </View>
-        
-        <TextInput
-          style={styles.searchBar}
-          onChangeText={handleSearchTextChange}
-          value={searchText}
-          placeholder="Search"
-        />
+      <ScrollView>
+        <View style={{marginTop:10}}>
+          <Text style={{fontSize:16, fontWeight:"bold", marginLeft:3}}>Produk Terlaris</Text>
+          <HomeCharts/>
         </View>
-      </View>
-      {/* <Carousel items={items}/> */}
-      {/* Add your content here */}
+        <View style={{marginTop:10}}>
+          <Text style={{fontSize:16, fontWeight:"bold", marginLeft:3}}>Diskon</Text>
+          <HomeCharts/>
+        </View>
+        <View style={{marginTop:10}}>
+        <HomeCategory/>
+        </View>
+      
+      <ProductCards/>
+      </ScrollView>
     </View>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingTop: 40,
+    // paddingTop: 40,
   },
   header: {
     flexDirection: 'row',
