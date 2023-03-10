@@ -12,7 +12,7 @@ const Login: React.FC<Props> = ({ navigation }) => {
     const [password, setPassword] = useState('');
 
     const handleLoginPress = () => {
-        if (email === '123@gmail.com' && password === '123') {
+        if (email === '123' && password === '123') {
             alert('Login Success!');
           navigation.navigate('MainApp');
         } else {

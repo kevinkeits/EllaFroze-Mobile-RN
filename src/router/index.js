@@ -15,6 +15,7 @@ import Login from '../pages/Login';
 import HomeHeader from '../pages/Home/components/HomeHeader/HomeHeader';
 import Category from '../pages/Category';
 import { useNavigation } from '@react-navigation/native';
+import ProductDetail from '../pages/ProductDetail/ProductDetail';
 
 
   
@@ -120,8 +121,23 @@ const Router = () => {
           style={styles.searchBar}
           // onChangeText={handleSearchTextChange}
           // value={searchText}
-          // placeholder="Search"
+          placeholder="Search"
         />,
+            headerRight:()=> <CartIcon/>,
+            headerLeft:()=> <TouchableOpacity onPress={()=>navigation.goBack()}><BackIcon /></TouchableOpacity>,
+            headerStyle:{
+              backgroundColor:"red",
+            }
+            }}/>
+          <RootStack.Screen name='ProductDetail' component={ProductDetail} options={{
+            title: "Product Detail",
+            headerTitle:()=>
+            <TextInput
+            style={styles.searchBar}
+            // onChangeText={handleSearchTextChange}
+            // value={searchText}
+            placeholder="Search"
+            />,
             headerRight:()=> <CartIcon/>,
             headerLeft:()=> <TouchableOpacity onPress={()=>navigation.goBack()}><BackIcon /></TouchableOpacity>,
             headerStyle:{

@@ -1,10 +1,19 @@
 import { View, Text, Image, TouchableOpacity, ScrollView, FlatList, Button } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 
 
 
 const ProductCards = () => {
+    const [count, setCount] = useState(0);
+
+  const incrementCount = () => {
+    setCount(count + 1);
+  };
+
+  const decrementCount = () => {
+    setCount(count - 1);
+  };
     const navigation = useNavigation();
    const data = [{
         id: '1',
@@ -87,7 +96,7 @@ const ProductCards = () => {
         data={data}
         renderItem={({item}) => 
  
-        <TouchableOpacity style={{width:180, height:240, backgroundColor:"white", borderWidth:5, borderColor:"background: rgba(255, 203, 0, 0.2)",  margin:8}}>
+        <TouchableOpacity style={{width:180, height:240, backgroundColor:"white", borderWidth:5, borderColor:"background: rgba(255, 203, 0, 0.2)",  margin:8}} onPress={()=>{navigation.navigate('ProductDetail')}}>
             <View style={{alignItems:"center"}}>
             <Image source={item.uri} />
             </View>
