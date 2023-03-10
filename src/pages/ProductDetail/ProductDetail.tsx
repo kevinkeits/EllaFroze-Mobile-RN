@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView } from 'react-native';
 import { DetailProduct1 } from '../../assets';
@@ -8,6 +9,7 @@ import { CartIcon, LocationIcon, MessageIcon } from '../../assets/icons';
 
 
 const ProductDetail = () => {
+  const navigation = useNavigation();
 const [count, setCount] = useState(0);
 
   const incrementCount = () => {
@@ -52,7 +54,7 @@ const [count, setCount] = useState(0);
             </TouchableOpacity>
         </View>
         
-            <TouchableOpacity style={{backgroundColor:"#148D2E", paddingVertical:14, alignItems:"center", marginTop:8, width:370, borderRadius:7}}>
+            <TouchableOpacity style={{backgroundColor:"#148D2E", paddingVertical:14, alignItems:"center", marginTop:8, width:370, borderRadius:7}} onPress={()=>{navigation.navigate('Cart')}}>
                 <Text style={{color:"white", fontWeight:"bold"}}>MASUKKAN KE KERANJANG</Text>
             </TouchableOpacity>
         
