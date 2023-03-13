@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import { Button, StyleSheet, Text, TouchableOpacity, View, Image, } from 'react-native';
-import Clipboard from '@react-native-clipboard/clipboard';
+// import Clipboard from '@react-native-clipboard/clipboard';
 import { RootStackParams } from '../../../App';
 import { BCALogo, SuccessImage } from '../../assets';
 import { AccountIcon, AddressIcon, ChatIcon, HistoryIcon } from '../../assets/icons';
@@ -17,10 +17,10 @@ export default function Payment() {
 
 const textToCopy: string = 'Hello World!';
 
-const copyToClipboard = (): void => {
-  Clipboard.setString(textToCopy);
-  alert('Text copied to clipboard');
-};
+// const copyToClipboard = (): void => {
+//   Clipboard.setString(textToCopy);
+//   alert('Text copied to clipboard');
+// };
 
   return (
       
@@ -45,10 +45,10 @@ const copyToClipboard = (): void => {
 
         <View style={{marginTop:20, marginLeft:15}}>
             <Text>Nomor Virtual Account</Text>
-            <View style={{flexDirection:"row"}}>
+        <View style={{flexDirection:"row", gap:8}}>
             <Text style={{fontWeight:"bold"}}>3333982177123</Text>
-            <TouchableOpacity onPress={copyToClipboard}>
-          <Text>Click here to copy to Clipboard</Text>
+            <TouchableOpacity>
+          <Text style={{color:"green"}}>Copy</Text>
         </TouchableOpacity>
             </View>
          

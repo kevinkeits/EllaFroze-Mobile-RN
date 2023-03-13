@@ -18,6 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import ProductDetail from '../pages/ProductDetail/ProductDetail';
 import Cart from '../pages/Cart/Cart';
 import Payment from '../pages/Payment/Payment';
+import AddressDetail from '../pages/Account/components/address_detail/AddressDetail';
 
 
   
@@ -42,7 +43,18 @@ const AccountApp = () => {
             />
           ),
         }}/>
-  <AccountStack.Screen name='AccountAddress' component={AccountAddress}/>
+  <AccountStack.Screen name='AccountAddress' component={AccountAddress}
+  options={{title: "Address", headerStyle: {
+    backgroundColor: '#FA0000',
+    height: 120,
+  }}}
+  />
+  <AccountStack.Screen name='AddressDetail' component={AddressDetail} 
+  options={{title: "Address Detail", headerStyle: {
+    backgroundColor: '#FA0000',
+    height: 120,
+  }}}
+  />
 </AccountStack.Navigator>
 )
 }

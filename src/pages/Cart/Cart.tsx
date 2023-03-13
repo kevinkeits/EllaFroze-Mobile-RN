@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView, Modal } from 'react-native';
-import { BCALogo, DetailProduct1 } from '../../assets';
+import { BCALogo, DetailProduct1, GopayLogo } from '../../assets';
 import { CartIcon, LocationIcon, MessageIcon } from '../../assets/icons';
 import Drawer  from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
@@ -13,6 +13,10 @@ const Cart = () => {
   const navigation = useNavigation()
 const [count, setCount] = useState(0);
 const [isSelected, setSelection] = useState(false);
+const [selectedGopay, setSelectedGopay] = useState(false);
+const [selectedBCA, setSelectedBCA] = useState(false);
+
+
 const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const incrementCount = () => {
@@ -26,6 +30,16 @@ const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const handlePress = () => {
     setSelection(!isSelected);
   };
+
+  const handleSelectBCA = () =>{
+    setSelectedGopay(false);
+    setSelectedBCA(!selectedBCA);
+  }
+
+  const handleSelectGopay = () =>{
+    setSelectedGopay(!selectedGopay);
+    setSelectedBCA(false);
+  }
 
   return (
     <View style={styles.container}>
@@ -204,10 +218,7 @@ const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     </View>
     <View style={{marginTop:7}}>
     <View style={{paddingVertical:2, borderBottomWidth:1, borderRadius:8}}>
-      {/* <TouchableOpacity>
-      <Text style={{fontSize:16, fontWeight:"bold", textAlign:"center", color:"white"}}>BCA Virtual Account</Text>
-      </TouchableOpacity> */}
-       <TouchableOpacity onPress={handlePress} style={{paddingLeft:12}}>
+       <TouchableOpacity onPress={handleSelectBCA}style={{paddingLeft:12}}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <View
           style={{
@@ -215,12 +226,12 @@ const [isDrawerOpen, setIsDrawerOpen] = useState(false);
             width: 24,
             borderRadius: 12,
             borderWidth: 2,
-            borderColor: isSelected ? '#007AFF' : '#C7C7CC',
+            borderColor: selectedBCA ? '#007AFF' : '#C7C7CC',
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          {isSelected && (
+          {selectedBCA && (
             <View
               style={{
                 height: 12,
@@ -234,12 +245,49 @@ const [isDrawerOpen, setIsDrawerOpen] = useState(false);
       <View style={{marginLeft:15}}>
         <Image source={BCALogo} style={{width:50, height:50}}/>
       </View>
-        <Text style={{fontSize:16, marginLeft:8}}>BCA Virtual Account</Text>
+        <Text style={{fontSize:16, marginLeft:8, fontWeight:"bold"}}>BCA Virtual Account</Text>
       </View>
     </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={{backgroundColor:"#148D2E", paddingVertical:14, alignItems:"center", marginTop:8, width:"100%", borderRadius:7}} onPress={()=>{navigation.navigate('Payment')}}>
+      <View style={{paddingVertical:2, borderBottomWidth:1, borderRadius:8}}>
+       <TouchableOpacity onPress={handleSelectGopay} style={{paddingLeft:12}}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View
+          style={{
+            height: 24,
+            width: 24,
+            borderRadius: 12,
+            borderWidth: 2,
+            borderColor: selectedGopay ? '#007AFF' : '#C7C7CC',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {selectedGopay && (
+            <View
+              style={{
+                height: 12,
+                width: 12,
+                borderRadius: 6,
+                backgroundColor: '#007AFF',
+              }}
+            />
+          )}
+        </View>
+      <View style={{marginLeft:20, paddingVertical:7}}>
+        <Image source={GopayLogo} style={{width:35, height:35}}/>
+      </View>
+        <Text style={{fontSize:16, marginLeft:8, fontWeight:"bold"}}>GoPay</Text>
+      </View>
+    </TouchableOpacity>
+      </View>
+
+      <TouchableOpacity style={{backgroundColor:"#148D2E", paddingVertical:14, alignItems:"center", marginTop:8, width:"100%", borderRadius:7}} onPress={()=>
+      {
+        navigation.navigate('Payment')
+        setIsDrawerOpen(false)
+        }}>
                 <Text style={{color:"white", fontWeight:"bold"}}>LANJUTKAN</Text>
             </TouchableOpacity>
 

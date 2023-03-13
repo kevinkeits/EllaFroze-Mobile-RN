@@ -10,6 +10,7 @@ import HistoryIcon from './HistoryIcon.svg'
 import CartIcon from './CartIcon.svg'
 import MessageIcon from './MessageIcon.svg'
 import LocationIcon from './LocationIcon.svg'
+import DropdownIcon from './dropdown-icon.svg'
 
 
 
@@ -19,4 +20,5 @@ import LocationIcon from './LocationIcon.svg'
 
 
 
-export {HomeIcon, CartIcon, MessageIcon, LocationIcon, HelpIcon, ProfileIcon, TransactionIcon, BackIcon, AccountIcon, AddressIcon, ChatIcon, HistoryIcon}
+
+export {HomeIcon, DropdownIcon, CartIcon, MessageIcon, LocationIcon, HelpIcon, ProfileIcon, TransactionIcon, BackIcon, AccountIcon, AddressIcon, ChatIcon, HistoryIcon}
