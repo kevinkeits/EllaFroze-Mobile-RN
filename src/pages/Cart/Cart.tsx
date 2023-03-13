@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView, Modal } from 'react-native';
 import { DetailProduct1 } from '../../assets';
 import { CartIcon, LocationIcon, MessageIcon } from '../../assets/icons';
+import Drawer  from 'react-native-modal';
 
 
 
@@ -10,6 +11,7 @@ import { CartIcon, LocationIcon, MessageIcon } from '../../assets/icons';
 const Cart = () => {
 const [count, setCount] = useState(0);
 const [isSelected, setSelection] = useState(false);
+const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const incrementCount = () => {
     setCount(count + 1);
@@ -181,9 +183,50 @@ const [isSelected, setSelection] = useState(false);
             </TouchableOpacity>
         </View>
         
-            <TouchableOpacity style={{backgroundColor:"#148D2E", paddingVertical:14, alignItems:"center", marginTop:8, width:370, borderRadius:7}}>
+            <TouchableOpacity style={{backgroundColor:"#148D2E", paddingVertical:14, alignItems:"center", marginTop:8, width:370, borderRadius:7}} onPress={() => setIsDrawerOpen(true)}>
                 <Text style={{color:"white", fontWeight:"bold"}}>LANJUT KE PEMBAYARAN</Text>
             </TouchableOpacity>
+
+<Drawer
+  isVisible={isDrawerOpen}
+  swipeDirection="left"
+  onSwipeComplete={() => setIsDrawerOpen(false)}
+  style={{}}
+>
+  <View style={{backgroundColor:"white", padding:10}}>
+    <View style={{flexDirection:"row", justifyContent:"space-between", paddingVertical:12, borderBottomWidth:2}}>
+      <Text style={{fontSize:16, fontWeight:"bold"}}>Payment Method</Text>
+      <TouchableOpacity onPress={() => setIsDrawerOpen(false)}>
+      <Text style={{fontSize:16, fontWeight:"bold"}}>X</Text>
+      </TouchableOpacity>
+    </View>
+    <View style={{marginTop:7}}>
+    <View style={{paddingVertical:15, backgroundColor:"blue"}}>
+      <TouchableOpacity>
+      <Text style={{fontSize:16, fontWeight:"bold", textAlign:"center", color:"white"}}>BCA Virtual Account</Text>
+      </TouchableOpacity>
+      </View>
+    </View>
+    
+  </View>
+</Drawer>
+
+
+{/* <Modal
+  animationType="slide"
+  transparent={true}
+  visible={isDrawerOpen}
+  onRequestClose={() => setIsDrawerOpen(false)}
+>
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{ backgroundColor: 'white', padding: 20 }}>
+      <Text>This is the modal content.</Text>
+      <TouchableOpacity onPress={() => setIsDrawerOpen(false)}>
+        <Text>Close Modal</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</Modal> */}
         
     </View>
   );
