@@ -17,6 +17,7 @@ import Category from '../pages/Category';
 import { useNavigation } from '@react-navigation/native';
 import ProductDetail from '../pages/ProductDetail/ProductDetail';
 import Cart from '../pages/Cart/Cart';
+import Payment from '../pages/Payment/Payment';
 
 
   
@@ -160,6 +161,7 @@ const Router = () => {
               backgroundColor:"red",
             }
             }}/>
+            <RootStack.Screen name='Payment' component={Payment} options={{headerShown:false}} />
 
       </RootStack.Navigator>
   )
