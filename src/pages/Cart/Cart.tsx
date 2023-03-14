@@ -290,10 +290,7 @@ const [isDrawerOpen, setIsDrawerOpen] = useState(false);
         }}>
                 <Text style={{color:"white", fontWeight:"bold"}}>LANJUTKAN</Text>
             </TouchableOpacity>
-
-
     </View>
-    
   </View>
 </Drawer>
         
