@@ -38,7 +38,21 @@ const AccountAddress = () => {
   return (
     <View style={{ justifyContent:"center"}}>
       {items.map((item, index) => (
-        <TouchableOpacity key={index} style={{borderWidth:1, marginTop:10, marginHorizontal:8, padding:8, borderRadius:8}}>
+        <TouchableOpacity key={index} style={{
+          marginTop:10, 
+          marginHorizontal:8, 
+          padding:8, 
+          borderRadius:8,
+          backgroundColor: '#fff',
+          elevation:3,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.22,
+          shadowRadius: 2.22,
+          }}>
         <Text style={{fontWeight:"bold", marginTop:20}}>{item.name}</Text>
         <Text style={{marginTop:15}}>{item.phoneNumber}</Text>
         <Text style={{marginTop:15}}>BUILDING NAME</Text>

@@ -36,7 +36,20 @@ const AddressDetail = () => {
   return (
     <View>
       <Text style={{marginTop:20, marginLeft:8}}>Detail Alamat</Text>
-      <View style={{padding:10, borderWidth:1, marginTop:20, marginHorizontal:8}}>
+      <View style={{
+        padding:10, 
+        marginTop:20, 
+        marginHorizontal:8,
+        backgroundColor: '#fff',
+        elevation:3,
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+        }}>
         <TextInput placeholder='Label Alamat' style={{margin:20, borderBottomWidth:1}}/>
         <TextInput placeholder='No Telepon' style={{margin:20, borderBottomWidth:1}}/>
 

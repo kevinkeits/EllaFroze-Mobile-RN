@@ -30,6 +30,7 @@ const HomeStack = createNativeStackNavigator();
 
 
 const AccountApp = () => {
+
   return(
 <AccountStack.Navigator initialRouteName='Account'>
   <AccountStack.Screen name='Account' component={Account}/>
@@ -61,6 +62,7 @@ const AccountApp = () => {
 
 
 const MainApp = () => {
+  const navigation = useNavigation();
   return (
     <Tab.Navigator
     screenOptions={{
@@ -81,6 +83,7 @@ const MainApp = () => {
         tabBarActiveBackgroundColor: "#BA0000",}}/>
         <Tab.Screen name='Transaction' component={Transaction} options={{title: "Transaction", headerTitle: () => <HomeHeader/>, headerStyle: {
           backgroundColor: '#FA0000',
+          height: 120,
         },
         tabBarIcon: ({color, size}) => (
           <TransactionIcon color={color} size={size}  />
@@ -153,7 +156,7 @@ const Router = () => {
             placeholder="Search"
             />,
             headerRight:()=> <CartIcon/>,
-            headerLeft:()=> <TouchableOpacity onPress={()=>navigation.goBack()}><BackIcon /></TouchableOpacity>,
+            headerLeft:()=> <TouchableOpacity onPress={()=>navigation.goBack()} ><BackIcon /></TouchableOpacity>,
             headerStyle:{
               backgroundColor:"red",
             }
@@ -168,7 +171,7 @@ const Router = () => {
             placeholder="Search"
             />,
             headerRight:()=> <CartIcon/>,
-            headerLeft:()=> <TouchableOpacity onPress={()=>navigation.goBack()}><BackIcon /></TouchableOpacity>,
+            headerLeft:()=> <TouchableOpacity style={{ marginBottom:20}} onPress={()=>navigation.goBack()}><BackIcon /></TouchableOpacity>,
             headerStyle:{
               backgroundColor:"red",
             }
@@ -205,7 +208,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     paddingLeft: 10,
-    width: '83%'
+    width: '80%'
   },
   title: {
     fontSize: 20,

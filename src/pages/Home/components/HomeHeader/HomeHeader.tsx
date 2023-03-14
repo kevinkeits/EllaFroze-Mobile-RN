@@ -1,6 +1,9 @@
+import { Picker } from '@react-native-picker/picker';
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
 import { CartIcon, LocationIcon, MessageIcon } from '../../../../assets/icons';
+import Drawer  from 'react-native-modal';
+import { useNavigation } from '@react-navigation/native';
 
 
 const items= [
@@ -15,7 +18,17 @@ const items= [
 ]
 
 const HomeHeader = () => {
+  const navigation = useNavigation();
+
   const [searchText, setSearchText] = useState('');
+  const [selectedCity, setSelectedCity] = useState<string>("");
+    const [pickerCity, setPickerCity] = useState<boolean>(false);
+
+
+    const handlePickerCity = () => {
+    setPickerCity(true);
+  };
+
 
   const handleSearchTextChange = (text: string) => {
     setSearchText(text);
@@ -25,16 +38,16 @@ const HomeHeader = () => {
       <View style={styles.header}>
         <Image source={require('../../../../assets/images/logo.png')} style={styles.logo} />
         <View style={{width:'100%'}}>
-          <View style={{flexDirection:'row', marginVertical:2, justifyContent:'space-between', width:300}}>
-            <View style={{flexDirection:'row', gap:8}}>
-            <LocationIcon  />
-            <Text>Cabang</Text>
-            </View>
-            <View style={{flexDirection:'row', gap:10}}>
+          <View style={{flexDirection:'row', marginVertical:2, justifyContent:'space-between', width:293}}>
+          <TouchableOpacity onPress={handlePickerCity} style={{flexDirection:"row", gap:8}}>           
+           <LocationIcon  />
+            <Text>{selectedCity}</Text>
+           </TouchableOpacity>         
+           <View style={{flexDirection:'row', gap:20}}>
               <TouchableOpacity>
                 <MessageIcon/>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>navigation.navigate("Cart")}>
                 <CartIcon />
               </TouchableOpacity>
             </View>
@@ -47,6 +60,31 @@ const HomeHeader = () => {
           placeholder="Search"
         />
         </View>
+        <Drawer
+  isVisible={pickerCity}
+  swipeDirection="left"
+  onSwipeComplete={() => setPickerCity(false)}
+  style={{}}
+>
+  <View style={{backgroundColor:"white"}}>
+    <TouchableOpacity onPress={() => setPickerCity(false)} style={{alignSelf:"flex-end", marginHorizontal:15, marginTop:10}} >
+      <Text style={{fontWeight:"bold", fontSize:16}}>X</Text>
+    </TouchableOpacity>
+  {pickerCity && (
+        <Picker
+          selectedValue={selectedCity}
+          onValueChange={(itemValue) => {
+            setSelectedCity(itemValue);
+            setPickerCity(false);
+          }}
+        >
+          <Picker.Item label="Bogor" value="Bogor" />
+          <Picker.Item label="Jakarta" value="Jakarta" />
+          <Picker.Item label="Semarang" value="Semarang" />
+        </Picker>
+      )}
+  </View>
+</Drawer>
       </View>
   );
 };
@@ -70,7 +108,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderWidth: 1,
     borderRadius: 20,
-    paddingLeft: 10,
+    paddingLeft: 13,
     width:300
     
   },

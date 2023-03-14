@@ -3,6 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RootStackParams } from '../../../App';
+import Carousel from '../Home/components/Carousel';
 
 
 export default function Help() {
@@ -11,9 +12,7 @@ export default function Help() {
   return (
       
     <View style={styles.container}>
-      <Text>Help</Text>
-      <Button title='Go to Profile'  onPress={() => {navigation.navigate('Profile')}}/>
-      <StatusBar style="auto" />
+     <Carousel/>
     </View>
     
   );

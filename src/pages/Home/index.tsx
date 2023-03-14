@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView } from 'react-native';
 import { CartIcon, LocationIcon, MessageIcon } from '../../assets/icons';
-import ImageCarousel from './components/Carousel';
 import Carousel from './components/Carousel';
 import HomeCategory from './components/HomeCategory/HomeCategory';
 import HomeCharts from './components/HomeCharts/HomeCharts';
@@ -29,6 +28,9 @@ const HomePage = () => {
   return (
     <View style={styles.container}>
       <ScrollView>
+      <View style={{marginTop:10}}>
+         <Carousel/>
+        </View>
         <View style={{marginTop:10}}>
           <Text style={{fontSize:16, fontWeight:"bold", marginLeft:3}}>Produk Terlaris</Text>
           <HomeCharts/>
