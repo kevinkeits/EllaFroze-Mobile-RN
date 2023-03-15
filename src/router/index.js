@@ -19,6 +19,10 @@ import ProductDetail from '../pages/ProductDetail/ProductDetail';
 import Cart from '../pages/Cart/Cart';
 import Payment from '../pages/Payment/Payment';
 import AddressDetail from '../pages/Account/components/address_detail/AddressDetail';
+import Contact from '../pages/Contact/Contact';
+import ChatRoom from '../pages/ChatRoom/ChatRoom';
+import SignUp from '../pages/SignUp/SignUp';
+import ForgetPassword from '../pages/ForgetPassword/ForgetPassword';
 
 
   
@@ -123,6 +127,8 @@ const Router = () => {
     <RootStack.Navigator initialRouteName='Splash'>
         <RootStack.Screen name='Splash' component={Splash} options={{title: "Splash", headerShown: false}}/>
         <RootStack.Screen name='Login' component={Login} options={{title: "Login", headerShown: false}}/>
+        <RootStack.Screen name='SignUp' component={SignUp} options={{title: "SignUp", headerShown: false}}/>
+        <RootStack.Screen name='ForgetPassword' component={ForgetPassword} options={{title: "ForgetPassword", headerShown: false}}/>
         <RootStack.Screen name='MainApp' component={MainApp} options={{title: "Home", headerShown: false,
           // tabBarIcon: ({color, size}) => (
           //   <HomeIcon color={color} size={size}  />
@@ -177,6 +183,16 @@ const Router = () => {
             }
             }}/>
             <RootStack.Screen name='Payment' component={Payment} options={{headerShown:false}} />
+            <RootStack.Screen name='Contact' component={Contact}
+                options={{title: "Hubungi Admin", headerStyle: {
+                backgroundColor: '#FA0000',
+                height: 120,
+                }}} />
+            <RootStack.Screen name='ChatRoom' component={ChatRoom}
+                options={{title: "Admin", headerStyle: {
+                backgroundColor: '#FA0000',
+                height: 120,
+                }}} />
 
       </RootStack.Navigator>
   )

@@ -21,8 +21,8 @@ const HomeHeader = () => {
   const navigation = useNavigation();
 
   const [searchText, setSearchText] = useState('');
-  const [selectedCity, setSelectedCity] = useState<string>("");
-    const [pickerCity, setPickerCity] = useState<boolean>(false);
+  const [selectedCity, setSelectedCity] = useState<string>("Semua");
+  const [pickerCity, setPickerCity] = useState<boolean>(false);
 
 
     const handlePickerCity = () => {
@@ -41,10 +41,10 @@ const HomeHeader = () => {
           <View style={{flexDirection:'row', marginVertical:2, justifyContent:'space-between', width:293}}>
           <TouchableOpacity onPress={handlePickerCity} style={{flexDirection:"row", gap:8}}>           
            <LocationIcon  />
-            <Text>{selectedCity}</Text>
+            <Text style={{color:"white"}}>{selectedCity}</Text>
            </TouchableOpacity>         
            <View style={{flexDirection:'row', gap:20}}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>navigation.navigate("Contact")}>
                 <MessageIcon/>
               </TouchableOpacity>
               <TouchableOpacity onPress={()=>navigation.navigate("Cart")}>
@@ -78,6 +78,7 @@ const HomeHeader = () => {
             setPickerCity(false);
           }}
         >
+          <Picker.Item label="Semua" value="Semua" />
           <Picker.Item label="Bogor" value="Bogor" />
           <Picker.Item label="Jakarta" value="Jakarta" />
           <Picker.Item label="Semarang" value="Semarang" />

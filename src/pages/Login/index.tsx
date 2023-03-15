@@ -8,6 +8,7 @@ interface Props {
   }
 
 const Login: React.FC<Props> = ({ navigation }) => {
+  
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -23,7 +24,7 @@ const Login: React.FC<Props> = ({ navigation }) => {
       
   return (
     <View style={{flex: 1, backgroundColor:"#FA0000", margin: 0, justifyContent:'center'}}>
-       <View style={{marginLeft:50}}><Image source={Logo} style={styles.logo}/></View>
+       <View style={{alignSelf:'center'}}><Image source={Logo} style={styles.logo}/></View>
       <View style={{width:'80%', justifyContent:'center', marginLeft:40}}>
         <View style={{marginHorizontal:10}}>
             <Text style={{color:'white', fontSize:20, fontWeight:'bold'}}>Masuk</Text>
@@ -48,11 +49,20 @@ const Login: React.FC<Props> = ({ navigation }) => {
       style={{borderColor:"white", fontWeight:'bold', borderWidth:1, alignItems: "center", justifyContent:"center", padding:10, backgroundColor:'white', marginVertical:5, borderRadius:6}}
       />
     </View>
-    <View style={{ marginHorizontal: 10, marginTop: 50}}>
+    <View style={{ marginHorizontal: 10, marginTop: 40}}>
       {/* <Button title='SIMPAN' onPress={()=> alert("TERSIMPAN")}/> */}
       <TouchableOpacity onPress={handleLoginPress} style={{backgroundColor:"#FFCB00", borderRadius:15, alignItems:"center", paddingVertical:10}}>
-        <Text style={{color:"black", fontWeight:"bold"}}>SIMPAN</Text>
+        <Text style={{color:"black", fontWeight:"bold"}}>MASUK</Text>
       </TouchableOpacity>
+      <View style={{flexDirection:"row", justifyContent:"space-between", marginTop:8}}> 
+      <TouchableOpacity onPress={()=>navigation.navigate("ForgetPassword")}>
+        <Text style={{color:"white", marginTop:8, marginLeft:5}}>Lupa Password?</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={()=>navigation.navigate("SignUp")}>
+        <Text style={{color:"white", marginTop:8, marginLeft:5}}>Daftar disini</Text>
+      </TouchableOpacity>
+      </View>
+      
     </View>
     </View>
     </View>
