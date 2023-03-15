@@ -1,36 +1,83 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import CarouselItems from './components/CarouselItem/CarouselItem'
+import React, { useState } from 'react';
+import { View, ScrollView, StyleSheet, Dimensions, Image } from 'react-native';
 
+const { width } = Dimensions.get('window');
 
-
-
-const items: CarouselItem[] = [
-  {
-    id: 1,
-    image: 'https://picsum.photos/id/1/200/300',
-    title: 'Lorem ipsum dolor sit amet',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-  },
-  {
-    id: 2,
-    image: 'https://picsum.photos/id/2/200/300',
-    title: 'Sed do eiusmod tempor incididunt',
-    description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-  },
-  {
-    id: 3,
-    image: 'https://picsum.photos/id/3/200/300',
-    title: 'Ut enim ad minim veniam',
-    description: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex'}]
-const index = () => {
-  return (
-    <View>
-      <CarouselItems items={items}/>
-    </View>
-  )
+interface Slide {
+  id: number;
+  backgroundColor?: string;
+  imgUrl?:string;
 }
 
-export default index
+const slides: Slide[] = [
+  { id: 1, backgroundColor: '#5DADE2', imgUrl: "../../../../assets/images/BannerImage.png" },
+  { id: 2, backgroundColor: '#F4D03F', imgUrl: "../../../../assets/images/BannerImage.png" },
+  { id: 3, backgroundColor: '#58D68D', imgUrl: "../../../../assets/images/BannerImage.png"},
+]
 
-const styles = StyleSheet.create({})
+const Carousel = () => {
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  const handleScroll = (event: any) => {
+    const slide = Math.round(event.nativeEvent.contentOffset.x / width);
+    setActiveSlide(slide);
+  };
+
+  return (
+    <View style={styles.container}>
+      <ScrollView
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+      >
+        {slides.map((slide) => (
+          <View key={slide.id} style={[styles.slide, { backgroundColor: slide.backgroundColor }]} >
+            <Image source={{uri:slide.imgUrl}} style={{width:300, height:200}}  />
+          </View>
+        ))}
+      </ScrollView>
+      <View style={styles.dotsContainer}>
+        {slides.map((slide, index) => (
+          <View
+            key={slide.id}
+            style={[styles.dot, index === activeSlide ? styles.activeDot : null]}
+          />
+        ))}
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  slide: {
+    width,
+    height: 200,
+  },
+  dotsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 16,
+    left: 0,
+    right: 0,
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginHorizontal: 4,
+    backgroundColor: '#ccc',
+  },
+  activeDot: {
+    backgroundColor: '#333',
+  },
+});
+
+export default Carousel;

@@ -17,6 +17,14 @@ const items= [
   }
 ]
 
+
+const data = [
+  { id: 1, image: 'https://picsum.photos/200/300' },
+  { id: 2, image: 'https://picsum.photos/200/301' },
+  { id: 3, image: 'https://picsum.photos/200/302' },
+  { id: 4, image: 'https://picsum.photos/200/303' },
+];
+
 const HomePage = () => {
  
   const images = [
@@ -29,7 +37,7 @@ const HomePage = () => {
     <View style={styles.container}>
       <ScrollView>
       <View style={{marginTop:10}}>
-         <Carousel/>
+         <Carousel />
         </View>
         <View style={{marginTop:10}}>
           <Text style={{fontSize:16, fontWeight:"bold", marginLeft:3}}>Produk Terlaris</Text>
@@ -42,8 +50,10 @@ const HomePage = () => {
         <View style={{marginTop:10}}>
         <HomeCategory/>
         </View>
-      
+      <View style={{marginTop:10}}>
       <ProductCards/>
+      </View>
+     
       </ScrollView>
     </View>
   );

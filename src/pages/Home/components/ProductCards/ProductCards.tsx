@@ -93,12 +93,31 @@ const ProductCards = () => {
 
   return (
     
-    <View style={{backgroundColor:"white"}} >
+    <View style={{}} >
          <FlatList
         data={data}
         renderItem={({item}) => 
  
-        <TouchableOpacity style={{width:180, height:240, backgroundColor:"white", borderWidth:5, borderColor:"background: rgba(255, 203, 0, 0.2)",  margin:8}} onPress={()=>{navigation.navigate('ProductDetail')}}>
+        <TouchableOpacity 
+        style={{
+            width:180, 
+            height:250, 
+            backgroundColor: '#fff',
+        elevation:3,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22, 
+            // borderWidth:5, 
+            // borderColor:"background: rgba(255, 203, 0, 0.2)",  
+            margin:8,
+            borderRadius:8
+        }} 
+            onPress={()=>{navigation.navigate('ProductDetail')}}
+            >
             <View style={{alignItems:"center"}}>
             <Image source={item.uri} />
             </View>
