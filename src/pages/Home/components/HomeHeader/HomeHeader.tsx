@@ -4,6 +4,9 @@ import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity } from 'reac
 import { CartIcon, LocationIcon, MessageIcon } from '../../../../assets/icons';
 import Drawer  from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
+import { Icon, Badge } from 'react-native-elements';
+import NotificationIcon from './components/Icon/Icon';
+
 
 
 const items= [
@@ -45,10 +48,23 @@ const HomeHeader = () => {
            </TouchableOpacity>         
            <View style={{flexDirection:'row', gap:20}}>
               <TouchableOpacity onPress={()=>navigation.navigate("Contact")}>
-                <MessageIcon/>
+                {/* <MessageIcon/> */}
+                <NotificationIcon
+                  name="mail"
+                  type="material"
+                  size={30}
+                  notificationCount={3}
+                />
               </TouchableOpacity>
               <TouchableOpacity onPress={()=>navigation.navigate("Cart")}>
-                <CartIcon />
+                {/* <CartIcon/> */}
+                <NotificationIcon
+                  name="shopping-cart"
+                  type="material"
+                  size={30}
+                  notificationCount={2}
+                />
+
               </TouchableOpacity>
             </View>
           </View>

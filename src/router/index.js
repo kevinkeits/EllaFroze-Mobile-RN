@@ -23,6 +23,9 @@ import Contact from '../pages/Contact/Contact';
 import ChatRoom from '../pages/ChatRoom/ChatRoom';
 import SignUp from '../pages/SignUp/SignUp';
 import ForgetPassword from '../pages/ForgetPassword/ForgetPassword';
+import { Icon } from 'react-native-elements';
+import NotificationIcon from '../components/Icon/Icon';
+
 
 
   
@@ -68,55 +71,111 @@ const AccountApp = () => {
 const MainApp = () => {
   const navigation = useNavigation();
   return (
-    <Tab.Navigator
-    screenOptions={{
-      tabBarStyle: {
-        backgroundColor: '#FA0000',
-      },
-    tabBarActiveTintColor: '#ffff', 
-    tabBarInactiveTintColor: 'black',  
-  }}
+  //   <Tab.Navigator
+  //   screenOptions={{
+  //     tabBarStyle: {
+  //       backgroundColor: '#FA0000',
+  //     },
+  //   tabBarActiveTintColor: '#ffff', 
+  //   tabBarInactiveTintColor: 'black',  
+  // }}
+  //   >
+  <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarStyle: {
+                backgroundColor: '#FA0000',
+              },
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === 'Home') {
+            iconName = 'home';
+          }  if (route.name === 'AccountApp') {
+            iconName = 'person';
+          }  if (route.name === 'Transaction') {
+            iconName = 'sync-alt';
+          }  else if (route.name === 'Help') {
+            iconName = 'help';
+          }
+
+          return (
+            <Icon
+              name={iconName}
+              type="material"
+              size={size}
+              color={focused ? 'green' : 'white'}
+            />
+          );
+        },
+        tabBarLabel: ({ focused, color }) => {
+          let labelName;
+
+          if (route.name === 'Home') {
+            labelName = 'Home';
+          }  if (route.name === 'AccountApp') {
+            labelName = 'Profile';
+          }  if (route.name === 'Transaction') {
+            labelName = 'Transaction';
+          }  else if (route.name === 'Help') {
+            labelName = 'Help';
+          }
+
+          return (
+            <Text style={{ color: focused ? 'yellow' : color }}>
+              {labelName}
+            </Text>
+          );
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: 'black',
+        inactiveTintColor: 'white',
+      }}
     >
-      <Tab.Screen name='Home' component={Home} options={{title: "Home", headerTitle: () => <HomeHeader/>, headerStyle: {
+        <Tab.Screen name='Home' component={Home} options={{title: "Home", headerTitle: () => <HomeHeader/>, headerStyle: {
           backgroundColor: '#FA0000',
           height: 120,
         },
-        tabBarIcon: ({color, size}) => (
-          <HomeIcon color={color} size={size}  />
-        ),
-        tabBarActiveBackgroundColor: "#BA0000",}}/>
+        // tabBarIcon: ({color, size}) => (
+        //   <HomeIcon color={color} size={size}  />
+        // ),
+        // tabBarActiveBackgroundColor: "#BA0000",
+        }}/>
         <Tab.Screen name='Transaction' component={Transaction} options={{title: "Transaction", headerTitle: () => <HomeHeader/>, headerStyle: {
           backgroundColor: '#FA0000',
           height: 120,
         },
-        tabBarIcon: ({color, size}) => (
-          <TransactionIcon color={color} size={size}  />
-        ),
-        tabBarActiveBackgroundColor: "#BA0000",
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },}}/>
+        // tabBarIcon: ({color, size}) => (
+        //   <TransactionIcon color={color} size={size}  />
+        // ),
+        // tabBarActiveBackgroundColor: "#BA0000",
+        // headerTintColor: '#fff',
+        // headerTitleStyle: {
+        //   fontWeight: 'bold',
+        // },
+        }}/>
         <Tab.Screen name='Help' component={Help} options={{title: "Help", headerStyle: {
           backgroundColor: '#FA0000',
         },
-        tabBarIcon: ({color, size}) => (
-          <HelpIcon color={color} size={size}  />
-        ),
-        tabBarActiveBackgroundColor: "#BA0000",
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },}}/>
+        // tabBarIcon: ({color, size}) => (
+        //   <HelpIcon color={color} size={size}  />
+        // ),
+        // tabBarActiveBackgroundColor: "#BA0000",
+        // headerTintColor: '#fff',
+        // headerTitleStyle: {
+        //   fontWeight: 'bold',
+        // },
+        }}/>
       <Tab.Screen name='AccountApp' component={AccountApp} options={{title: "AccountApp", headerShown: false,
-        tabBarIcon: ({color, size}) => (
-          <ProfileIcon color={color} size={size}  />
-        ),
-        tabBarActiveBackgroundColor: "#BA0000",
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        }}}/>
+        // tabBarIcon: ({color, size}) => (
+        //   <ProfileIcon color={color} size={size}  />
+        // ),
+        // tabBarActiveBackgroundColor: "#BA0000",
+        // headerTintColor: '#fff',
+        // headerTitleStyle: {
+        //   fontWeight: 'bold',
+        // }
+        }}/>
     </Tab.Navigator>
   )
 } 
@@ -146,8 +205,24 @@ const Router = () => {
           // value={searchText}
           placeholder="Search"
         />,
-            headerRight:()=> <CartIcon/>,
-            headerLeft:()=> <TouchableOpacity onPress={()=>navigation.goBack()}><BackIcon /></TouchableOpacity>,
+            headerRight:()=> 
+            <NotificationIcon
+            name="shopping-cart"
+            type="material"
+            size={30}
+            notificationCount={2}
+          />
+,
+            headerLeft:()=> <TouchableOpacity onPress={()=>navigation.goBack()}>
+              {/* <BackIcon /> */}
+              <Icon
+                  name="arrow-back"
+                  type="material"
+                  size={30}
+                  color="white"
+                />
+
+              </TouchableOpacity>,
             headerStyle:{
               backgroundColor:"red",
             }
