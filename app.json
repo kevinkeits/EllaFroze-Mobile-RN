@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "ellafroze-mobile-rn",
+    "name": "Ella Froze",
     "slug": "ellafroze-mobile-rn",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./src/assets/images/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.lazu4rdi.ellafrozemobilern"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f34f6b45-e435-495c-8b39-f0f4134bc184"
+      }
     }
   }
 }

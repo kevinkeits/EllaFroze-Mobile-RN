@@ -6,8 +6,9 @@ import { useNavigation } from '@react-navigation/native';
 
 const ProductCards = () => {
     const [count, setCount] = useState(0);
+    const [selected, setSelected] = useState(false);
+    const [selectedItems, setSelectedItems] = useState([]);
 
-    const [select, setSelect] = useState(false);
 
   const incrementCount = () => {
     setCount(count + 1);
@@ -15,6 +16,11 @@ const ProductCards = () => {
 
   const decrementCount = () => {
     setCount(count - 1);
+  };
+
+  const handleButtonPress = (itemId: any) => {
+    setSelected(itemId);
+    // alert(`Button clicked for item ${itemId}`);
   };
     const navigation = useNavigation();
    const data = [{
@@ -91,66 +97,78 @@ const ProductCards = () => {
     }];
     const numColumns = 2;
 
+    const renderItem = ({item}:any) => {
+        const isSelected = item.id === selected;
+
+
+        
+
+        return (
+            <TouchableOpacity 
+            style={{
+                width:180, 
+                height:250, 
+                backgroundColor: '#fff',
+            elevation:3,
+            shadowColor: '#000',
+            shadowOffset: {
+                width: 0,
+                height: 1,
+              },
+            shadowOpacity: 0.22,
+            shadowRadius: 2.22, 
+                // borderWidth:5, 
+                // borderColor:"background: rgba(255, 203, 0, 0.2)",  
+                margin:8,
+                borderRadius:8
+            }} 
+                onPress={()=>{navigation.navigate('ProductDetail')}}
+                >
+                <View style={{alignItems:"center"}}>
+                <Image source={item.uri} />
+                </View>
+            <Text style={{fontSize:15, marginTop:5, marginLeft:8}}>{item.productName}</Text>
+            <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>Rp. {item.price}</Text>
+            <Text style={{fontSize:11, marginTop:3, marginLeft:8}}>Rp. {item.discountedPrice}</Text>
+            <Text style={{fontSize:11, marginTop:3, marginLeft:8}}>Berat: {item.weight}gr / Pack</Text>
+    
+            
+       
+   
+            {isSelected  ? (
+            <View style={{flexDirection:"row", justifyContent:"center", alignItems:"center", marginHorizontal:20}}>
+                    <View style={{backgroundColor:"#background: rgba(20, 141, 46, 0.1);", flexDirection:"row", padding:5, borderRadius:6}}>
+                    <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={decrementCount}>
+                        <Text style={{color:"#148D2E"}}>-</Text>
+                    </TouchableOpacity>
+                    <Text style={{paddingVertical:5, alignItems:"center", textAlign:"center", width:30}}>{count}</Text>
+                    <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={incrementCount}>
+                        <Text style={{color:"#148D2E"}}>+</Text>
+                    </TouchableOpacity>
+                    </View>
+                </View>):(
+                      <View style={{justifyContent:"center", alignItems:"center"}}>
+                      <TouchableOpacity onPress={()=>handleButtonPress(item.id)} style={{backgroundColor: '#148D2E', width:'85%', marginTop:6, alignItems:"center", paddingVertical:3, borderRadius:6}}>
+                          <Text style={{color:"white", fontWeight:"bold"}}>BELI</Text>
+                      </TouchableOpacity>
+                      
+                  </View>
+                )}
+           
+            </TouchableOpacity>
+        )
+    }
+
   return (
     
-    <View style={{}} >
+    // <View style={{}} >
          <FlatList
         data={data}
-        renderItem={({item}) => 
- 
-        <TouchableOpacity 
-        style={{
-            width:180, 
-            height:250, 
-            backgroundColor: '#fff',
-        elevation:3,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-        shadowOpacity: 0.22,
-        shadowRadius: 2.22, 
-            // borderWidth:5, 
-            // borderColor:"background: rgba(255, 203, 0, 0.2)",  
-            margin:8,
-            borderRadius:8
-        }} 
-            onPress={()=>{navigation.navigate('ProductDetail')}}
-            >
-            <View style={{alignItems:"center"}}>
-            <Image source={item.uri} />
-            </View>
-        <Text style={{fontSize:15, marginTop:5, marginLeft:8}}>{item.productName}</Text>
-        <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>Rp. {item.price}</Text>
-        <Text style={{fontSize:11, marginTop:3, marginLeft:8}}>Rp. {item.discountedPrice}</Text>
-        <Text style={{fontSize:11, marginTop:3, marginLeft:8}}>Berat: {item.weight}gr / Pack</Text>
-
-        {select === true ? 
-        (<View style={{flexDirection:"row", justifyContent:"center", alignItems:"center", marginHorizontal:20}}>
-                <View style={{backgroundColor:"#background: rgba(20, 141, 46, 0.1);", flexDirection:"row", padding:5, borderRadius:6}}>
-                <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={decrementCount}>
-                    <Text style={{color:"#148D2E"}}>-</Text>
-                </TouchableOpacity>
-                <Text style={{paddingVertical:5, alignItems:"center", textAlign:"center", width:30}}>{count}</Text>
-                <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={incrementCount}>
-                    <Text style={{color:"#148D2E"}}>+</Text>
-                </TouchableOpacity>
-                </View>
-            </View>)
-            :( <View style={{justifyContent:"center", alignItems:"center"}}>
-        <TouchableOpacity onPress={()=>setSelect(!select)} style={{backgroundColor: '#148D2E', width:'85%', marginTop:6, alignItems:"center", paddingVertical:3, borderRadius:6}}>
-            <Text style={{color:"white", fontWeight:"bold"}}>BELI</Text>
-        </TouchableOpacity>
-        </View>
-)}
-       
-        </TouchableOpacity>
-       }
+        renderItem={renderItem}
         keyExtractor={item => item.id}
         numColumns={numColumns}
       />
-    </View>
+    // </View>
   )
 }
 
