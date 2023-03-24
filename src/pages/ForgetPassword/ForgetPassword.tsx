@@ -18,14 +18,15 @@ const ForgetPassword = () => {
        <View style={{alignSelf:"center", marginTop:50}}><Image source={Logo} style={styles.logo}/></View>
       <View style={{width:'80%', justifyContent:'center', marginLeft:40}}>
         <View style={{marginHorizontal:10}}>
-            <Text style={{color:'black', fontSize:20, fontWeight:'bold'}}>Lupa Password</Text>
-            <Text style={{marginTop:8, fontSize:16}}>Masukkan alamat Email kamu. Kami akan mengirimkan instruksi untuk atur ulang kata sandi</Text>
+            <Text style={{color:'white', fontSize:20, fontWeight:'bold'}}>Lupa Password</Text>
+            <Text style={{marginTop:8, color:"white", fontSize:16}}>Masukkan alamat Email kamu. Kami akan mengirimkan instruksi untuk atur ulang kata sandi</Text>
         </View>
     <View style={{ marginHorizontal: 10, marginTop: 20}}>
       <Text style={{fontWeight:"500", color:'white'}}>Email</Text>
       <TextInput
       value={email}
-      onChangeText={setEmail} 
+      onChangeText={setEmail}
+      autoCapitalize="none"  
       style={{borderColor:"white", fontWeight:'bold', borderWidth:1, alignItems: "center", justifyContent:"center", padding:10,backgroundColor:'white', marginVertical:5, borderRadius:6}}
       />
     </View>

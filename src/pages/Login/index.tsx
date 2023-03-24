@@ -2,6 +2,16 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Keyboard, A
 import React, { useState } from 'react'
 import { Logo } from '../../assets'
 import { useNavigation } from '@react-navigation/native'
+import axios from 'axios';
+import { loginFailure, loginSuccess } from '../../components/Redux/Redux';
+import { useDispatch, useSelector } from 'react-redux';
+
+
+interface LoginCredentials {
+  txtUsername: string;
+  txtPassword: string;
+}
+
 
 interface Props {
     navigation: any;
@@ -9,17 +19,78 @@ interface Props {
 
 const Login: React.FC<Props> = ({ navigation }) => {
   
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [txtUsername, setTxtUsername] = useState('');
+    const [txtPassword, setTxtPassword] = useState('');
+    
+    const dispatch = useDispatch();
 
-    const handleLoginPress = () => {
-        if (email === '123' && password === '123') {
-            alert('Login Success!');
-          navigation.navigate('MainApp');
-        } else {
-          alert('Invalid email or password');
-        }
+    async function loginUser(loginInput: LoginCredentials): Promise<void> {
+      const apiUrl = 'https://ellafroze.com/api/external/doLogin';
+    
+      try {
+         const response = await axios.post(apiUrl, loginInput);
+         //alert(JSON.stringify(response.data.status))
+         if (!response.data.status){
+          alert(response.data.message);
+         } else {
+          //navigation.navigate("Login")
+          alert(response.data.message)
+         }   
+      } catch (error) {
+        console.error(error);
+        throw error;
       }
+    }
+
+    const handleLoginUser = async () => {
+      try {
+        await loginUser({  txtUsername, txtPassword });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+  
+    
+    
+    // const handleLogin = async () => {
+    //   try {
+    //     const userData = await login(txtUsername, txtPassword);
+    //     // do something with userData, e.g. store it in AsyncStorage
+    //     if (userData.success) {
+    //       navigation.navigate('MainApp');
+    //     } else {
+    //       // handle invalid username or password
+    //       alert("Account not Found")
+    //     }
+    //   } catch (error) {
+    //     // handle login error
+    //   }
+    // };
+
+    // async function login(loginCredentials: LoginCredentials): Promise<void> {
+    //   const apiUrl = 'https://ellafroze.com/api/external/doLogin';
+    
+    //   try {
+    //     const response = await axios.post(apiUrl, loginCredentials);
+    //     alert('Login successful!');
+    //     navigation.navigate('MainApp')
+    //     console.log('User data:', response.data);
+    //   } catch (error) {
+    //     console.error(error);
+    //     throw error;
+    //   }
+    // }
+    
+
+
+      // const handleLogin = async () => {
+      //   try {
+      //     await login({ txtUsername, txtPassword });
+      //   } catch (error) {
+      //     console.error(error);
+      //   }
+      // };
 
       
   return (
@@ -32,26 +103,25 @@ const Login: React.FC<Props> = ({ navigation }) => {
       <View style={{ marginHorizontal: 10, marginTop: 10}}>
       <Text style={{fontWeight:"500", color:'white'}}>Email</Text>
       <TextInput
-      value={email}
-      onChangeText={setEmail} 
+      value={txtUsername}
+      onChangeText={setTxtUsername}
+      autoCapitalize="none"  
       style={{borderColor:"white", fontWeight:'bold', borderWidth:1, alignItems: "center", justifyContent:"center", padding:10,backgroundColor:'white', marginVertical:5, borderRadius:6}}
       />
-      {/* <View style={{borderColor:"black", borderWidth: 1, alignItems: "center", justifyContent:"center", paddingVertical:8, marginVertical:5, backgroundColor:"white", borderRadius:6}}>
-        <Text style={{fontWeight:"500"}}>Rifqi Raihan Lazuardi</Text>
-      </View> */}
+    
     </View>
     <View style={{ marginHorizontal: 10, marginTop: 10}}>
       <Text style={{fontWeight:"500", color:'white'}}>Password</Text>
       <TextInput
-      value={password}
-      onChangeText={setPassword} 
+      value={txtPassword}
+      onChangeText={setTxtPassword} 
+      autoCapitalize="none" 
       secureTextEntry={true} 
       style={{borderColor:"white", fontWeight:'bold', borderWidth:1, alignItems: "center", justifyContent:"center", padding:10, backgroundColor:'white', marginVertical:5, borderRadius:6}}
       />
     </View>
     <View style={{ marginHorizontal: 10, marginTop: 40}}>
-      {/* <Button title='SIMPAN' onPress={()=> alert("TERSIMPAN")}/> */}
-      <TouchableOpacity onPress={handleLoginPress} style={{backgroundColor:"#FFCB00", borderRadius:15, alignItems:"center", paddingVertical:10}}>
+      <TouchableOpacity onPress={handleLoginUser} style={{backgroundColor:"#FFCB00", borderRadius:15, alignItems:"center", paddingVertical:10}}>
         <Text style={{color:"black", fontWeight:"bold"}}>MASUK</Text>
       </TouchableOpacity>
       <View style={{flexDirection:"row", justifyContent:"space-between", marginTop:8}}> 
