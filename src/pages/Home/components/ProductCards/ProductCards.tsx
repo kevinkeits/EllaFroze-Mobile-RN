@@ -43,8 +43,7 @@ const ProductCards = () => {
 
 
     useEffect(() => {
-      
-
+    
       const fetchToken = async () => {
         const TokenID = await AsyncStorage.getItem('@tokenID');
         return TokenID;
@@ -53,7 +52,6 @@ const ProductCards = () => {
       const TokenID = fetchToken();
 
       fetchData(TokenID);
-      // if (TokenID != null) alert("Token not Null")
     }, []);
   
     if (loading) {
