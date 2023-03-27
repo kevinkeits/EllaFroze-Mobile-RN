@@ -1,11 +1,12 @@
 import { Picker } from '@react-native-picker/picker';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
 import { CartIcon, LocationIcon, MessageIcon } from '../../../../assets/icons';
 import Drawer  from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
 import { Icon, Badge } from 'react-native-elements';
 import NotificationIcon from './components/Icon/Icon';
+import axios from 'axios';
 
 
 
@@ -19,6 +20,11 @@ const items= [
     text: "Test2"
   }
 ]
+interface Notification {
+  cartData: number;
+  messageData: number;
+  orderData: number;
+}
 
 const HomeHeader = () => {
   const navigation = useNavigation();
@@ -26,6 +32,19 @@ const HomeHeader = () => {
   const [searchText, setSearchText] = useState('');
   const [selectedCity, setSelectedCity] = useState<string>("Semua");
   const [pickerCity, setPickerCity] = useState<boolean>(false);
+  const [notifications, setNotifications] = useState<Notification>();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios.get('https://ellafroze.com/api/external/getNotification?_cb=onCompleteFetchNotification&_s=OEhXVkhKVTc4M0RDNk5NQjNROFJPT1lCOVZCOTlYVzIxWU1LQ044TklTWFVFRlJSTFRQRDlRVUZKVE5RWEJWWk1Ea3lZbVkwWVRNNFltUmxZakUzTmpSaFkyRTFNREppTVRoak9EUmxObVV4TmpjNU5qVXhNRFl4')
+      .then(response => {
+        setNotifications(response.data.data);
+        //alert(JSON.stringify(response.data.data))
+        alert(JSON.stringify(notifications))
+        setLoading(false);
+      })
+      .catch(error => console.log(error));
+  }, []);
 
 
     const handlePickerCity = () => {
@@ -53,7 +72,7 @@ const HomeHeader = () => {
                   name="mail"
                   type="material"
                   size={30}
-                  notificationCount={3}
+                  notificationCount={notifications ? notifications?.messageData : 0}
                 />
               </TouchableOpacity>
               <TouchableOpacity onPress={()=>navigation.navigate("Cart")}>
@@ -62,7 +81,7 @@ const HomeHeader = () => {
                   name="shopping-cart"
                   type="material"
                   size={30}
-                  notificationCount={2}
+                  notificationCount={notifications ? notifications?.cartData : 0}
                 />
 
               </TouchableOpacity>

@@ -1,11 +1,6 @@
 import { StyleSheet, Text,TextInput, View, Button, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-// import Home from '../pages/Home';
-// import Transaction from '../pages/Transaction';
-// import Help from '../pages/Help';
-// import Profile from '../pages/Profile';
-// import Splash from '../pages/Splash';
 import {Home, Transaction, Help, Account, Splash} from '../pages';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { BackIcon, CartIcon, HelpIcon, HomeIcon, ProfileIcon, TransactionIcon } from '../assets/icons';

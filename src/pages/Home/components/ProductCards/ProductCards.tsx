@@ -1,14 +1,66 @@
 import { View, Text, Image, TouchableOpacity, ScrollView, FlatList, Button } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import { Icon } from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
+
+interface Product {
+    ProductID: string;
+    Product: string;
+    Branch: string;
+    BranchID: string;
+    Discount: string;
+    DiscountType: string;
+    ImagePath: string;
+    ItemSold: string;
+    Price: string;
+    Stock: string;
+    Qty?: string;
+
+  }
+
+ 
 
 const ProductCards = () => {
     const [count, setCount] = useState(0);
     const [selected, setSelected] = useState(false);
     const [selectedItems, setSelectedItems] = useState([]);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
 
+    
+    
+
+    const fetchData = async (token: string) => {
+      const url = `https://ellafroze.com/api/external/getAllProduct?CatID=&BranchID=e0251060-1c70-11ec-9ac9-ca13603aef66&Keyword=&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
+      const response = await axios.get(url);
+      setProducts(response.data.data);
+      setLoading(false)
+    }
+
+
+    useEffect(() => {
+      
+
+      const fetchToken = async () => {
+        const TokenID = await AsyncStorage.getItem('@tokenID');
+        return TokenID;
+      }
+
+      const TokenID = fetchToken();
+
+      fetchData(TokenID);
+      // if (TokenID != null) alert("Token not Null")
+    }, []);
+  
+    if (loading) {
+      return <Text>Loading...</Text>;
+    }
+
+   
 
   const incrementCount = () => {
     setCount(count + 1);
@@ -23,91 +75,21 @@ const ProductCards = () => {
     // alert(`Button clicked for item ${itemId}`);
   };
     const navigation = useNavigation();
-   const data = [{
-        id: '1',
-        categoryName: "Ikan Satu",
-        productName:"Satu",
-        discountedPrice:24000,
-        price:26000,
-        weight:50,
-        uri: require("../../../../assets/images/product-1.png")
-    },
-    {
-        id: '2',
-        categoryName: "Ikan Dua",
-        productName:"Dua",
-        discountedPrice:24000,
-        price:26000,
-        weight:50,
-        uri: require("../../../../assets/images/product-1.png")
-    },
-    {
-        id: '3',
-        categoryName: "Ikan Tiga",
-        productName:"Tiga",
-        discountedPrice:24000,
-        price:26000,
-        weight:50,
-        uri: require("../../../../assets/images/product-1.png")
-    },
-    {
-        id: '4',
-        categoryName: "Ikan Empat",
-        productName:"Empat",
-        discountedPrice:24000,
-        price:26000,
-        weight:50,
-        uri: require("../../../../assets/images/product-1.png")
-    },
-    {
-        id: '5',
-        categoryName: "Ikan Lima",
-        productName:"Lima",
-        discountedPrice:24000,
-        price:26000,
-        weight:50,
-        uri: require("../../../../assets/images/product-1.png")
-    },
-    {
-        id: '6',
-        categoryName: "Ikan Enam",
-        productName:"Enam",
-        discountedPrice:24000,
-        price:26000,
-        weight:50,
-        uri: require("../../../../assets/images/product-1.png")
-    },
-    {
-        id: '7',
-        categoryName: "Ikan Tujuh",
-        productName:"Tujuh",
-        discountedPrice:24000,
-        price:26000,
-        weight:50,
-        uri: require("../../../../assets/images/product-1.png")
-    },
-    {
-        id: '8',
-        categoryName: "Ikan Delapan",
-        productName:"Delapan",
-        discountedPrice:24000,
-        price:26000,
-        weight:50,
-        uri: require("../../../../assets/images/product-1.png")
-    }];
+    
     const numColumns = 2;
 
     const renderItem = ({item}:any) => {
-        const isSelected = item.id === selected;
-
-
-        
-
+        const isSelected = item.ProductID === selected;
+        const formattedPrice = new Intl.NumberFormat('id-ID', {
+            // style: 'currency',
+            currency: 'IDR'
+          }).format(item.Price);
         return (
             <TouchableOpacity 
             style={{
                 width:180, 
-                height:250, 
+                // height:250,
+                paddingBottom:10, 
                 backgroundColor: '#fff',
             elevation:3,
             shadowColor: '#000',
@@ -124,13 +106,23 @@ const ProductCards = () => {
             }} 
                 onPress={()=>{navigation.navigate('ProductDetail')}}
                 >
-                <View style={{alignItems:"center"}}>
-                <Image source={item.uri} />
-                </View>
-            <Text style={{fontSize:15, marginTop:5, marginLeft:8}}>{item.productName}</Text>
-            <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>Rp. {item.price}</Text>
-            <Text style={{fontSize:11, marginTop:3, marginLeft:8}}>Rp. {item.discountedPrice}</Text>
-            <Text style={{fontSize:11, marginTop:3, marginLeft:8}}>Berat: {item.weight}gr / Pack</Text>
+
+        <View style={{alignItems:"center"}}>
+            <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:100, height:120}}/>
+        </View>
+            <Text style={{fontSize:15, marginTop:5, marginLeft:8}}>{item.Product}</Text>
+            <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>Rp. {formattedPrice}</Text>
+            <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. {formattedPrice}</Text>
+            <View style={{flexDirection:"row", alignItems:"center", marginLeft:10}}>
+            <Icon  
+                name="map-marker-outline"
+                type="material-community"
+                size={15} color="black" /> 
+            <Text style={{fontSize:11, marginTop:3, marginLeft:8}}>{item.Branch}</Text>
+
+            </View>
+            <Text style={{fontSize:11, marginTop:3, marginLeft:8}}> Terjual: {item.ItemSold}</Text>
+
     
             
        
@@ -146,7 +138,7 @@ const ProductCards = () => {
                         <Text style={{color:"#148D2E"}}>+</Text>
                     </TouchableOpacity>
                     </View>
-                </View>):(
+            </View>):(
                       <View style={{justifyContent:"center", alignItems:"center"}}>
                       <TouchableOpacity onPress={()=>handleButtonPress(item.id)} style={{backgroundColor: '#148D2E', width:'85%', marginTop:6, alignItems:"center", paddingVertical:3, borderRadius:6}}>
                           <Text style={{color:"white", fontWeight:"bold"}}>BELI</Text>
@@ -161,14 +153,14 @@ const ProductCards = () => {
 
   return (
     
-    // <View style={{}} >
+    <View style={{}} >
          <FlatList
-        data={data}
+        data={products}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.ProductID}
         numColumns={numColumns}
       />
-    // </View>
+     </View>
   )
 }
 

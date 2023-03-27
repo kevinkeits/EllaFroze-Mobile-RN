@@ -1,10 +1,9 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Keyboard, Alert } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Logo } from '../../assets'
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios';
-import { loginFailure, loginSuccess } from '../../components/Redux/Redux';
-import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 interface LoginCredentials {
@@ -22,19 +21,21 @@ const Login: React.FC<Props> = ({ navigation }) => {
     const [txtUsername, setTxtUsername] = useState('');
     const [txtPassword, setTxtPassword] = useState('');
     
-    const dispatch = useDispatch();
+    //const dispatch = useDispatch();
 
     async function loginUser(loginInput: LoginCredentials): Promise<void> {
       const apiUrl = 'https://ellafroze.com/api/external/doLogin';
     
       try {
          const response = await axios.post(apiUrl, loginInput);
-         //alert(JSON.stringify(response.data.status))
+         //alert(JSON.stringify(response.data))
+         //alert(JSON.stringify(await AsyncStorage.getItem('@tokenID')))
          if (!response.data.status){
           alert(response.data.message);
          } else {
-          //navigation.navigate("Login")
-          alert(response.data.message)
+          navigation.navigate("MainApp")
+          //alert(response.data.data.Token)
+          await AsyncStorage.setItem('@tokenID', response.data.data.Token)
          }   
       } catch (error) {
         console.error(error);
@@ -49,6 +50,20 @@ const Login: React.FC<Props> = ({ navigation }) => {
         console.error(error);
       }
     };
+
+    useEffect (() => {
+      const fetchToken = async () => {
+        const TokenID = await AsyncStorage.getItem('@tokenID');
+        return TokenID;
+      }
+
+      const TokenID = fetchToken();
+      if (TokenID != null) navigation.navigate("MainApp")
+      // return () => {
+      //   console.log('Component unmounted');
+      // };
+    }, []);
+  
 
   
     

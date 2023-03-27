@@ -1,11 +1,45 @@
 import { View, Text, Image, TouchableOpacity, ScrollView, FlatList } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
+
+interface Category {
+    ID: string;
+    ImagePath: string;
+    Name: string;
+  }
 
 const HomeCategory = () => {
     const navigation = useNavigation();
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchData = async (token: string) => {
+      const url = `https://ellafroze.com/api/external/getCategory?_cb=onCompleteFetchCategory&_p=main-category-slider&_s=${token}`;
+      const response = await axios.get(url);
+      setCategories(response.data.data);
+      setLoading(false)
+    }
+
+    useEffect(() => {
+    
+      const fetchToken = async () => {
+        const TokenID = await AsyncStorage.getItem('@tokenID');
+        return TokenID;
+      }
+
+      const TokenID = fetchToken();
+
+      fetchData(TokenID);
+    }, []);
+  
+  
+    if (loading) {
+      return <Text>Loading...</Text>;
+    }
    const data = [{
         id: '1',
         categoryName: "Ikan Satu",
@@ -52,14 +86,14 @@ const HomeCategory = () => {
     
     <View style={{backgroundColor:"white", flexDirection:"row" }} >
          <FlatList
-        data={data}
+        data={categories}
         renderItem={({item}) => 
        
         <TouchableOpacity style={{width:80, height:80, alignItems:"center",  margin:8}} onPress={()=>{navigation.navigate('Category')}}>
-        <Image source={item.uri}/>
-        <Text style={{fontSize:10, marginTop:4}}>{item.categoryName}</Text>
+        <Image source={{ uri: `https://ellafroze.com/api/uploaded/category/${item.ImagePath}`}} style={{width:50, height:50}}/>
+        <Text style={{fontSize:10, marginTop:4}}>{item.Name}</Text>
         </TouchableOpacity>}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.ID}
         numColumns={numColumns}
       />
         {/* {data.map((datum, index)=>(
