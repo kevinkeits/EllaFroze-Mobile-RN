@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StackActions, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParams } from '../../../App';
@@ -8,7 +8,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
+
 const Splash = () => {
+  const [token, setToken] = useState("");
+
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
     // useEffect(()=>{
     //     setTimeout(()=>{
@@ -16,15 +19,32 @@ const Splash = () => {
     //     }, 3000)
     // })
 
-    useEffect (() => {
-      const fetchToken = async () => {
-        const TokenID = await AsyncStorage.getItem('@tokenID');
-        return TokenID;
-      }
+    const fetchToken = async () => {
+      const tokenData = await AsyncStorage.getItem('tokenID')
+      setToken(tokenData == null ? "" : tokenData);
+    };
 
-      const TokenID = fetchToken();
-      if (TokenID != null) navigation.navigate("MainApp")
-      else navigation.navigate("Login");
+    useEffect (() => {
+      
+
+      fetchToken()
+
+      if (token == "") {
+        setTimeout(()=>{
+            navigation.navigate('Login');
+        }, 3000)
+      } else {
+        navigation.navigate("MainApp")
+      }
+      
+
+      // setToken(await AsyncStorage.getItem('tokenID'))
+      
+
+      //const TokenID = await fetchToken();
+      //alert(JSON.stringify(TokenID))
+      // if (await fetchToken() != null) navigation.navigate("MainApp")
+      // else navigation.navigate("Login");
       // return () => {
       //   console.log('Component unmounted');
       // };

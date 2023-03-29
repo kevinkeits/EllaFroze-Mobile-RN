@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView } from 'react-native';
 import { CartIcon, LocationIcon, MessageIcon } from '../../assets/icons';
 import Carousel from './components/Carousel';
+import HomeArticle from './components/HomeArticle/HomeArticle';
 import HomeCategory from './components/HomeCategory/HomeCategory';
 import HomeCharts from './components/HomeCharts/HomeCharts';
 import ProductCards from './components/ProductCards/ProductCards';
@@ -51,7 +52,8 @@ const HomePage = () => {
         <HomeCategory/>
         </View>
       <View style={{marginTop:10}}>
-      <ProductCards/>
+      {/* <ProductCards/> */}
+      <HomeArticle/>
       </View>
      
       </ScrollView>

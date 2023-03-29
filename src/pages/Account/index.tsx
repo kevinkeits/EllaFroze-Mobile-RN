@@ -5,7 +5,17 @@ import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RootStackParams } from '../../../App';
 import { AccountIcon, AddressIcon, ChatIcon, HistoryIcon } from '../../assets/icons';
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+
+
+interface User {
+  Name: string;
+  Email: string;
+  Phone: string;
+}
 
 const API_BASE_URL = 'https://ellafroze.com/api/external/doLogout'; // replace with your API base URL
 
@@ -13,38 +23,49 @@ interface LogoutResponse {
   success: boolean;
 }
 
-export const logout = async (): Promise<LogoutResponse> => {
-  try {
-    const response = await axios.post<LogoutResponse>(`${API_BASE_URL}`);
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw new Error('Unable to logout');
-  }
-};
-
-
 
 
 export default function Account() {
-  const navigation =
-    useNavigation();
+  const navigation = useNavigation();
+  // const navigationLogout = useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [users, setUsers] = useState<User>();
+  const [loading, setLoading] = useState(true);  
+  
 
-  const handleLogout = async () => {
-    setIsLoggingOut(true);
+  const fetchData = async (tokenData: string) => {
+    const url = `https://ellafroze.com/api/external/getUser?_cb=onCompleteFetchUserDetail&_p=&_s=${tokenData}`;
+    const response = await axios.get(url);
+    setUsers(response.data.data);
+    setLoading(false)
+  }
+
+  
+
+  const handleLogout= async () => {
     try {
-      await logout();
-      alert("logged out")
-      navigation.navigate("Login")
-      // handle successful logout
+      await AsyncStorage.removeItem('tokenID');
+      //alert('loggedOut')
+      navigation.navigate("Login");
     } catch (error) {
-      // handle error
-    } finally {
-      setIsLoggingOut(false);
+      console.error(error);
     }
   };
+
+  const fetchToken = async () => {
+    const tokenData = await AsyncStorage.getItem('tokenID')
+    fetchData(tokenData == null ? "" : tokenData);
+    
+  };
+
+  useEffect(() => {
+    
+    fetchToken()
+    
+    
+  }, []);
+
+
 
 
     // const handleLogout = async () => {
@@ -59,8 +80,39 @@ export default function Account() {
   return (
       
     <View style={{marginHorizontal:10, marginVertical:15}}>
+      <View style={{
+          margin:7,
+          alignItems:"center",
+          borderRadius:9, 
+          paddingVertical:15,
+          backgroundColor: '#fff',
+          elevation:3,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.22,
+          shadowRadius: 2.22,
+          }}>
+        <Text style={{fontWeight:"bold", fontSize:16}}>{users?.Name}</Text>
+        <Text style={{fontSize:16}}>{users?.Email}</Text>
+      </View>
       <Text style={{marginBottom:10, fontWeight:"bold", fontSize:15}}>Pengaturan Akun</Text>
-      <View style={{backgroundColor:"#148D2E", marginHorizontal:10, borderRadius:10}}>
+      <View style={{
+          margin:7,
+          borderRadius:9, 
+          paddingVertical:3,
+          backgroundColor: '#fff',
+          elevation:3,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.22,
+          shadowRadius: 2.22,
+          }}>
         <TouchableOpacity style={{flexDirection:"row", gap:10, paddingVertical:15, marginLeft:30}}
        onPress={()=>{navigation.navigate('AccountDetail')}}
        >
@@ -69,7 +121,20 @@ export default function Account() {
         </TouchableOpacity>
 
       </View>
-      <View style={{backgroundColor:"#148D2E", marginHorizontal:10, marginTop:10, borderRadius:10}}>
+      <View style={{
+          margin:7,
+          borderRadius:9, 
+          paddingVertical:3,
+          backgroundColor: '#fff',
+          elevation:3,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.22,
+          shadowRadius: 2.22,
+          }}>
         <TouchableOpacity style={{flexDirection:"row", gap:10, paddingVertical:15, marginLeft:30}}
        onPress={()=>{navigation.navigate('Transaction')}}
        >
@@ -78,7 +143,20 @@ export default function Account() {
         </TouchableOpacity>
 
       </View>
-      <View style={{backgroundColor:"#148D2E", marginHorizontal:10, marginTop:10, borderRadius:10}}>
+      <View style={{
+          margin:7,
+          borderRadius:9, 
+          paddingVertical:3,
+          backgroundColor: '#fff',
+          elevation:3,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.22,
+          shadowRadius: 2.22,
+          }}>
         <TouchableOpacity style={{flexDirection:"row", gap:10, paddingVertical:15, marginLeft:30}}
        onPress={()=>{navigation.navigate('Contact')}}
        >
@@ -87,7 +165,20 @@ export default function Account() {
         </TouchableOpacity>
 
       </View>
-      <View style={{backgroundColor:"#148D2E", marginHorizontal:10, marginVertical:10, borderRadius:10}}>
+      <View style={{
+          margin:7,
+          borderRadius:9, 
+          paddingVertical:3,
+          backgroundColor: '#fff',
+          elevation:3,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.22,
+          shadowRadius: 2.22,
+          }}>
         <TouchableOpacity style={{flexDirection:"row", gap:10, paddingVertical:15, marginLeft:30}}
        onPress={()=>{navigation.navigate('AccountAddress')}}
        >
@@ -96,13 +187,27 @@ export default function Account() {
         </TouchableOpacity>
 
       </View>
-      <View style={{backgroundColor:"#148D2E", marginHorizontal:10, borderRadius:10}}>
+      <View style={{
+          margin:7,
+          borderRadius:9, 
+          paddingVertical:3,
+          backgroundColor: '#fff',
+          elevation:3,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.22,
+          shadowRadius: 2.22,
+          }}>
         <TouchableOpacity style={{flexDirection:"row", gap:10, paddingVertical:15, marginLeft:30}}
-       onPress={handleLogout} disabled={isLoggingOut}
+       onPress={handleLogout}
        >
           <AccountIcon/>
           <Text style={{fontWeight:"700"}}>Logout</Text>
         </TouchableOpacity>
+       
 
       </View>
       {/* <Button title='Account Detail' onPress={()=>{navigation.navigate('AccountDetail')}}/>

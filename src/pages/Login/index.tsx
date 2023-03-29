@@ -28,14 +28,11 @@ const Login: React.FC<Props> = ({ navigation }) => {
     
       try {
          const response = await axios.post(apiUrl, loginInput);
-         //alert(JSON.stringify(response.data))
-         //alert(JSON.stringify(await AsyncStorage.getItem('@tokenID')))
          if (!response.data.status){
           alert(response.data.message);
          } else {
           navigation.navigate("MainApp")
-          //alert(response.data.data.Token)
-          await AsyncStorage.setItem('@tokenID', response.data.data.Token)
+          await AsyncStorage.setItem('tokenID', response.data.data.Token)
          }   
       } catch (error) {
         console.error(error);
@@ -52,16 +49,7 @@ const Login: React.FC<Props> = ({ navigation }) => {
     };
 
     useEffect (() => {
-      const fetchToken = async () => {
-        const TokenID = await AsyncStorage.getItem('@tokenID');
-        return TokenID;
-      }
-
-      const TokenID = fetchToken();
-      if (TokenID != null) navigation.navigate("MainApp")
-      // return () => {
-      //   console.log('Component unmounted');
-      // };
+      
     }, []);
   
 

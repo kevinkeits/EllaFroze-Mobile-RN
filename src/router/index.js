@@ -35,9 +35,16 @@ const AccountApp = () => {
 
   return(
 <AccountStack.Navigator initialRouteName='Account'>
-  <AccountStack.Screen name='Account' component={Account}/>
+  <AccountStack.Screen name='Account' component={Account} options={{title: "Profile", headerStyle: {
+          backgroundColor: '#FA0000',
+        },
+        }}/>
   <AccountStack.Screen name='AccountDetail' component={AccountDetail} options={{
           headerBackTitle: null,
+          title:"Data Diri",
+          headerStyle : {
+              backgroundColor: '#FA0000',
+          },
           headerRight: () => (
             <Button
               onPress={() => alert('This is a button!')}
