@@ -35,7 +35,7 @@ const AddressDetail = () => {
 
   return (
     <View>
-      <Text style={{marginTop:20, marginLeft:8}}>Detail Alamat</Text>
+      <Text style={{marginTop:20, marginLeft:8, fontWeight:"bold", fontSize:16}}>Detail Alamat</Text>
       <View style={{
         padding:10, 
         marginTop:20, 

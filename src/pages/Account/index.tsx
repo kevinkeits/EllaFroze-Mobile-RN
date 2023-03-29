@@ -96,6 +96,7 @@ export default function Account() {
           shadowRadius: 2.22,
           }}>
         <Text style={{fontWeight:"bold", fontSize:16}}>{users?.Name}</Text>
+        <Text style={{fontSize:16}}>{users?.Phone}</Text>
         <Text style={{fontSize:16}}>{users?.Email}</Text>
       </View>
       <Text style={{marginBottom:10, fontWeight:"bold", fontSize:15}}>Pengaturan Akun</Text>

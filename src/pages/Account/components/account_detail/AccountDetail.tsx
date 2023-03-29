@@ -13,6 +13,7 @@ interface UserInput {
   txtFrmName: string;
   txtFrmEmail: string;
   txtFrmPhone: string;
+  _s:string;
 }
 
 
@@ -24,15 +25,18 @@ const AccountDetail = () => {
   const [txtFrmName, setTxtFrmName] = useState('');
   const [txtFrmEmail, setTxtFrmEmail] = useState('');
   const [txtFrmPhone, setTxtFrmPhone] = useState('');
-    
-    
+  const [_s, setToken] = useState('');
+
+
+
 
     async function saveEdit(userInput: UserInput): Promise<void> {
       const apiUrl = 'https://ellafroze.com/api/external/doUpdateUser';
     
       try {
-         const response = await axios.post(apiUrl, {txtFrmName, txtFrmPhone, txtFrmEmail});
-         //alert(JSON.stringify(response.data.status))
+         const response = await axios.post(apiUrl, userInput);
+         await AsyncStorage.getItem('tokenID')
+         //alert(JSON.stringify(userInput))
          if (!response.data.status){
           alert(response.data.message);
          } else {
@@ -47,7 +51,7 @@ const AccountDetail = () => {
 
     const handleSave = async () => {
       try {
-        await saveEdit({ txtFrmName, txtFrmPhone, txtFrmEmail });
+        await saveEdit({ txtFrmName, txtFrmPhone, txtFrmEmail, _s });
       } catch (error) {
         console.error(error);
       }
@@ -60,14 +64,27 @@ const AccountDetail = () => {
     setUsers(response.data.data);
 
     // alert(JSON.stringify(response.data.data))
-    alert(JSON.stringify(users))
+    //alert(JSON.stringify(users))
     setLoading(false)
   }
 
   const fetchToken = async () => {
     const tokenData = await AsyncStorage.getItem('tokenID')
     fetchData(tokenData == null ? "" : tokenData);
+    setToken(tokenData == null ? "" : tokenData)
     
+  };
+
+  const handleChangeName = (value: string) => {
+    setTxtFrmName(value)
+  };
+
+  const handleChangeEmail = (value: string) => {
+    setTxtFrmEmail(value)
+  };
+
+  const handleChangePhone = (value: string) => {
+    setTxtFrmPhone(value)
   };
 
   useEffect(() => {
@@ -83,22 +100,24 @@ const AccountDetail = () => {
       <Text style={{fontWeight:"bold"}}>Nama Lengkap</Text>
       <TextInput 
       // placeholder='Rifqi Lazuardi'
-      value={users?.Name}
-      onChangeText={setTxtFrmName}
+      value={txtFrmName !== '' ? txtFrmName : users?.Name}
+      onChangeText={handleChangeName}
       style={{borderColor:"black", borderBottomWidth:1, alignItems: "center", justifyContent:"center", padding:8, marginVertical:5, borderRadius:6}}
       />
     </View>
     <View style={{ marginHorizontal: 10, marginTop: 10}}>
       <Text style={{fontWeight:"bold"}}>No Handphone</Text>
       <TextInput 
-      value={users?.Phone}
+      value={txtFrmPhone !== '' ? txtFrmPhone : users?.Phone}
+      onChangeText={handleChangePhone}
       style={{borderColor:"black", borderBottomWidth:1, alignItems: "center", justifyContent:"center", padding:8, marginVertical:5, borderRadius:6}}
       />
     </View>
     <View style={{ marginHorizontal: 10, marginTop: 10}}>
       <Text style={{fontWeight:"bold"}}>Email</Text>
       <TextInput 
-      value={users?.Email}
+      value={txtFrmEmail !== '' ? txtFrmEmail : users?.Email}
+      onChangeText={handleChangeEmail}
       style={{borderColor:"black", borderBottomWidth:1, alignItems: "center", justifyContent:"center", padding:8, marginVertical:5, borderRadius:6}}
       />
     </View>

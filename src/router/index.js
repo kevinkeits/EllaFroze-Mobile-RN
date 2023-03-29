@@ -20,6 +20,7 @@ import SignUp from '../pages/SignUp/SignUp';
 import ForgetPassword from '../pages/ForgetPassword/ForgetPassword';
 import { Icon } from 'react-native-elements';
 import NotificationIcon from '../components/Icon/Icon';
+import NewAddress from '../pages/Account/components/new_address/NewAddress';
 
 
 
@@ -61,6 +62,12 @@ const AccountApp = () => {
   />
   <AccountStack.Screen name='AddressDetail' component={AddressDetail} 
   options={{title: "Address Detail", headerStyle: {
+    backgroundColor: '#FA0000',
+    height: 120,
+  }}}
+  />
+   <AccountStack.Screen name='NewAddress' component={NewAddress} 
+  options={{title: "New Address", headerStyle: {
     backgroundColor: '#FA0000',
     height: 120,
   }}}
