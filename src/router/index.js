@@ -34,6 +34,7 @@ const HomeStack = createNativeStackNavigator();
 
 const AccountApp = () => {
 
+
   return(
 <AccountStack.Navigator initialRouteName='Account'>
   <AccountStack.Screen name='Account' component={Account} options={{title: "Profile", headerStyle: {
@@ -46,13 +47,22 @@ const AccountApp = () => {
           headerStyle : {
               backgroundColor: '#FA0000',
           },
-          headerRight: () => (
-            <Button
-              onPress={() => alert('This is a button!')}
-              title="Info"
-              color="black"
-            />
-          ),
+          // headerLeft:()=> 
+          //   <TouchableOpacity onPress={()=>navigation.goBack()} >
+          //      <Icon
+          //         name="arrow-back"
+          //         type="material"
+          //         size={40}
+          //         color="white"
+          //       />
+          //     </TouchableOpacity>,
+          // headerRight: () => (
+          //   <Button
+          //     onPress={() => alert('This is a button!')}
+          //     title="Info"
+          //     color="black"
+          //   />
+          // ),
         }}/>
   <AccountStack.Screen name='AccountAddress' component={AccountAddress}
   options={{title: "Address", headerStyle: {
@@ -215,19 +225,21 @@ const Router = () => {
           placeholder="Search"
         />,
             headerRight:()=> 
-            <NotificationIcon
-            name="shopping-cart"
-            type="material"
-            size={30}
-            notificationCount={2}
-          />
+            <TouchableOpacity onPress={()=>navigation.navigate("Cart")}>
+                <NotificationIcon
+                  name="shopping-cart"
+                  type="material"
+                  size={30}
+                  // notificationCount={2}
+                />
+              </TouchableOpacity>
 ,
             headerLeft:()=> <TouchableOpacity onPress={()=>navigation.goBack()}>
               {/* <BackIcon /> */}
               <Icon
                   name="arrow-back"
                   type="material"
-                  size={30}
+                  size={40}
                   color="white"
                 />
 
@@ -245,35 +257,74 @@ const Router = () => {
             // value={searchText}
             placeholder="Search"
             />,
-            headerRight:()=> <CartIcon/>,
-            headerLeft:()=> <TouchableOpacity onPress={()=>navigation.goBack()} ><BackIcon /></TouchableOpacity>,
+            headerRight:()=>
+            <TouchableOpacity onPress={()=>navigation.navigate("Cart")}>
+                <NotificationIcon
+                  name="shopping-cart"
+                  type="material"
+                  size={30}
+                  // notificationCount={2}
+                />
+              </TouchableOpacity>
+            ,
+            headerLeft:()=> 
+            <TouchableOpacity onPress={()=>navigation.goBack()} >
+               <Icon
+                  name="arrow-back"
+                  type="material"
+                  size={40}
+                  color="white"
+                />
+              </TouchableOpacity>,
             headerStyle:{
               backgroundColor:"red",
             }
             }}/>
              <RootStack.Screen name='Cart' component={Cart} options={{
-            title: "Cart",
-            headerTitle:()=>
-            <TextInput
-            style={styles.searchBar}
-            // onChangeText={handleSearchTextChange}
-            // value={searchText}
-            placeholder="Search"
-            />,
-            headerRight:()=> <CartIcon/>,
-            headerLeft:()=> <TouchableOpacity style={{ marginBottom:20}} onPress={()=>navigation.goBack()}><BackIcon /></TouchableOpacity>,
-            headerStyle:{
-              backgroundColor:"red",
-            }
-            }}/>
+              title: "Keranjang",
+              headerLeft:()=> 
+            <TouchableOpacity onPress={()=>navigation.goBack()} >
+               <Icon
+                  name="arrow-back"
+                  type="material"
+                  size={40}
+                  color="white"
+                />
+              </TouchableOpacity>, 
+             headerStyle: {
+                backgroundColor: '#FA0000',
+                height: 120,
+                }}}/>
             <RootStack.Screen name='Payment' component={Payment} options={{headerShown:false}} />
             <RootStack.Screen name='Contact' component={Contact}
-                options={{title: "Hubungi Admin", headerStyle: {
+                options={{
+                  title: "Hubungi Admin",
+                  headerLeft:()=> 
+            <TouchableOpacity onPress={()=>navigation.goBack()} >
+               <Icon
+                  name="arrow-back"
+                  type="material"
+                  size={40}
+                  color="white"
+                />
+              </TouchableOpacity>, 
+                  headerStyle: {
                 backgroundColor: '#FA0000',
                 height: 120,
                 }}} />
             <RootStack.Screen name='ChatRoom' component={ChatRoom}
-                options={{title: "Admin", headerStyle: {
+                options={{
+                  title: "Admin",
+                  headerLeft:()=> 
+            <TouchableOpacity onPress={()=>navigation.goBack()} >
+               <Icon
+                  name="arrow-back"
+                  type="material"
+                  size={40}
+                  color="white"
+                />
+              </TouchableOpacity>, 
+                  headerStyle: {
                 backgroundColor: '#FA0000',
                 height: 120,
                 }}} />
@@ -308,7 +359,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     paddingLeft: 10,
-    width: '80%'
+    width: '75%'
   },
   title: {
     fontSize: 20,

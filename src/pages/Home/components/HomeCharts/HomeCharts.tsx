@@ -95,8 +95,13 @@ const HomeCharts = () => {
     setCount(count + 1);
   };
 
+  // const decrementCount = () => {
+  //   setCount(count - 1);
+  // };
+
   const decrementCount = () => {
-    setCount(count - 1);
+    const newCount = count - 1 >= 0 ? count - 1 : 0;
+    setCount(newCount);
   };
 
   const handleButtonPress = (itemId: any) => {
@@ -104,8 +109,8 @@ const HomeCharts = () => {
     // alert(`Button clicked for item ${itemId}`);
   };
 
-  const handleNavigate = (id: string) => {
-    navigation.navigate('ProductDetail', {itemId: id})
+  const handleNavigate = (itemId: string) => {
+    navigation.navigate('ProductDetail', {itemId})
     // alert(`Button clicked for item ${itemId}`);
   };
    

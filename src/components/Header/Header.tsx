@@ -1,7 +1,7 @@
 import { Picker } from '@react-native-picker/picker';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
-import { CartIcon, LocationIcon, MessageIcon } from '../../../../assets/icons';
+import { CartIcon, LocationIcon, MessageIcon } from '../../assets/icons';
 import Drawer  from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
 import { Icon, Badge } from 'react-native-elements';
@@ -11,23 +11,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
-const items= [
-  {
-  id: 1,
-  text: "Test"
-  },
-  {
-    id:2,
-    text: "Test2"
-  }
-]
+
 interface Notification {
   cartData: number;
   messageData: number;
   orderData: number;
 }
 
-const HomeHeader = () => {
+const Header = () => {
   const navigation = useNavigation();
 
   const [searchText, setSearchText] = useState('');
@@ -70,13 +61,20 @@ useEffect(() => {
 
   return (
       <View style={styles.header}>
-        <Image source={require('../../../../assets/images/logo.png')} style={styles.logo} />
+        <TouchableOpacity onPress={()=>navigation.goBack()} >
+               <Icon
+                  name="arrow-back"
+                  type="material"
+                  size={40}
+                  color="white"
+                />
+              </TouchableOpacity>
         <View style={{width:'100%'}}>
           <View style={{flexDirection:'row', marginVertical:2, justifyContent:'space-between', width:293}}>
-          <TouchableOpacity onPress={handlePickerCity} style={{flexDirection:"row", gap:8}}>           
+          {/* <TouchableOpacity onPress={handlePickerCity} style={{flexDirection:"row", gap:8}}>           
            <LocationIcon  />
             <Text style={{color:"white"}}>{selectedCity}</Text>
-           </TouchableOpacity>         
+           </TouchableOpacity>          */}
            <View style={{flexDirection:'row', gap:20}}>
               <TouchableOpacity onPress={()=>navigation.navigate("Contact")}>
                 {/* <MessageIcon/> */}
@@ -88,14 +86,12 @@ useEffect(() => {
                 />
               </TouchableOpacity>
               <TouchableOpacity onPress={()=>navigation.navigate("Cart")}>
-                {/* <CartIcon/> */}
                 <NotificationIcon
                   name="shopping-cart"
                   type="material"
                   size={30}
                   notificationCount={notifications ? notifications?.cartData : 0}
                 />
-
               </TouchableOpacity>
             </View>
           </View>
@@ -167,4 +163,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeHeader;
+export default Header;

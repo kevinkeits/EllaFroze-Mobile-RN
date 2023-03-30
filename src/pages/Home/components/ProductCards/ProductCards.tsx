@@ -64,8 +64,13 @@ const ProductCards = () => {
     setCount(count + 1);
   };
 
+  // const decrementCount = () => {
+  //   setCount(count - 1);
+  // };
+
   const decrementCount = () => {
-    setCount(count - 1);
+    const newCount = count - 1 >= 0 ? count - 1 : 0;
+    setCount(newCount);
   };
 
   const handleButtonPress = (itemId: any) => {

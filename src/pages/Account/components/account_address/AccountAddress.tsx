@@ -48,26 +48,6 @@ const AccountAddress = () => {
     fetchData(tokenData == null ? "" : tokenData);
     
   };
-  const items:AddressProps[] = [
-    {
-    id:"1",
-    name: "Rifqi",
-    phoneNumber:"08128323",
-    state:"West Java",
-    city: "Bogor",
-    district: "Kec. Tanah Sareal",
-    postalCode: "16161"
-  },
-  {
-    id:"2",
-    name: "Raihan",
-    phoneNumber:"08128323",
-    state:"West Java",
-    city: "Depok",
-    district: "Kec. Kelapa Dua",
-    postalCode: "16161"
-  }
-]
 
 useEffect(() => {
     

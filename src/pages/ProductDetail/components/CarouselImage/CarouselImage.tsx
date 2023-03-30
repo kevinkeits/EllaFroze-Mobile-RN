@@ -12,25 +12,26 @@ interface Slide {
   imgUrl?:string;
 }
 
-interface Banner {
-  ID: string;
-  ImagePath: string;
-  Name: string;
-  Keyword: string;
-  URL: string;
-}
+interface ImagePath {
+    ID: string;
+    ImagePath: string;
+  }
+
+  interface Props {
+    itemId: string
+  }
 
 
 
-const Carousel = () => {
+const CarouselImage = ({itemId}:Props) => {
   const [activeSlide, setActiveSlide] = useState(0);
-  const [banners, setBanners] = useState<Banner[]>([]);
+  const [image, setImage] = useState<ImagePath[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async (token: string) => {
-    const url = `https://ellafroze.com/api/external/getBanner?_cb=onCompleteFetchBanner&_p=main-banner-slider-wrapper&_s=${token}`;
+    const url = `https://ellafroze.com/api/external/getProductImage?_i=${itemId}&_cb=onCompleteFetchBanner&_p=product-image-slider-wrapper&_s=${token}`;
     const response = await axios.get(url);
-    setBanners(response.data.data);
+    setImage(response.data.data);
     setLoading(false)
   }
 
@@ -46,6 +47,7 @@ useEffect(() => {
   
   
 }, []);
+
   // useEffect(() => {
   //   axios.get('https://ellafroze.com/api/external/getBanner?_cb=onCompleteFetchBanner&_p=main-banner-slider-wrapper&_s=NTk4OFBPSk9IUEc4MTVGT1hFQ0ZXT1pZRTVRREZFUUVMWjkyTE1PMTYzR0xIV0tWR0JGSFI5SzZTUFNKUldVNU1Ea3lZbVkwWVRNNFltUmxZakUzTmpSaFkyRTFNREppTVRoak9EUmxObVV4TmpjNU5qTTROemM1')
   //     .then(response => {
@@ -75,9 +77,9 @@ useEffect(() => {
         onScroll={handleScroll}
         scrollEventThrottle={16}
       >
-        {banners.map((banner) => (
-          <View key={banner.ID} style={[styles.slide]} >
-            <Image source={{ uri: `https://ellafroze.com/api/uploaded/banner/${banner.ImagePath}`}} style={{width:390, height:200}}  />
+        {image.map((item) => (
+          <View key={item.ID} style={[styles.slide]} >
+            <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:300, height:500, alignSelf:"center"}}  />
           </View>
         //   <View key={banner.ID} style={[styles.slide, { backgroundColor: slide.backgroundColor }]} >
         //   <Image source={{uri:slide.imgUrl}} style={{width:300, height:200}}  />
@@ -85,9 +87,9 @@ useEffect(() => {
         ))}
       </ScrollView>
       <View style={styles.dotsContainer}>
-        {banners.map((banner, index) => (
+        {image.map((item, index) => (
           <View
-            key={banner.ID}
+            key={item.ID}
             style={[styles.dot, index === activeSlide ? styles.activeDot : null]}
           />
         ))}
@@ -98,12 +100,12 @@ useEffect(() => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 200,
+    height: 500,
     backgroundColor: '#fff',
   },
   slide: {
     width,
-    height: 250,
+    height: 500,
   },
   dotsContainer: {
     flexDirection: 'row',
@@ -126,4 +128,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Carousel;
+export default CarouselImage;
