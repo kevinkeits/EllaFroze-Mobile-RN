@@ -11,16 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
-const items= [
-  {
-  id: 1,
-  text: "Test"
-  },
-  {
-    id:2,
-    text: "Test2"
-  }
-]
+
 interface Notification {
   cartData: number;
   messageData: number;
@@ -48,6 +39,11 @@ const HomeHeader = () => {
     fetchData(tokenData == null ? "" : tokenData);
     
   };
+
+  const handleSearch = () => {
+    navigation.navigate('Search', { searchText });
+  };
+
 
 useEffect(() => {
     
@@ -99,13 +95,22 @@ useEffect(() => {
               </TouchableOpacity>
             </View>
           </View>
-        
+        <View style={styles.containerInput}>
         <TextInput
-          style={styles.searchBar}
-          onChangeText={handleSearchTextChange}
+          style={styles.input}
           value={searchText}
+          onChangeText={setSearchText}
           placeholder="Search"
         />
+        <TouchableOpacity onPress={handleSearch} style={{alignItems:"center", marginRight:8}}>
+        <Icon
+                  name="search"
+                  type="material"
+                  size={25}
+                  color="gray"
+                />
+      </TouchableOpacity>
+      </View>
         </View>
         <Drawer
   isVisible={pickerCity}
@@ -164,6 +169,28 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  containerInput: {
+    flexDirection: 'row',
+    height: 30,
+    borderColor: 'gray',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderRadius: 10,
+    width:290,
+    alignItems: 'center',
+  },
+  icon: {
+    position: 'absolute',
+    top: 8,
+    left: 16,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: '500',
+    color: 'black',
+    paddingLeft: 10,
   },
 });
 

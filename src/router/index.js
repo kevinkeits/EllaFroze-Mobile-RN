@@ -21,6 +21,8 @@ import ForgetPassword from '../pages/ForgetPassword/ForgetPassword';
 import { Icon } from 'react-native-elements';
 import NotificationIcon from '../components/Icon/Icon';
 import NewAddress from '../pages/Account/components/new_address/NewAddress';
+import Search from '../pages/Search/Search';
+import Header from '../components/Header/Header';
 
 
 
@@ -155,35 +157,15 @@ const MainApp = () => {
           backgroundColor: '#FA0000',
           height: 120,
         },
-        // tabBarIcon: ({color, size}) => (
-        //   <HomeIcon color={color} size={size}  />
-        // ),
-        // tabBarActiveBackgroundColor: "#BA0000",
         }}/>
-        <Tab.Screen name='Transaction' component={Transaction} options={{title: "Transaction", headerTitle: () => <HomeHeader/>, headerStyle: {
+        <Tab.Screen name='Transaction' component={Transaction} options={{title: "Home", headerTitle: () => <HomeHeader/>, headerStyle: {
           backgroundColor: '#FA0000',
           height: 120,
         },
-        // tabBarIcon: ({color, size}) => (
-        //   <TransactionIcon color={color} size={size}  />
-        // ),
-        // tabBarActiveBackgroundColor: "#BA0000",
-        // headerTintColor: '#fff',
-        // headerTitleStyle: {
-        //   fontWeight: 'bold',
-        // },
         }}/>
         <Tab.Screen name='Help' component={Help} options={{title: "Help", headerStyle: {
           backgroundColor: '#FA0000',
         },
-        // tabBarIcon: ({color, size}) => (
-        //   <HelpIcon color={color} size={size}  />
-        // ),
-        // tabBarActiveBackgroundColor: "#BA0000",
-        // headerTintColor: '#fff',
-        // headerTitleStyle: {
-        //   fontWeight: 'bold',
-        // },
         }}/>
       <Tab.Screen name='AccountApp' component={AccountApp} options={{title: "AccountApp", headerShown: false,
         // tabBarIcon: ({color, size}) => (
@@ -208,78 +190,13 @@ const Router = () => {
         <RootStack.Screen name='SignUp' component={SignUp} options={{title: "SignUp", headerShown: false}}/>
         <RootStack.Screen name='ForgetPassword' component={ForgetPassword} options={{title: "ForgetPassword", headerShown: false}}/>
         <RootStack.Screen name='MainApp' component={MainApp} options={{title: "Home", headerShown: false,
-          // tabBarIcon: ({color, size}) => (
-          //   <HomeIcon color={color} size={size}  />
-          // ),
           headerTintColor: '#fff',
           headerTitleStyle: {
             fontWeight: 'bold',
           },}}/>
-          <RootStack.Screen name='Category' component={Category} options={{
-            title: "Category",
-            headerTitle:()=>
-            <TextInput
-          style={styles.searchBar}
-          // onChangeText={handleSearchTextChange}
-          // value={searchText}
-          placeholder="Search"
-        />,
-            headerRight:()=> 
-            <TouchableOpacity onPress={()=>navigation.navigate("Cart")}>
-                <NotificationIcon
-                  name="shopping-cart"
-                  type="material"
-                  size={30}
-                  // notificationCount={2}
-                />
-              </TouchableOpacity>
-,
-            headerLeft:()=> <TouchableOpacity onPress={()=>navigation.goBack()}>
-              {/* <BackIcon /> */}
-              <Icon
-                  name="arrow-back"
-                  type="material"
-                  size={40}
-                  color="white"
-                />
-
-              </TouchableOpacity>,
-            headerStyle:{
-              backgroundColor:"red",
-            }
-            }}/>
-          <RootStack.Screen name='ProductDetail' component={ProductDetail} options={{
-            title: "Product Detail",
-            headerTitle:()=>
-            <TextInput
-            style={styles.searchBar}
-            // onChangeText={handleSearchTextChange}
-            // value={searchText}
-            placeholder="Search"
-            />,
-            headerRight:()=>
-            <TouchableOpacity onPress={()=>navigation.navigate("Cart")}>
-                <NotificationIcon
-                  name="shopping-cart"
-                  type="material"
-                  size={30}
-                  // notificationCount={2}
-                />
-              </TouchableOpacity>
-            ,
-            headerLeft:()=> 
-            <TouchableOpacity onPress={()=>navigation.goBack()} >
-               <Icon
-                  name="arrow-back"
-                  type="material"
-                  size={40}
-                  color="white"
-                />
-              </TouchableOpacity>,
-            headerStyle:{
-              backgroundColor:"red",
-            }
-            }}/>
+          <RootStack.Screen name='Search' component={Search} options={{ header: () => <Header/>}}/>
+          <RootStack.Screen name='Category' component={Category} options={{ header: () => <Header/>}}/>
+          <RootStack.Screen name='ProductDetail' component={ProductDetail} options={{ header: () => <Header/>}}/>
              <RootStack.Screen name='Cart' component={Cart} options={{
               title: "Keranjang",
               headerLeft:()=> 

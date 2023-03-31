@@ -22,8 +22,6 @@ const Header = () => {
   const navigation = useNavigation();
 
   const [searchText, setSearchText] = useState('');
-  const [selectedCity, setSelectedCity] = useState<string>("Semua");
-  const [pickerCity, setPickerCity] = useState<boolean>(false);
   const [notifications, setNotifications] = useState<Notification>();
   const [loading, setLoading] = useState(true);
 
@@ -40,6 +38,10 @@ const Header = () => {
     
   };
 
+  const handleSearch = () => {
+    navigation.navigate('Search', { searchText });
+  };
+
 useEffect(() => {
     
   fetchToken()
@@ -48,44 +50,36 @@ useEffect(() => {
 }, []);
 
 
-
-
-    const handlePickerCity = () => {
-    setPickerCity(true);
-  };
-
-
-  const handleSearchTextChange = (text: string) => {
-    setSearchText(text);
-  };
-
   return (
       <View style={styles.header}>
-        <TouchableOpacity onPress={()=>navigation.goBack()} >
+      
+        <TouchableOpacity onPress={()=>navigation.goBack()} style={{alignItems:"center", marginTop:30, marginLeft:15}} >
                <Icon
                   name="arrow-back"
                   type="material"
                   size={40}
                   color="white"
                 />
-              </TouchableOpacity>
-        <View style={{width:'100%'}}>
-          <View style={{flexDirection:'row', marginVertical:2, justifyContent:'space-between', width:293}}>
-          {/* <TouchableOpacity onPress={handlePickerCity} style={{flexDirection:"row", gap:8}}>           
-           <LocationIcon  />
-            <Text style={{color:"white"}}>{selectedCity}</Text>
-           </TouchableOpacity>          */}
-           <View style={{flexDirection:'row', gap:20}}>
-              <TouchableOpacity onPress={()=>navigation.navigate("Contact")}>
-                {/* <MessageIcon/> */}
-                <NotificationIcon
-                  name="mail"
+          </TouchableOpacity>
+        
+          <View style={styles.containerInput}>
+                   <TextInput
+                    style={styles.input}
+                    value={searchText}
+                    onChangeText={setSearchText}
+                    placeholder="Search"
+                  />
+                  <TouchableOpacity onPress={handleSearch} style={{alignItems:"center", marginRight:8}}>
+                  <Icon
+                  name="search"
                   type="material"
-                  size={30}
-                  notificationCount={notifications ? notifications?.messageData : 0}
+                  size={25}
+                  color="gray"
                 />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={()=>navigation.navigate("Cart")}>
+                  </TouchableOpacity>
+        </View>
+        <View>
+              <TouchableOpacity onPress={()=>navigation.navigate("Cart")} style={{alignItems:"center", marginTop:30, marginLeft:12}}>
                 <NotificationIcon
                   name="shopping-cart"
                   type="material"
@@ -93,42 +87,10 @@ useEffect(() => {
                   notificationCount={notifications ? notifications?.cartData : 0}
                 />
               </TouchableOpacity>
-            </View>
+           
           </View>
-        
-        <TextInput
-          style={styles.searchBar}
-          onChangeText={handleSearchTextChange}
-          value={searchText}
-          placeholder="Search"
-        />
-        </View>
-        <Drawer
-  isVisible={pickerCity}
-  swipeDirection="left"
-  onSwipeComplete={() => setPickerCity(false)}
-  style={{}}
->
-  <View style={{backgroundColor:"white"}}>
-    <TouchableOpacity onPress={() => setPickerCity(false)} style={{alignSelf:"flex-end", marginHorizontal:15, marginTop:10}} >
-      <Text style={{fontWeight:"bold", fontSize:16}}>X</Text>
-    </TouchableOpacity>
-  {pickerCity && (
-        <Picker
-          selectedValue={selectedCity}
-          onValueChange={(itemValue) => {
-            setSelectedCity(itemValue);
-            setPickerCity(false);
-          }}
-        >
-          <Picker.Item label="Semua" value="Semua" />
-          <Picker.Item label="Bogor" value="Bogor" />
-          <Picker.Item label="Jakarta" value="Jakarta" />
-          <Picker.Item label="Semarang" value="Semarang" />
-        </Picker>
-      )}
-  </View>
-</Drawer>
+          
+         
       </View>
   );
 };
@@ -136,15 +98,12 @@ useEffect(() => {
 const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
-    // backgroundColor: 'rgba(255, 203, 0, 0.2);',
+    backgroundColor:"#FA0000",
+    // justifyContent:"space-around",
     alignItems: 'center',
     width:'100%',
-    marginBottom: 20,
-  },
-  logo: {
-    width: 55,
-    height: 58,
-    marginRight: 10,
+    height:100,
+   
   },
   searchBar: {
     height: 25,
@@ -153,13 +112,35 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
     paddingLeft: 13,
-    width:300
+    width:"90%",
     
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  containerInput: {
+    flexDirection: 'row',
+    height: 30,
+    borderColor: 'gray',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderRadius: 10,
+    width:"65%", marginLeft:10, marginTop:30,
+    alignItems: 'center',
+  },
+  icon: {
+    position: 'absolute',
+    top: 8,
+    left: 16,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: '500',
+    color: 'black',
+    paddingLeft: 10,
   },
 });
 

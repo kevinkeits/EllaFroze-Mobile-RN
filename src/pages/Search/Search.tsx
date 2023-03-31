@@ -19,12 +19,16 @@ interface Product {
     Price: string;
     Stock: string;
     Qty?: string;
+  }
 
+  interface SearchScreenProps {
+    route: { params: { searchText: string } };
   }
 
  
 
-const ProductCards = () => {
+const Search = ({route}: SearchScreenProps) => {
+    const { searchText } = route.params;
     const [count, setCount] = useState(0);
     const [selected, setSelected] = useState(false);
     const [selectedItems, setSelectedItems] = useState([]);
@@ -35,7 +39,7 @@ const ProductCards = () => {
     
 
     const fetchData = async (token: string) => {
-      const url = `https://ellafroze.com/api/external/getAllProduct?CatID=&BranchID=e0251060-1c70-11ec-9ac9-ca13603aef66&Keyword=&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
+      const url = `https://ellafroze.com/api/external/getAllProduct?CatID=&BranchID=e0251060-1c70-11ec-9ac9-ca13603aef66&Keyword=${searchText}&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
       const response = await axios.get(url);
       setProducts(response.data.data);
       setLoading(false)
@@ -164,6 +168,7 @@ const ProductCards = () => {
   return (
     
     <View style={{}} >
+          <Text style={{margin:10, fontWeight:"bold"}}>Produk dengan keyword "{searchText}"</Text>
          <FlatList
         data={products}
         renderItem={renderItem}
@@ -174,4 +179,4 @@ const ProductCards = () => {
   )
 }
 
-export default ProductCards
+export default Search

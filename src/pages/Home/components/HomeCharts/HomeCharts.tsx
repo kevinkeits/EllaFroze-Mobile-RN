@@ -73,6 +73,7 @@ const HomeCharts = () => {
       const item = products[itemIndex];
   
       try {
+       
         const response = await axios.put(`https://ellafroze.com/api/external/getProductDetail?_i=${itemId}&_cb=onCompleteFetchProduct&_p=&_s=${token}`, {
           ...item,
           selected: !item.selected,
@@ -126,7 +127,7 @@ const HomeCharts = () => {
 
   const handleButtonPress = (itemId: any) => {
     setSelected(itemId);
-    // alert(`Button clicked for item ${itemId}`);
+    alert(`Button clicked for item ${itemId}`);
   };
 
   const handleNavigate = (itemId: string) => {
@@ -214,7 +215,7 @@ const HomeCharts = () => {
                     </View>
                   )}
 
-{product.selected ? (
+{/* {product.selected ? (
             <TouchableOpacity onPress={() => handleSelect(product.ProductID)}>
               <Text>Deselect</Text>
             </TouchableOpacity>
@@ -222,7 +223,7 @@ const HomeCharts = () => {
             <TouchableOpacity onPress={() => handleSelect(product.ProductID)}>
               <Text>Select</Text>
             </TouchableOpacity>
-          )}
+          )} */}
              
               </TouchableOpacity>
         ))}
