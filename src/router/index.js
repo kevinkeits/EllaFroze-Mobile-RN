@@ -183,6 +183,7 @@ const MainApp = () => {
 
 const Router = () => {
   const navigation = useNavigation();
+
   return (
     <RootStack.Navigator initialRouteName='Splash'>
         <RootStack.Screen name='Splash' component={Splash} options={{title: "Splash", headerShown: false}}/>
@@ -229,22 +230,7 @@ const Router = () => {
                 backgroundColor: '#FA0000',
                 height: 120,
                 }}} />
-            <RootStack.Screen name='ChatRoom' component={ChatRoom}
-                options={{
-                  title: "Admin",
-                  headerLeft:()=> 
-            <TouchableOpacity onPress={()=>navigation.goBack()} >
-               <Icon
-                  name="arrow-back"
-                  type="material"
-                  size={40}
-                  color="white"
-                />
-              </TouchableOpacity>, 
-                  headerStyle: {
-                backgroundColor: '#FA0000',
-                height: 120,
-                }}} />
+            <RootStack.Screen name='ChatRoom' component={ChatRoom} options={{headerShown: false}} />
 
       </RootStack.Navigator>
   )

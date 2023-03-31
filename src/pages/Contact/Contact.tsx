@@ -20,6 +20,8 @@ interface Contact {
 export default function Contact() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+    const navigationChat =
+    useNavigation();
     const [contact, setContact] = useState<Contact[]>([]);
     const [loading, setLoading] = useState(true);  
     
@@ -27,6 +29,7 @@ export default function Contact() {
     const fetchData = async (tokenData: string) => {
       const url = `https://ellafroze.com/api/external/getChatList?_cb=onCompleteFetchChat&_p=chatListWrapper&_s=${tokenData}`;
       const response = await axios.get(url);
+      
       setContact(response.data.data);
       setLoading(false)
     }
@@ -35,6 +38,14 @@ export default function Contact() {
       const tokenData = await AsyncStorage.getItem('tokenID')
       fetchData(tokenData == null ? "" : tokenData);
       
+    };
+
+    const handleNavigate = async (itemId: string, branchName: string) => {
+      
+      await AsyncStorage.setItem('branchName', branchName)
+      navigationChat.navigate('ChatRoom', {itemId, branchName})
+      // alert(branchName)
+      // alert(`Button clicked for item ${itemId}`);
     };
   
   useEffect(() => {
@@ -49,7 +60,7 @@ export default function Contact() {
       {contact?.map((item, index)=>(
              <TouchableOpacity
              key={index} 
-             onPress={()=>navigation.navigate("ChatRoom")}
+             onPress={()=>handleNavigate(item.ID, item.Name)}
              style={{
                 width:"90%", 
                 flexDirection:"row", 
