@@ -19,6 +19,7 @@ interface Product {
     Price: number;
     Stock: string;
     Qty?: string;
+    selected?:string
   }
 
   interface ProductDetail {
@@ -65,6 +66,25 @@ const HomeCharts = () => {
       fetchData(tokenData == null ? "" : tokenData);
       fetchDataDetail(tokenData == null ? "" : tokenData);
       
+    };
+
+    const handleSelect = async (itemId: string) => {
+      const itemIndex = products.findIndex((item) => item.ProductID === itemId);
+      const item = products[itemIndex];
+  
+      try {
+        const response = await axios.put(`https://ellafroze.com/api/external/getProductDetail?_i=${itemId}&_cb=onCompleteFetchProduct&_p=&_s=${token}`, {
+          ...item,
+          selected: !item.selected,
+        });
+  
+        const updatedItem = response.data;
+        const newData = [...products];
+        newData[itemIndex] = updatedItem;
+        setProducts(newData);
+      } catch (error) {
+        console.error(error);
+      }
     };
   
   useEffect(() => {
@@ -193,6 +213,16 @@ const HomeCharts = () => {
                         
                     </View>
                   )}
+
+{product.selected ? (
+            <TouchableOpacity onPress={() => handleSelect(product.ProductID)}>
+              <Text>Deselect</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={() => handleSelect(product.ProductID)}>
+              <Text>Select</Text>
+            </TouchableOpacity>
+          )}
              
               </TouchableOpacity>
         ))}
