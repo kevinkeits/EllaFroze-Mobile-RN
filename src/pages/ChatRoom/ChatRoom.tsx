@@ -144,11 +144,11 @@ const ChatRoom = ({ route, branchName }: ChatScreenProps) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={()=>navigation.goBack()} style={{alignItems:"center", marginTop:30, marginLeft:15}} >
                <Icon
-                  name="arrow-back"
+                  name="chevron-left"
                   type="material"
                   size={40}
                   color="white"
@@ -183,7 +183,7 @@ const ChatRoom = ({ route, branchName }: ChatScreenProps) => {
         />
         <Button title="Send" onPress={handleMessageUser} />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

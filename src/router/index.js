@@ -35,29 +35,37 @@ const HomeStack = createNativeStackNavigator();
 
 
 const AccountApp = () => {
-
+  const navigationAccount = useNavigation();
+  
 
   return(
 <AccountStack.Navigator initialRouteName='Account'>
-  <AccountStack.Screen name='Account' component={Account} options={{title: "Profile", headerStyle: {
+  <AccountStack.Screen name='Account' component={Account} options={{title: "Profile",
+  headerTitleStyle:{
+    color:"white"
+  },
+   headerStyle: {
           backgroundColor: '#FA0000',
         },
         }}/>
   <AccountStack.Screen name='AccountDetail' component={AccountDetail} options={{
           headerBackTitle: null,
           title:"Data Diri",
+          headerTitleStyle:{
+            color:"white"
+          },
           headerStyle : {
               backgroundColor: '#FA0000',
           },
-          // headerLeft:()=> 
-          //   <TouchableOpacity onPress={()=>navigation.goBack()} >
-          //      <Icon
-          //         name="arrow-back"
-          //         type="material"
-          //         size={40}
-          //         color="white"
-          //       />
-          //     </TouchableOpacity>,
+          headerLeft:()=> 
+            <TouchableOpacity onPress={()=>navigationAccount.goBack()} >
+               <Icon
+                  name="chevron-left"
+                  type="material"
+                  size={40}
+                  color="white"
+                />
+              </TouchableOpacity>,
           // headerRight: () => (
           //   <Button
           //     onPress={() => alert('This is a button!')}
@@ -67,7 +75,20 @@ const AccountApp = () => {
           // ),
         }}/>
   <AccountStack.Screen name='AccountAddress' component={AccountAddress}
-  options={{title: "Address", headerStyle: {
+  options={{title: "Alamat",
+  headerTitleStyle:{
+    color:"white"
+  },
+  headerLeft:()=> 
+  <TouchableOpacity onPress={()=>navigationAccount.goBack()} >
+     <Icon
+        name="chevron-left"
+        type="material"
+        size={40}
+        color="white"
+      />
+    </TouchableOpacity>, 
+   headerStyle: {
     backgroundColor: '#FA0000',
     height: 120,
   }}}
@@ -79,7 +100,20 @@ const AccountApp = () => {
   }}}
   />
    <AccountStack.Screen name='NewAddress' component={NewAddress} 
-  options={{title: "New Address", headerStyle: {
+  options={{title: "Buat Alamat Baru",
+  headerTitleStyle:{
+    color:"white"
+  },
+  headerLeft:()=> 
+  <TouchableOpacity onPress={()=>navigationAccount.goBack()} >
+     <Icon
+        name="chevron-left"
+        type="material"
+        size={40}
+        color="white"
+      />
+    </TouchableOpacity>, 
+   headerStyle: {
     backgroundColor: '#FA0000',
     height: 120,
   }}}
@@ -163,7 +197,7 @@ const MainApp = () => {
           height: 120,
         },
         }}/>
-        <Tab.Screen name='Help' component={Help} options={{title: "Help", headerStyle: {
+        <Tab.Screen name='Help' component={Help} options={{title: "Help", headerTitleStyle:{ color:"white" }, headerStyle: {
           backgroundColor: '#FA0000',
         },
         }}/>
@@ -195,15 +229,69 @@ const Router = () => {
           headerTitleStyle: {
             fontWeight: 'bold',
           },}}/>
-          <RootStack.Screen name='Search' component={Search} options={{ header: () => <Header/>}}/>
-          <RootStack.Screen name='Category' component={Category} options={{ header: () => <Header/>}}/>
-          <RootStack.Screen name='ProductDetail' component={ProductDetail} options={{ header: () => <Header/>}}/>
-             <RootStack.Screen name='Cart' component={Cart} options={{
-              title: "Keranjang",
+          <RootStack.Screen name='Search' component={Search} options={{
+              title: "Pencarian",
+              headerTitleStyle:{
+                color:"white"
+              },
               headerLeft:()=> 
             <TouchableOpacity onPress={()=>navigation.goBack()} >
                <Icon
-                  name="arrow-back"
+                  name="chevron-left"
+                  type="material"
+                  size={40}
+                  color="white"
+                />
+              </TouchableOpacity>, 
+             headerStyle: {
+                backgroundColor: '#FA0000',
+                height: 120,
+                }}}/>
+          <RootStack.Screen name='Category' component={Category} options={{
+              title: "Pencarian",
+              headerTitleStyle:{
+                color:"white"
+              },
+              headerLeft:()=> 
+            <TouchableOpacity onPress={()=>navigation.goBack()} >
+               <Icon
+                  name="chevron-left"
+                  type="material"
+                  size={40}
+                  color="white"
+                />
+              </TouchableOpacity>, 
+             headerStyle: {
+                backgroundColor: '#FA0000',
+                height: 120,
+                }}}/>
+          <RootStack.Screen name='ProductDetail' component={ProductDetail} options={{
+              title: "Detail Produk",
+              headerTitleStyle:{
+                color:"white"
+              },
+              headerLeft:()=> 
+            <TouchableOpacity onPress={()=>navigation.goBack()} >
+               <Icon
+                  name="chevron-left"
+                  type="material"
+                  size={40}
+                  color="white"
+                />
+              </TouchableOpacity>, 
+             headerStyle: {
+                backgroundColor: '#FA0000',
+                height: 120,
+                }}}/>
+             <RootStack.Screen name='Cart' component={Cart} options={{
+              title: "Keranjang",
+              headerTitleStyle:{
+                color:"white"
+              },
+              headerLeft:()=> 
+            <TouchableOpacity onPress={()=>navigation.goBack()} >
+               <Icon
+                  name="chevron-left"
                   type="material"
                   size={40}
                   color="white"
@@ -217,10 +305,13 @@ const Router = () => {
             <RootStack.Screen name='Contact' component={Contact}
                 options={{
                   title: "Hubungi Admin",
+                  headerTitleStyle: {
+                      color:"white"
+                  },
                   headerLeft:()=> 
             <TouchableOpacity onPress={()=>navigation.goBack()} >
                <Icon
-                  name="arrow-back"
+                  name="chevron-left"
                   type="material"
                   size={40}
                   color="white"

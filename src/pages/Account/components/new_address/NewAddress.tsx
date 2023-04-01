@@ -15,6 +15,9 @@ interface AddressInput {
     SelFrmDistrict: string;
     txtPostalCode: string;
     txtAddressDetail: string;
+    hdnFrmID: string;
+    hdnAction: string;
+    _s: string;
     chkDefaultAddress?: string;
 }
 
@@ -58,9 +61,11 @@ const NewAddress = () => {
   const [SelFrmCity, setSelFrmCity] = useState('');
   const [SelFrmDistrict, setSelFrmDistrict] = useState('');
   const [txtPostalCode, setTxtPostalCode] = useState('');
+  const [hdnFrmID, setHdnFrmID] = useState('');
+  const [hdnAction, setHdnAction] = useState('');
   const [txtAddressDetail, setTxtAddressDetail] = useState('');
 
-  const [token, setToken] = useState('');
+  const [_s, setToken] = useState('');
 //   const [addressData, setAddressData] = useState<AddressInput>({
 //     txtAddressName: '',
 //     txtFrmPhone: '',
@@ -100,6 +105,8 @@ const NewAddress = () => {
     fetchState(tokenData == null ? "" : tokenData);
     fetchCity(tokenData == null ? "" : tokenData);
     fetchDistrict(tokenData == null ? "" : tokenData);
+    setHdnFrmID('')
+    setHdnAction('Add')
   };
 
   async function saveAddress(addressInput: AddressInput): Promise<void> {
@@ -124,7 +131,7 @@ const NewAddress = () => {
 
   const handleCreateAddress = async () => {
     try {
-      await saveAddress({ txtAddressName, txtFrmPhone, SelFrmState, SelFrmCity, SelFrmDistrict, txtPostalCode, txtAddressDetail });
+      await saveAddress({ txtAddressName, txtFrmPhone, SelFrmState, SelFrmCity, SelFrmDistrict, txtPostalCode, txtAddressDetail, hdnFrmID, hdnAction, _s });
     } catch (error) {
       console.error(error);
     }

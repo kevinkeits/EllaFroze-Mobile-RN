@@ -55,7 +55,7 @@ useEffect(() => {
       
         <TouchableOpacity onPress={()=>navigation.goBack()} style={{alignItems:"center", marginTop:30, marginLeft:15}} >
                <Icon
-                  name="arrow-back"
+                  name="chevron-left"
                   type="material"
                   size={40}
                   color="white"
