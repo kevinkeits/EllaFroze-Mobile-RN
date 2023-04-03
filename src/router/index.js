@@ -187,10 +187,7 @@ const MainApp = () => {
         inactiveTintColor: 'white',
       }}
     >
-        <Tab.Screen name='Home' component={Home} options={{title: "Home", headerTitle: () => <HomeHeader/>, headerStyle: {
-          backgroundColor: '#FA0000',
-          height: 120,
-        },
+        <Tab.Screen name='Home' component={Home} options={{title: "Home", headerShown:false
         }}/>
         <Tab.Screen name='Transaction' component={Transaction} options={{title: "Home", headerTitle: () => <HomeHeader/>, headerStyle: {
           backgroundColor: '#FA0000',

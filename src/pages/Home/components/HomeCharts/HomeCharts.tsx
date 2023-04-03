@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, ScrollView, FlatList } from 'react-native'
+import { View, Text, Image, TouchableOpacity, ScrollView, FlatList, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -22,33 +22,42 @@ interface Product {
     selected?:string
   }
 
+  interface Props {
+    products: Product[]
+  }
+  
 
 
-const HomeCharts = () => {
+const HomeCharts = ({products}:Props) => {
     const navigation = useNavigation();
     const [count, setCount] = useState(0);
     const [selected, setSelected] = useState(false);
-    const [products, setProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState(true);
+    // const [products, setProducts] = useState<Product[]>([]);
+    // const [loading, setLoading] = useState(true);
+   
 
 
-    const fetchData = async (token: string, selectedBranch: string) => {
-      const url = `https://ellafroze.com/api/external/getAllProduct?CatID=&BranchID=${selectedBranch}&Keyword=&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
-      const response = await axios.get(url);
-      setProducts(response.data.data);
-      setLoading(false)
-    }
 
-    const fetchToken = async () => {
-      const tokenData = await AsyncStorage.getItem('tokenID')
-      const selectedBranchData = await AsyncStorage.getItem('selectedBranch')
 
-      if(selectedBranchData != ""){
-        fetchData(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
-      }
+    // const fetchData = async (token: string, selectedBranch: string) => {
+    //   const url = `https://ellafroze.com/api/external/getAllProduct?CatID=&BranchID=${selectedBranch}&Keyword=&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
+    //   const response = await axios.get(url);
+    //   setProducts(response.data.data);
+    //   setLoading(false)
+    // }
+
+    
+
+    // const fetchToken = async () => {
+    //   const tokenData = await AsyncStorage.getItem('tokenID')
+    //   const selectedBranchData = await AsyncStorage.getItem('selectedBranch')
 
       
-    };
+    //   fetchData(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
+      
+    // };
+
+   
 
     // const handleSelect = async (itemId: string) => {
     //   const itemIndex = products.findIndex((item) => item.ProductID === itemId);
@@ -72,15 +81,15 @@ const HomeCharts = () => {
   
   useEffect(() => {
       
-    fetchToken()
+    // fetchToken()
     
     
   }, []);
 
   
-    if (loading) {
-      return <Text>Loading...</Text>;
-    }
+    // if (loading) {
+    //   return <Text>Loading...</Text>;
+    // }
 
 
   const incrementCount = () => {
@@ -206,4 +215,58 @@ const HomeCharts = () => {
   )
 }
 
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    // backgroundColor: 'rgba(255, 203, 0, 0.2);',
+    alignItems: 'center',
+    width:'100%',
+    marginBottom: 20,
+  },
+  logo: {
+    width: 55,
+    height: 58,
+    marginRight: 10,
+  },
+  searchBar: {
+    height: 25,
+    borderColor: 'gray',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderRadius: 20,
+    paddingLeft: 13,
+    width:300
+    
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  containerInput: {
+    flexDirection: 'row',
+    height: 30,
+    borderColor: 'gray',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderRadius: 10,
+    width:290,
+    alignItems: 'center',
+  },
+  icon: {
+    position: 'absolute',
+    top: 8,
+    left: 16,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: '500',
+    color: 'black',
+    paddingLeft: 10,
+  },
+});
+
 export default HomeCharts
+
+

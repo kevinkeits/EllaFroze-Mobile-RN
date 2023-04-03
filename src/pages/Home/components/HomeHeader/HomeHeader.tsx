@@ -68,8 +68,6 @@ const HomeHeader = () => {
     setPickerCity(false);
     if (selectedCity !== "") {
       await AsyncStorage.setItem('selectedBranch', selectedCity)
-      alert(await AsyncStorage.getItem('selectedBranch'))
-      alert(selectedBranchLabel?.Name)
     }
   };
   
