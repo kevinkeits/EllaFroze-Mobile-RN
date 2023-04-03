@@ -1,6 +1,6 @@
 import { Picker } from '@react-native-picker/picker';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Modal } from 'react-native';
 import { CartIcon, LocationIcon, MessageIcon } from '../../../../assets/icons';
 import Drawer  from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
@@ -18,13 +18,24 @@ interface Notification {
   orderData: number;
 }
 
+interface Branch {
+  ID: string;
+  Name: string;
+}
+
 const HomeHeader = () => {
   const navigation = useNavigation();
 
   const [searchText, setSearchText] = useState('');
-  const [selectedCity, setSelectedCity] = useState<string>("Semua");
+  const [selectedCity, setSelectedCity] = useState<string>("");
   const [pickerCity, setPickerCity] = useState<boolean>(false);
   const [notifications, setNotifications] = useState<Notification>();
+  const [branches, setBranches] = useState<Branch[]>([]);
+
+
+  const selectedBranchLabel = branches.find(item => item.ID === selectedCity);
+
+
   const [loading, setLoading] = useState(true);
 
   const fetchData = async (token: string) => {
@@ -34,9 +45,17 @@ const HomeHeader = () => {
     setLoading(false)
   }
 
+  const fetchBranch = async (token: string) => {
+    const url = `https://ellafroze.com/api/external/getBranch?_cb=onCompleteFetchBranch&_p=&_s=${token}`;
+    const response = await axios.get(url);
+    setBranches(response.data.data);
+    setLoading(false)
+  }
+
   const fetchToken = async () => {
     const tokenData = await AsyncStorage.getItem('tokenID')
     fetchData(tokenData == null ? "" : tokenData);
+    fetchBranch(tokenData == null ? "" : tokenData);
     
   };
 
@@ -44,10 +63,21 @@ const HomeHeader = () => {
     navigation.navigate('Search', { searchText });
   };
 
+  const handleCitySelection  = async (cityId: string) => {
+    setSelectedCity(cityId);
+    setPickerCity(false);
+    if (selectedCity !== "") {
+      await AsyncStorage.setItem('selectedBranch', selectedCity)
+      alert(await AsyncStorage.getItem('selectedBranch'))
+      alert(selectedBranchLabel?.Name)
+    }
+  };
+  
 
 useEffect(() => {
     
   fetchToken()
+  // storedBranch()
   
   
 }, []);
@@ -55,8 +85,18 @@ useEffect(() => {
 
 
 
-    const handlePickerCity = () => {
+  const handlePickerCity = async () => {
+    // await AsyncStorage.setItem('selectedBranch', selectedCity)
+    // alert(await AsyncStorage.getItem('selectedBranch'))
     setPickerCity(true);
+  };
+
+  const storedBranch = async () => {
+    if (selectedCity) {
+    await AsyncStorage.setItem('selectedBranch', selectedCity)
+    alert(await AsyncStorage.getItem('selectedBranch'))
+  }
+   
   };
 
 
@@ -71,7 +111,7 @@ useEffect(() => {
           <View style={{flexDirection:'row', marginVertical:2, justifyContent:'space-between', width:293}}>
           <TouchableOpacity onPress={handlePickerCity} style={{flexDirection:"row", gap:8}}>           
            <LocationIcon  />
-            <Text style={{color:"white"}}>{selectedCity}</Text>
+            <Text style={{color:"white"}}>{selectedCity ? selectedBranchLabel?.Name : 'Pilih Cabang'}</Text>
            </TouchableOpacity>         
            <View style={{flexDirection:'row', gap:20}}>
               <TouchableOpacity onPress={()=>navigation.navigate("Contact")}>
@@ -112,32 +152,47 @@ useEffect(() => {
       </TouchableOpacity>
       </View>
         </View>
-        <Drawer
+  <Drawer
   isVisible={pickerCity}
   swipeDirection="left"
   onSwipeComplete={() => setPickerCity(false)}
   style={{}}
 >
-  <View style={{backgroundColor:"white"}}>
-    <TouchableOpacity onPress={() => setPickerCity(false)} style={{alignSelf:"flex-end", marginHorizontal:15, marginTop:10}} >
-      <Text style={{fontWeight:"bold", fontSize:16}}>X</Text>
-    </TouchableOpacity>
-  {pickerCity && (
-        <Picker
-          selectedValue={selectedCity}
-          onValueChange={(itemValue) => {
-            setSelectedCity(itemValue);
-            setPickerCity(false);
-          }}
-        >
-          <Picker.Item label="Semua" value="Semua" />
-          <Picker.Item label="Bogor" value="Bogor" />
-          <Picker.Item label="Jakarta" value="Jakarta" />
-          <Picker.Item label="Semarang" value="Semarang" />
-        </Picker>
-      )}
-  </View>
+<View style={{paddingBottom:20, backgroundColor:"white"}}>
+<TouchableOpacity onPress={() => setPickerCity(false)} style={{alignSelf:"flex-end", marginHorizontal:15, marginTop:10}} >
+            <Text style={{fontWeight:"bold", fontSize:16}}>X</Text>
+           </TouchableOpacity>
+      {branches?.map((item, index)=>(
+             <TouchableOpacity
+             key={index} 
+             onPress={()=>handleCitySelection(item.ID)}
+             style={{
+                width:"90%", 
+                // flexDirection:"row", 
+                alignItems:"center",
+                alignSelf:"center",
+                marginTop:8,
+                borderRadius:8, 
+                paddingVertical:10,
+                backgroundColor: '#fff',
+                elevation:3,
+                shadowColor: '#000',
+                shadowOffset: {
+                    width: 0,
+                    height: 1,
+                  },
+                shadowOpacity: 0.22,
+                shadowRadius: 2.22,
+                }}>
+           
+                {/* <Image source={require('../../assets/images/logo.png')} style={{width:50, height:50, marginHorizontal:20}} /> */}
+                <Text style={{fontSize:16}}>{item.Name}</Text>
+             </TouchableOpacity>
+      ))}
+    </View>
 </Drawer>
+
+
       </View>
   );
 };

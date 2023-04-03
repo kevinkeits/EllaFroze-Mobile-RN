@@ -13,7 +13,7 @@ interface Product {
     Branch: string;
     BranchID: string;
     Discount: string;
-    DiscountType: string;
+    DiscountType: number;
     ImagePath: string;
     ItemSold: string;
     Price: number;
@@ -22,71 +22,53 @@ interface Product {
     selected?:string
   }
 
-  interface ProductDetail {
-    ProductID: string;
-    Product: string;
-    Branch: string;
-    BranchID: string;
-    Description: string;
-    Discount: string;
-    DiscountType: string;
-    MinOrder?: number
-    ImagePath: string;
-    ItemSold: string;
-    Price: number;
-    Stock: number;
-    Qty?: string;
-  }
+
 
 const HomeCharts = () => {
     const navigation = useNavigation();
     const [count, setCount] = useState(0);
     const [selected, setSelected] = useState(false);
     const [products, setProducts] = useState<Product[]>([]);
-    const [detail, setDetail] = useState<ProductDetail[]>([]);
     const [loading, setLoading] = useState(true);
 
 
-    const fetchData = async (token: string) => {
-      const url = `https://ellafroze.com/api/external/getAllProduct?CatID=&BranchID=e0251060-1c70-11ec-9ac9-ca13603aef66&Keyword=&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
+    const fetchData = async (token: string, selectedBranch: string) => {
+      const url = `https://ellafroze.com/api/external/getAllProduct?CatID=&BranchID=${selectedBranch}&Keyword=&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
       const response = await axios.get(url);
       setProducts(response.data.data);
       setLoading(false)
     }
 
-    const fetchDataDetail = async (token: string) => {
-      const url = `https://ellafroze.com/api/external/getProductDetail?_i=25c18e2b-439a-11ed-90e4-ca13603aef66&_cb=onCompleteFetchProduct&_p=&_s=${token}`;
-      const response = await axios.get(url);
-      setDetail(response.data.data);
-      setLoading(false)
-    }
-
     const fetchToken = async () => {
       const tokenData = await AsyncStorage.getItem('tokenID')
-      fetchData(tokenData == null ? "" : tokenData);
-      fetchDataDetail(tokenData == null ? "" : tokenData);
+      const selectedBranchData = await AsyncStorage.getItem('selectedBranch')
+
+      if(selectedBranchData != ""){
+        fetchData(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
+      }
+
       
     };
 
-    const handleSelect = async (itemId: string) => {
-      const itemIndex = products.findIndex((item) => item.ProductID === itemId);
-      const item = products[itemIndex];
+    // const handleSelect = async (itemId: string) => {
+    //   const itemIndex = products.findIndex((item) => item.ProductID === itemId);
+    //   const item = products[itemIndex];
   
-      try {
+    //   try {
        
-        const response = await axios.put(`https://ellafroze.com/api/external/getProductDetail?_i=${itemId}&_cb=onCompleteFetchProduct&_p=&_s=${token}`, {
-          ...item,
-          selected: !item.selected,
-        });
+    //     const response = await axios.put(`https://ellafroze.com/api/external/getProductDetail?_i=${itemId}&_cb=onCompleteFetchProduct&_p=&_s=${token}`, {
+    //       ...item,
+    //       selected: !item.selected,
+    //     });
   
-        const updatedItem = response.data;
-        const newData = [...products];
-        newData[itemIndex] = updatedItem;
-        setProducts(newData);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    //     const updatedItem = response.data;
+    //     const newData = [...products];
+    //     newData[itemIndex] = updatedItem;
+    //     setProducts(newData);
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // };
   
   useEffect(() => {
       
@@ -95,17 +77,6 @@ const HomeCharts = () => {
     
   }, []);
 
-    // useEffect(() => {
-    
-    //   const fetchToken = async () => {
-    //     const TokenID = await AsyncStorage.getItem('@tokenID');
-    //     return TokenID;
-    //   }
-
-    //   const TokenID = fetchToken();
-
-    //   fetchData(TokenID);
-    // }, []);
   
     if (loading) {
       return <Text>Loading...</Text>;
@@ -116,9 +87,6 @@ const HomeCharts = () => {
     setCount(count + 1);
   };
 
-  // const decrementCount = () => {
-  //   setCount(count - 1);
-  // };
 
   const decrementCount = () => {
     const newCount = count - 1 >= 0 ? count - 1 : 0;
@@ -168,12 +136,17 @@ const HomeCharts = () => {
               <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${product.ImagePath}`}} style={{width:100, height:120}}/>
           </View>
               <Text style={{fontSize:15, marginTop:5, marginLeft:8}}>{product.Product}</Text>
-              <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>Rp.  {
+          
+
+              {product.DiscountType == 1 && <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>Rp.  {
               new Intl.NumberFormat('id-ID', {
             // style: 'currency',
             currency: 'IDR'
           }).format(product.Price)
-          }</Text>
+          }</Text>  }
+
+            
+              
               <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. 
               {
               new Intl.NumberFormat('id-ID', {

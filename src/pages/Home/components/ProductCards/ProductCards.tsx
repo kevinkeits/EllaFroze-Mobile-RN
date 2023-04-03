@@ -34,8 +34,8 @@ const ProductCards = () => {
     
     
 
-    const fetchData = async (token: string) => {
-      const url = `https://ellafroze.com/api/external/getAllProduct?CatID=&BranchID=e0251060-1c70-11ec-9ac9-ca13603aef66&Keyword=&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
+    const fetchData = async (token: string, selectedBranch: string) => {
+      const url = `https://ellafroze.com/api/external/getAllProduct?CatID=&BranchID=${selectedBranch}&Keyword=&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
       const response = await axios.get(url);
       setProducts(response.data.data);
       setLoading(false)
@@ -43,7 +43,9 @@ const ProductCards = () => {
 
     const fetchToken = async () => {
       const tokenData = await AsyncStorage.getItem('tokenID')
-      fetchData(tokenData == null ? "" : tokenData);
+      const selectedBranchData = await AsyncStorage.getItem('selectedBranch')
+
+      fetchData(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData);
       
     };
 
@@ -121,7 +123,7 @@ const ProductCards = () => {
             <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:100, height:120}}/>
         </View>
             <Text style={{fontSize:15, marginTop:5, marginLeft:8}}>{item.Product}</Text>
-            <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>Rp. {formattedPrice}</Text>
+            {item.DiscountType == 1 && <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>{formattedPrice}</Text>  }
             <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. {formattedPrice}</Text>
             <View style={{flexDirection:"row", alignItems:"center", marginLeft:10}}>
             <Icon  

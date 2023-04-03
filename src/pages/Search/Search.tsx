@@ -38,8 +38,8 @@ const Search = ({route}: SearchScreenProps) => {
     
     
 
-    const fetchData = async (token: string) => {
-      const url = `https://ellafroze.com/api/external/getAllProduct?CatID=&BranchID=e0251060-1c70-11ec-9ac9-ca13603aef66&Keyword=${searchText}&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
+    const fetchData = async (token: string, selectedBranch: string) => {
+      const url = `https://ellafroze.com/api/external/getAllProduct?CatID=&BranchID=${selectedBranch}&Keyword=${searchText}&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
       const response = await axios.get(url);
       setProducts(response.data.data);
       setLoading(false)
@@ -47,7 +47,9 @@ const Search = ({route}: SearchScreenProps) => {
 
     const fetchToken = async () => {
       const tokenData = await AsyncStorage.getItem('tokenID')
-      fetchData(tokenData == null ? "" : tokenData);
+      const selectedBranchData = await AsyncStorage.getItem('selectedBranch')
+
+      fetchData(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData);
       
     };
 
