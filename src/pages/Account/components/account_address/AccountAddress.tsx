@@ -49,6 +49,12 @@ const AccountAddress = () => {
     
   };
 
+  const handleNavigate = (itemId: string) => {
+    navigation.navigate('AddressDetail', {itemId})
+    alert(itemId)
+    // alert(`Button clicked for item ${itemId}`);
+  };
+
 useEffect(() => {
     
   fetchToken()
@@ -73,17 +79,30 @@ useEffect(() => {
           },
           shadowOpacity: 0.22,
           shadowRadius: 2.22,
-          }}>
-        <Text style={{fontWeight:"bold", marginTop:20}}>{item.Name}</Text>
-        <Text style={{marginTop:15}}>{item.Phone}</Text>
-        <Text style={{marginTop:15}}>{item.Address}</Text>
+          }}
+          onPress={()=>handleNavigate(item.ID)}
+          >
+            {loading ? (<View style={{backgroundColor:"#EAEAEA", marginTop:20, width:55, height:20}}/>):(
+                      <Text style={{fontWeight:"bold", marginTop:20}}>{item.Name}</Text>
+            )}
+            {loading ? (<View style={{backgroundColor:"#EAEAEA", marginTop:15, width:80, height:20}}/>):(
+             <Text style={{marginTop:15}}>{item.Phone}</Text>
+          )}
+          {loading ? (<View style={{backgroundColor:"#EAEAEA", marginTop:15, width:90, height:20}}/>):(
+          <Text style={{marginTop:15}}>{item.Address}</Text>
+        )}
+        {loading ? (<View style={{backgroundColor:"#EAEAEA", marginVertical:15, width:200, height:20}}/>):(
         <Text style={{marginBottom:20}}>{item.CityName}, {item.DistrictName}, {item.PostalCode}</Text>
+        )}
       </TouchableOpacity>
       ))}
       
-      <TouchableOpacity onPress={()=>navigation.navigate("NewAddress")} style={{backgroundColor:"green", justifyContent:"center", alignItems:"center", alignSelf:'center', marginTop:25, paddingVertical:10, width:"80%", borderRadius:6}}>
-        <Text style={{fontWeight:"bold"}}>BUAT ALAMAT</Text>
-      </TouchableOpacity>
+      {loading ? (<View style={{backgroundColor:"#EAEAEA", alignSelf:'center', marginTop:25,  width:"80%", height:50}}/>):(
+      <TouchableOpacity onPress={()=>navigation.navigate("NewAddress")} style={{backgroundColor:"#FA0000", justifyContent:"center", alignItems:"center", alignSelf:'center', marginTop:25, paddingVertical:10, width:"80%", borderRadius:6}}>
+      <Text style={{fontWeight:"bold", color:"white"}}>BUAT ALAMAT</Text>
+      </TouchableOpacity>       
+ )}
+     
     </View>
   )
 }

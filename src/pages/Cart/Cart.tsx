@@ -210,37 +210,43 @@ const openAddressPopup = async () => {
 
     <View style={{flexDirection:"row", gap:2, justifyContent:"center", alignItems:"center"}}>
         <View style={{backgroundColor:"white", padding:4}}>
-            {/* <Image source={DetailProduct1} style={{width:115, height:106}}/> */}
-            <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:100, height:120}} />
+              {loading ? (<View style={{backgroundColor:"#EAEAEA", width:100, height:120}}/>) : (
+               <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:100, height:120}} />
+              )}
         </View>
     <View style={{backgroundColor:"white", borderRadius:6, width:"60%", padding:6,  marginTop:8}}>
-                <Text style={{fontWeight:"bold", marginHorizontal:4,}}>{item.Product}</Text>
-                {/* <Text style={{marginTop:4,marginHorizontal:4,}}>Detail :</Text> */}
-                
-                <Text style={{marginTop:4, marginHorizontal:4, fontSize:12}}>Rp. 
+      {loading ? (<View style={{backgroundColor:"#EAEAEA", width:150, height:20, marginTop:4}}/>):(
+          <Text style={{fontWeight:"bold", marginHorizontal:4,}}>{item.Product}</Text>
+      )}   
+      {loading ? (<View style={{backgroundColor:"#EAEAEA", width:60, height:15, marginTop:4}}/>):(
+        <Text style={{marginTop:4, marginHorizontal:4, fontSize:12}}>Rp. 
                 {
               new Intl.NumberFormat('id-ID', {
             // style: 'currency',
             currency: 'IDR'
           }).format(item.Price)
           }
-                </Text>
-                <Text style={{marginTop:4, marginHorizontal:4, fontSize:12}}>Rp. 
+                </Text>      )}                
+                
+                {/* <Text style={{marginTop:4, marginHorizontal:4, fontSize:12}}>Rp. 
                 {
               new Intl.NumberFormat('id-ID', {
             // style: 'currency',
             currency: 'IDR'
           }).format(item.Price * item.Qty)
           }
-                </Text>
-                <View style={{flexDirection:"row", alignItems:"center"}}>
-              <Icon  
-                  name="map-marker-outline"
-                  type="material-community"
-                  size={15} color="black" /> 
-              <Text style={{fontSize:11, marginTop:3, marginLeft:8}}>{item.Branch}</Text>
-  
-              </View>
+                </Text> */}
+
+{loading ? (<View style={{backgroundColor:"#EAEAEA", width:60, height:15, marginTop:4}}/>):(
+         <View style={{flexDirection:"row", alignItems:"center"}}>
+         <Icon  
+             name="map-marker-outline"
+             type="material-community"
+             size={15} color="black" /> 
+         <Text style={{fontSize:11, marginTop:3, marginLeft:8}}>{item.Branch}</Text>
+         </View>    
+          )}    
+               
                 <Text style={{marginTop:4, marginHorizontal:4, fontSize:10}}>{item.Notes}</Text>
         <View style={{flexDirection:"row",gap:5, marginHorizontal:4}}>
         <TouchableOpacity
@@ -261,7 +267,9 @@ const openAddressPopup = async () => {
                 <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={decrementCount}>
                     <Text style={{color:"#148D2E"}}>-</Text>
                 </TouchableOpacity>
-                <Text style={{paddingVertical:5, alignItems:"center", textAlign:"center", width:30}}>{item.Qty}</Text>
+                {loading ? (<View style={{backgroundColor:"#EAEAEA", width:30, height:20, marginTop:4}}/>):(
+                  <Text style={{paddingVertical:5, alignItems:"center", textAlign:"center", width:30}}>{item.Qty}</Text>
+          )}   
                 <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={incrementCount}>
                     <Text style={{color:"#148D2E"}}>+</Text>
                 </TouchableOpacity>
@@ -276,9 +284,13 @@ const openAddressPopup = async () => {
 ))}
 
         <View style={{backgroundColor:"rgba(20, 141, 46, 0.1);", paddingVertical:12, paddingHorizontal:10, marginTop:8, width:370, borderRadius:7, flexDirection:"row", justifyContent:"space-between"}}>
-            <Text style={{fontSize:16}}> <Text style={{fontWeight:"bold"}}>Total Harga </Text> :  </Text>
+        {loading ? (<View style={{backgroundColor:"#EAEAEA", width:340, height:30, marginTop:4}}/>):(
+<View style={{flexDirection:"row", justifyContent:"space-between", width:340, marginHorizontal:10}}>
+<Text style={{fontSize:16}}> <Text style={{fontWeight:"bold"}}>Total Harga </Text> :  </Text>
+<Text style={{fontSize:16, color:"black"}}>Rp. 100.000</Text>
+</View>          
+  )}   
             
-            <Text style={{fontSize:16, color:"black"}}>Rp. 100.000</Text>
         
         </View>
         {/* <View style={{backgroundColor:"rgba(20, 141, 46, 0.1);", paddingVertical:12, paddingHorizontal:10, marginTop:8, width:370, borderRadius:7, flexDirection:"row", justifyContent:"space-between"}}>
@@ -294,7 +306,8 @@ const openAddressPopup = async () => {
                 <Text style={{fontSize:12, color:"blue"}} onPress={openAddressPopup}>Ubah</Text>
             </TouchableOpacity>
         </View>
-        <View style={{marginTop:4}}>
+        {loading ? (<View style={{backgroundColor:"#EAEAEA", width:200, height:30, marginTop:4}}/>):(
+          <View style={{marginTop:4}}>
         <Text>{selectedAddress ? selectedAddress.Name : 'Please select an address'}</Text>
         {selectedAddress && (
           <>
@@ -302,7 +315,9 @@ const openAddressPopup = async () => {
             <Text>{selectedAddress.DistrictName}, {selectedAddress.CityName}, {selectedAddress.StateName} {selectedAddress.PostalCode}</Text>
           </>
         )}
-      </View>
+      </View>         
+  )}   
+        
         </View>
             <TouchableOpacity style={{backgroundColor:"#148D2E", paddingVertical:14, alignItems:"center", marginTop:8, width:370, borderRadius:7}} onPress={() => setIsDrawerOpen(true)}>
                 <Text style={{color:"white", fontWeight:"bold"}}>LANJUT KE PEMBAYARAN</Text>

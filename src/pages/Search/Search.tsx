@@ -61,9 +61,6 @@ const Search = ({route}: SearchScreenProps) => {
       
     }, []);
   
-    if (loading) {
-      return <Text>Loading...</Text>;
-    }
 
    
 
@@ -124,26 +121,38 @@ const Search = ({route}: SearchScreenProps) => {
                 >
 
         <View style={{alignItems:"center"}}>
+        {loading ? (<View style={{backgroundColor:"#EAEAEA", width:100, height:120}}/>) : (
             <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:100, height:120}}/>
+            )}
         </View>
+        {loading? (<View style={{backgroundColor:"#EAEAEA", width:150, height:20, marginTop:5, marginLeft:8}}/>):(
             <Text style={{fontSize:15, marginTop:5, marginLeft:8}}>{item.Product}</Text>
-            <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>Rp. {formattedPrice}</Text>
-            <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. {formattedPrice}</Text>
-            <View style={{flexDirection:"row", alignItems:"center", marginLeft:10}}>
-            <Icon  
-                name="map-marker-outline"
-                type="material-community"
-                size={15} color="black" /> 
-            <Text style={{fontSize:11, marginTop:3, marginLeft:8}}>{item.Branch}</Text>
+              )}
+  {item.DiscountType == 1 && <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>{formattedPrice}</Text>  }
+            {loading?(<View style={{backgroundColor:"#EAEAEA", height:16, width:80, marginTop:3, marginLeft:8,}}/>):(
+                <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. {formattedPrice}</Text>
 
-            </View>
+              )}
+            {loading ? (<View style={{backgroundColor:"#EAEAEA", height:14, width:80, marginTop:3, marginLeft:8,}}/>):(
+                  <View style={{flexDirection:"row", alignItems:"center", marginLeft:10}}>
+                  <Icon  
+                      name="map-marker-outline"
+                      type="material-community"
+                      size={15} color="black" /> 
+                  <Text style={{fontSize:11, marginTop:3, marginLeft:8}}>{item.Branch}</Text>
+      
+                  </View>
+              )}
+ {loading ? (<View style={{backgroundColor:"#EAEAEA", height:12, width:60, marginTop:3, marginLeft:8,}}/>):(
             <Text style={{fontSize:11, marginTop:3, marginLeft:8}}> Terjual: {item.ItemSold}</Text>
-
+              )}
     
             
        
    
-            {isSelected  ? (
+    {loading ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'85%', marginTop:6, alignSelf:"center"}}/>):(
+               <View>
+                  {isSelected  ? (
             <View style={{flexDirection:"row", justifyContent:"center", alignItems:"center", marginHorizontal:20}}>
                     <View style={{backgroundColor:"#background: rgba(20, 141, 46, 0.1);", flexDirection:"row", padding:5, borderRadius:6}}>
                     <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={decrementCount}>
@@ -162,6 +171,9 @@ const Search = ({route}: SearchScreenProps) => {
                       
                   </View>
                 )}
+               </View>
+
+              )}
            
             </TouchableOpacity>
         )
@@ -170,7 +182,7 @@ const Search = ({route}: SearchScreenProps) => {
   return (
     
     <View style={{}} >
-          <Text style={{margin:10, fontWeight:"bold"}}>Produk dengan keyword "{searchText}"</Text>
+          <Text style={{margin:4, fontWeight:"bold", fontSize:15}}>Produk dengan keyword "{searchText}"</Text>
          <FlatList
         data={products}
         renderItem={renderItem}

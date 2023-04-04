@@ -24,62 +24,31 @@ const HomeCategory = () => {
       setLoading(false)
     }
 
+    const fetchToken = async () => {
+      const tokenData = await AsyncStorage.getItem('tokenID')
+
+      fetchData(tokenData == null ? "" : tokenData);
+      
+    };
+
+    const handleNavigate = async (itemId: string, categoryName: string) => {
+      
+      await AsyncStorage.setItem('categoryId', itemId)
+      await AsyncStorage.setItem('categoryName', categoryName)
+      navigation.navigate('Category', {itemId, categoryName})
+    };
+
+
     useEffect(() => {
-    
-      const fetchToken = async () => {
-        const TokenID = await AsyncStorage.getItem('@tokenID');
-        return TokenID;
-      }
-
-      const TokenID = fetchToken();
-
-      fetchData(TokenID);
+      
+      fetchToken()
+      
+      
     }, []);
   
   
-    if (loading) {
-      return <Text>Loading...</Text>;
-    }
-   const data = [{
-        id: '1',
-        categoryName: "Ikan Satu",
-        uri: require("../../../../assets/images/fish-1.png")
-    },
-    {
-        id: '2',
-        categoryName: "Ikan Dua",
-        uri: require("../../../../assets/images/fish-1.png")
-    },
-    {
-        id: '3',
-        categoryName: "Ikan Tiga",
-        uri: require("../../../../assets/images/fish-1.png")
-    },
-    {
-        id: '4',
-        categoryName: "Ikan Empat",
-        uri: require("../../../../assets/images/fish-1.png")
-    },
-    {
-        id: '5',
-        categoryName: "Ikan Lima",
-        uri: require("../../../../assets/images/fish-1.png")
-    },
-    {
-        id: '6',
-        categoryName: "Ikan Enam",
-        uri: require("../../../../assets/images/fish-1.png")
-    },
-    {
-        id: '7',
-        categoryName: "Ikan Tujuh",
-        uri: require("../../../../assets/images/fish-1.png")
-    },
-    {
-        id: '8',
-        categoryName: "Ikan Delapan",
-        uri: require("../../../../assets/images/fish-1.png")
-    }];
+
+
     const numColumns = 4;
 
   return (
@@ -88,20 +57,17 @@ const HomeCategory = () => {
          <FlatList
         data={categories}
         renderItem={({item}) => 
-       
-        <TouchableOpacity style={{width:80, height:80, alignItems:"center",  margin:8}} onPress={()=>{navigation.navigate('Category')}}>
-        <Image source={{ uri: `https://ellafroze.com/api/uploaded/category/${item.ImagePath}`}} style={{width:50, height:50}}/>
-        <Text style={{fontSize:10, marginTop:4}}>{item.Name}</Text>
+        <TouchableOpacity style={{width:80, height:80, alignItems:"center",  margin:8}} onPress={()=>handleNavigate(item.ID, item.Name)}>
+          {loading ? (<View style={{backgroundColor:"#EAEAEA", width:50, height:50}}/>): (
+              <Image source={{ uri: `https://ellafroze.com/api/uploaded/category/${item.ImagePath}`}} style={{width:50, height:50}}/>
+          )}
+          {loading ? (<View style={{backgroundColor:"#EAEAEA", width:50, height:10, marginTop:4}}/>):(
+           <Text style={{fontSize:10, marginTop:4}}>{item.Name}</Text>
+          )}
         </TouchableOpacity>}
         keyExtractor={item => item.ID}
         numColumns={numColumns}
       />
-        {/* {data.map((datum, index)=>(
-            <TouchableOpacity key={index} style={{width:70, height:80, alignItems:"center",  marginHorizontal:8}}>
-                <Image source={datum.uri}/>
-                <Text style={{fontSize:10, marginTop:4}}>{datum.categoryName}</Text>
-            </TouchableOpacity>
-        ))} */}
       
     </View>
   )

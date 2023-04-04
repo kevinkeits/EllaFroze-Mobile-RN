@@ -1,26 +1,200 @@
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {Picker} from '@react-native-picker/picker';
 import Drawer  from 'react-native-modal';
 import { DropdownIcon } from '../../../../assets/icons';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-
-interface Item {
-  id: string;
-  label: string;
+interface AddressInput {
+    txtAddressName: string;
+    txtFrmPhone: string;
+    SelFrmState: string;
+    SelFrmCity: string;
+    SelFrmDistrict: string;
+    txtPostalCode: string;
+    txtAddressDetail: string;
+    hdnFrmID: string;
+    hdnAction: string;
+    _s: string;
+    chkDefaultAddress?: string;
 }
-const AddressDetail = () => {
-  const [selectedProvince, setSelectedProvince] = useState<string>("");
+
+// export const createAddress = async (addressData: AddressInput) => {
+//     try {
+//       const response = await axios.post(`https://ellafroze.com/api/external/doSaveAddress`, addressData);
+//       return response.data;
+//       alert(response.data);
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   };
+
+interface State {
+  ID: string;
+  Name: string;
+}
+interface City {
+    ID: string;
+    Name: string;
+  }
+interface District {
+    ID: string;
+    Name: string;
+  }
+
+  interface AddressDetail {
+    ID:string
+    Name: string
+    Phone: string
+    StateID: string
+    StateName: string
+    CityID: string
+    CityName: string
+    DistrictID: string
+    DistrictName: string
+    PostalCode: string
+    Address: string
+    IsDefault?: number
+  }
+
+  type DetailScreenProps = {
+    route: { params: { itemId: string } };
+  };
+
+const NewAddress = ({ route }: DetailScreenProps) => {
+  const { itemId } = route.params;
+
+  const [selectedState, setSelectedState] = useState<string>("");
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
   const [pickerProvince, setPickerProvince] = useState<boolean>(false);
   const [pickerCity, setPickerCity] = useState<boolean>(false);
   const [pickerDistrict, setPickerDistrict] = useState<boolean>(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [detail, setDetail] = useState<AddressDetail>();
+  const [state, setState] = useState<State[]>([]);
+  const [city, setCity] = useState<City[]>([]);
+  const [district, setDistrict] = useState<District[]>([]);
+  const [loading, setLoading] = useState(true);  
+  const [txtAddressName, setTxtAddressName] = useState('');
+  const [txtFrmPhone, setTxtFrmPhone] = useState('');
+  const [SelFrmState, setSelFrmState] = useState('');
+  const [SelFrmCity, setSelFrmCity] = useState('');
+  const [SelFrmDistrict, setSelFrmDistrict] = useState('');
+  const [txtPostalCode, setTxtPostalCode] = useState('');
+  const [hdnFrmID, setHdnFrmID] = useState('');
+  const [hdnAction, setHdnAction] = useState('');
+  const [txtAddressDetail, setTxtAddressDetail] = useState('');
+
+  const [_s, setToken] = useState('');
+  const [_p, set_p] = useState('');
+
+//   const [addressData, setAddressData] = useState<AddressInput>({
+//     txtAddressName: '',
+//     txtFrmPhone: '',
+//     SelFrmState: '',
+//     SelFrmCity: '',
+//     SelFrmDistrict:'',
+//     txtPostalCode:'',
+//     txtAddressDetail:'',
+//   });
+
+const fetchData = async (tokenData: string) => {
+  const url = `https://ellafroze.com/api/external/getUserAddress?_cb=onCompleteFetchUserAddressDetail&_p=${itemId}&_s=${tokenData}`;
+  const response = await axios.get(url);
+  setDetail(response.data.data);
+  setLoading(false)
+}
+
+  const fetchState = async (tokenData: string) => {
+    const url = `https://ellafroze.com/api/global/getState?_cb=onCompleteFetchAddressState&_p=&_s=${tokenData}`;
+    const response = await axios.get(url);
+    setState(response.data.data);
+    setLoading(false)
+  }
+
+  const fetchCity = async (tokenData: string) => {
+    const url = `https://ellafroze.com/api/global/getCity?stateID=${selectedState}&_cb=onCompleteFetchAddressCity&_p=&_s=${tokenData}`;
+    const response = await axios.get(url);
+    setCity(response.data.data);
+    setLoading(false)
+  }
+
+  const fetchDistrict = async (tokenData: string) => {
+    const url = `https://ellafroze.com/api/global/getDistrict?cityID=${selectedCity}&_cb=onCompleteFetchAddressDistrict&_p=&_s=${tokenData}`;
+    const response = await axios.get(url);
+    setDistrict(response.data.data);
+    setLoading(false)
+  }
+
+  const fetchToken = async () => {
+    const tokenData = await AsyncStorage.getItem('tokenID')
+    set_p(itemId)
+    setToken(tokenData == null ? "" : tokenData);
+    fetchData(tokenData == null ? "" : tokenData);
+    fetchState(tokenData == null ? "" : tokenData);
+    fetchCity(tokenData == null ? "" : tokenData);
+    fetchDistrict(tokenData == null ? "" : tokenData);
+    // setHdnFrmID('')
+    // setHdnAction('Add')
+  };
+
+  async function saveAddress(addressInput: AddressInput): Promise<void> {
+    const apiUrl = 'https://ellafroze.com/api/external/doSaveAddress';
+  
+    try {
+       const response = await axios.post(apiUrl, addressInput);
+       await AsyncStorage.getItem('tokenID')
+       //alert(JSON.stringify(response.data.status))
+       if (!response.data.status){
+        alert(response.data.message);
+       } else {
+        //navigation.navigate("Login")
+        alert(response.data.message)
+       }   
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+
+  const handleCreateAddress = async () => {
+    try {
+      await saveAddress({ txtAddressName, txtFrmPhone, SelFrmState, SelFrmCity, SelFrmDistrict, txtPostalCode, txtAddressDetail, hdnFrmID, hdnAction, _s });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
 
 
+  const handleStateChange = (value: string) => {
+    // setSelectedState(value);
+    setSelFrmState(value);
+    setPickerProvince(false);
+
+    //alert(token)
+    // fetchCity(token);
+  };
+
+  const handleCityChange = (value: string) => {
+    // setSelectedCity(value);
+    setSelFrmCity(value);
+    setPickerCity(false);
+  };
+
+  const handleDistrictChange = (value: string) => {
+    // setSelectedDistrict(value);
+    setSelFrmDistrict(value);
+    setPickerDistrict(false);
+  };
+
+  const selectedStateLabel = state.find(item => item.ID === SelFrmState);
+  const selectedCityLabel = city.find(item => item.ID === SelFrmCity);
+  const selectedDistrictLabel = district.find(item => item.ID === SelFrmDistrict);
 
   const handlePickerProvince = () => {
     setPickerProvince(true);
@@ -31,6 +205,13 @@ const AddressDetail = () => {
   const handlePickerDistrict = () => {
     setPickerDistrict(true);
   };
+
+  useEffect(() => {
+    
+    fetchToken()
+    
+    
+  }, []);
 
 
   return (
@@ -50,54 +231,56 @@ const AddressDetail = () => {
         shadowOpacity: 0.22,
         shadowRadius: 2.22,
         }}>
-        <TextInput placeholder='Label Alamat' style={{margin:20, borderBottomWidth:1}}/>
-        <TextInput placeholder='No Telepon' style={{margin:20, borderBottomWidth:1}}/>
+        <TextInput 
+        placeholder='Label Alamat cth. Rumah/Kantor' 
+        style={{margin:20, borderBottomWidth:1}}
+        value={txtAddressName !== '' ? txtAddressName : detail?.Name}
+        onChangeText={setTxtAddressName}
+        />
+        <TextInput 
+        placeholder='No. Telepon' 
+        style={{margin:20, borderBottomWidth:1}}
+        value={txtFrmPhone !== '' ? txtFrmPhone : detail?.Phone}
+        onChangeText={setTxtFrmPhone}
+        />
 
         <TouchableOpacity onPress={handlePickerProvince} style={{margin:20, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
         <Text>
-          Province : {selectedProvince}
+          Province : {detail?.StateName}
         </Text>
         <DropdownIcon/>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={handlePickerCity} style={{margin:20, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
         <Text>
-          City : {selectedCity}
+          City : {detail?.CityName}
         </Text>
         <DropdownIcon/>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={handlePickerDistrict} style={{margin:20, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
         <Text>
-          District : {selectedDistrict}
+          District : {detail?.DistrictName}
         </Text>
         <DropdownIcon/>
         </TouchableOpacity>
-{/* 
-        <View style={{margin:20, flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
-        <Text>
-          City : {selectedCity}
-        </Text>
-        <TouchableOpacity onPress={handlePickerCity} style={{borderWidth:1, padding:5}}>
-          <Text>Silahkan Pilih</Text>
-        </TouchableOpacity>
-        </View> */}
-
-        {/* <View style={{margin:20, flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
-        <Text>
-          District : {selectedDistrict}
-        </Text>
-        <TouchableOpacity onPress={handlePickerDistrict} style={{borderWidth:1, padding:5}}>
-          <Text>Silahkan Pilih</Text>
-        </TouchableOpacity>
-        </View> */}
 
 
-        <TextInput placeholder='Kode Pos' style={{margin:20, borderBottomWidth:1}}/>
-        <TextInput placeholder='Detail Alamat' style={{margin:20, borderBottomWidth:1}}/>
+        <TextInput 
+        placeholder='Kode Pos' 
+        style={{margin:20, borderBottomWidth:1}}
+        value={txtPostalCode !== '' ? txtPostalCode : detail?.PostalCode}
+        onChangeText={setTxtPostalCode}
+        />
+        <TextInput 
+        placeholder='Detail Alamat' 
+        style={{margin:20, borderBottomWidth:1}}
+        value={txtAddressDetail !== '' ? txtAddressDetail : detail?.Address}
+        onChangeText={setTxtAddressDetail}
+        />
       </View>
-      <TouchableOpacity style={{backgroundColor:"green", padding:10, alignItems:"center", width:"95%", alignSelf:"center", marginTop:20}}>
-        <Text>SIMPAN</Text>
+      <TouchableOpacity  onPress={handleCreateAddress} style={{ backgroundColor:"#FA0000", padding:10, alignItems:"center", width:"95%", alignSelf:"center", marginTop:20, borderRadius:6}}>
+        <Text style={{fontWeight:"bold", color:"white"}}>SIMPAN</Text>
       </TouchableOpacity>
 
 
@@ -114,15 +297,13 @@ const AddressDetail = () => {
     </TouchableOpacity>
   {pickerProvince && (
         <Picker
-          selectedValue={selectedProvince}
-          onValueChange={(itemValue) => {
-            setSelectedProvince(itemValue);
-            setPickerProvince(false);
-          }}
+            selectedValue={SelFrmState}
+            onValueChange={handleStateChange}
         >
-          <Picker.Item label="Jawa Barat" value="Jawa Barat" />
-          <Picker.Item label="Jawa Tengah" value="Jawa Tengah" />
-          <Picker.Item label="Jakarta" value="Jakarta" />
+            {state.map((item, index) => (
+                 <Picker.Item key={index} label={item.Name} value={item.ID} />
+            ))}
+         
         </Picker>
       )}
   </View>
@@ -139,15 +320,12 @@ const AddressDetail = () => {
     </TouchableOpacity>
   {pickerCity && (
         <Picker
-          selectedValue={selectedCity}
-          onValueChange={(itemValue) => {
-            setSelectedCity(itemValue);
-            setPickerCity(false);
-          }}
+          selectedValue={SelFrmCity}
+          onValueChange={handleCityChange}
         >
-          <Picker.Item label="Bogor" value="Bogor" />
-          <Picker.Item label="Jakarta" value="Jakarta" />
-          <Picker.Item label="Semarang" value="Semarang" />
+          {city.map((item, index) => (
+                 <Picker.Item key={index} label={item.Name} value={item.ID} />
+            ))}
         </Picker>
       )}
   </View>
@@ -164,15 +342,12 @@ const AddressDetail = () => {
     </TouchableOpacity>
   {pickerDistrict && (
         <Picker
-          selectedValue={selectedDistrict}
-          onValueChange={(itemValue) => {
-            setSelectedDistrict(itemValue);
-            setPickerDistrict(false);
-          }}
+          selectedValue={SelFrmDistrict}
+          onValueChange={handleDistrictChange}
         >
-          <Picker.Item label="Kec. Tanah Sareal" value="Kec. Tanah Sareal" />
-          <Picker.Item label="Kec. Tanah Kusir" value="Kec. Tanah Kusir" />
-          <Picker.Item label="Kec. Batang" value="Batang" />
+            {district.map((item, index) => (
+                 <Picker.Item key={index} label={item.Name} value={item.ID} />
+            ))}
         </Picker>
       )}
   </View>
@@ -184,6 +359,6 @@ const AddressDetail = () => {
   )
 }
 
-export default AddressDetail
+export default NewAddress
 
 const styles = StyleSheet.create({})

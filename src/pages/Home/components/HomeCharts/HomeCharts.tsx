@@ -24,11 +24,12 @@ interface Product {
 
   interface Props {
     products: Product[]
+    loading?: boolean
   }
   
 
 
-const HomeCharts = ({products}:Props) => {
+const HomeCharts = ({products, loading}:Props) => {
     const navigation = useNavigation();
     const [count, setCount] = useState(0);
     const [selected, setSelected] = useState(false);
@@ -142,10 +143,25 @@ const HomeCharts = ({products}:Props) => {
                   >
   
           <View style={{alignItems:"center"}}>
+            {loading ? (<View style={{backgroundColor:"#EAEAEA", width:100, height:120}}/>) : (
               <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${product.ImagePath}`}} style={{width:100, height:120}}/>
+            )}
           </View>
-              <Text style={{fontSize:15, marginTop:5, marginLeft:8}}>{product.Product}</Text>
+
+              {loading? (<View style={{backgroundColor:"#EAEAEA", width:150, height:20, marginTop:5, marginLeft:8}}/>):(
+               <Text style={{fontSize:15, marginTop:5, marginLeft:8}}>{product.Product}</Text>
+
+              )}
           
+              {loading?(<View style={{backgroundColor:"#EAEAEA", height:16, width:80, marginTop:3, marginLeft:8,}}/>):(
+                 <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. 
+                 {
+                 new Intl.NumberFormat('id-ID', {
+               // style: 'currency',
+               currency: 'IDR'
+             }).format(product.Price)
+             }</Text>
+              )}
 
               {product.DiscountType == 1 && <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>Rp.  {
               new Intl.NumberFormat('id-ID', {
@@ -155,29 +171,27 @@ const HomeCharts = ({products}:Props) => {
           }</Text>  }
 
             
-              
-              <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. 
-              {
-              new Intl.NumberFormat('id-ID', {
-            // style: 'currency',
-            currency: 'IDR'
-          }).format(product.Price)
-          }</Text>
-              <View style={{flexDirection:"row", alignItems:"center", marginLeft:10}}>
-              <Icon  
-                  name="map-marker-outline"
-                  type="material-community"
-                  size={15} color="black" /> 
-              <Text style={{fontSize:11, marginTop:3, marginLeft:8}}>{product.Branch}</Text>
-  
-              </View>
-              <Text style={{fontSize:11, marginTop:3, marginLeft:8}}> Terjual: {product.ItemSold}</Text>
+             
+{loading ? (<View style={{backgroundColor:"#EAEAEA", height:14, width:80, marginTop:3, marginLeft:8,}}/>):(
+                  <View style={{flexDirection:"row", alignItems:"center", marginLeft:10}}>
+                  <Icon  
+                      name="map-marker-outline"
+                      type="material-community"
+                      size={15} color="black" /> 
+                  <Text style={{fontSize:11, marginTop:3, marginLeft:8}}>{product.Branch}</Text>
+                  </View>
+              )}
+             
+             {loading ? (<View style={{backgroundColor:"#EAEAEA", height:12, width:60, marginTop:3, marginLeft:8,}}/>):(
+               <Text style={{fontSize:11, marginTop:3, marginLeft:8}}> Terjual: {product.ItemSold}</Text>
+
+              )}
   
       
               
-         
-     
-              {selected  ? (
+  {loading ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'85%', marginTop:6, alignSelf:"center"}}/>):(
+               <View>
+                  {selected  ? (
               <View style={{flexDirection:"row", justifyContent:"center", alignItems:"center", marginHorizontal:20}}>
                       <View style={{backgroundColor:"#background: rgba(20, 141, 46, 0.1);", flexDirection:"row", padding:5, borderRadius:6}}>
                       <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={decrementCount}>
@@ -196,6 +210,11 @@ const HomeCharts = ({products}:Props) => {
                         
                     </View>
                   )}
+               </View>
+
+              )}
+     
+            
 
 {/* {product.selected ? (
             <TouchableOpacity onPress={() => handleSelect(product.ProductID)}>

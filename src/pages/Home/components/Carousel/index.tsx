@@ -1,7 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet, Dimensions, Image } from 'react-native';
+import { View, ScrollView, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button } from 'react-native-elements';
 
 
 const { width } = Dimensions.get('window');
@@ -46,16 +47,7 @@ useEffect(() => {
   
   
 }, []);
-  // useEffect(() => {
-  //   axios.get('https://ellafroze.com/api/external/getBanner?_cb=onCompleteFetchBanner&_p=main-banner-slider-wrapper&_s=NTk4OFBPSk9IUEc4MTVGT1hFQ0ZXT1pZRTVRREZFUUVMWjkyTE1PMTYzR0xIV0tWR0JGSFI5SzZTUFNKUldVNU1Ea3lZbVkwWVRNNFltUmxZakUzTmpSaFkyRTFNREppTVRoak9EUmxObVV4TmpjNU5qTTROemM1')
-  //     .then(response => {
-  //       setBanners(response.data.data);
-  //       //alert(JSON.stringify(response.data.data))
-  //       alert(JSON.stringify(banners))
-  //       setLoading(false);
-  //     })
-  //     .catch(error => console.log(error));
-  // }, []);
+  
 
   // if (loading) {
   //   return <Text>Loading...</Text>;
@@ -68,7 +60,10 @@ useEffect(() => {
 
   return (
     <View style={styles.container}>
-      <ScrollView
+      {loading ? (<View style={{height:200, width:390, backgroundColor:"#EAEAEA"}}/>) : (
+        <View>
+          
+          <ScrollView
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
@@ -85,6 +80,7 @@ useEffect(() => {
         ))}
       </ScrollView>
       <View style={styles.dotsContainer}>
+    
         {banners.map((banner, index) => (
           <View
             key={banner.ID}
@@ -92,6 +88,10 @@ useEffect(() => {
           />
         ))}
       </View>
+        </View>
+
+      )}
+      
     </View>
   );
 };

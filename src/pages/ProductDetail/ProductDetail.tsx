@@ -29,7 +29,7 @@ interface Product {
   Branch: string;
   BranchID: string;
   Discount: string;
-  DiscountType: string;
+  DiscountType: number;
   ImagePath: string;
   ItemSold: string;
   Price: number;
@@ -85,6 +85,9 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
       fetchImage(tokenData == null ? "" : tokenData);
     };
 
+  const incrementCount = () => {
+      setCount(count + 1);
+    };
 
   const decrementCount = () => {
     const newCount = count - 1 >= 1 ? count - 1 : 1;
@@ -98,9 +101,7 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
     
   }, []);
 
-  const incrementCount = () => {
-    setCount(count + 1);
-  };
+  
 
 
 
@@ -110,25 +111,33 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
         <View style={{height:500}}>
             {/* <Image source={DetailProduct1}/> */}
             {/* <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${image?.ImagePath}`}} style={{width:200, height:250}}/> */}
-            <CarouselImage itemId={itemId}/>
+            {loading ? (<View style={{backgroundColor:"#EAEAEA", height:500, width:300}}/>) : (
+                 <CarouselImage itemId={itemId}/>
+            )}
+           
         </View>
-        <View style={{backgroundColor:"rgba(20, 141, 46, 0.1);", flexDirection:"row", justifyContent:"space-evenly", paddingVertical:10, paddingLeft:25, marginTop:8, width:370, borderRadius:7}}>
+        <View style={{backgroundColor:"rgba(20, 141, 46, 0.1);", alignItems:"center", flexDirection:"row", justifyContent:"space-evenly", paddingVertical:10, paddingLeft:25, marginTop:8, width:370, borderRadius:7}}>
           <View>
-          <Text style={{fontSize:16, textDecorationLine:"line-through"}}>Rp. {
+
+            {detail?.DiscountType == 1 &&  <Text style={{fontSize:16, textDecorationLine:"line-through"}}>Rp. {
               new Intl.NumberFormat('id-ID', {
             // style: 'currency',
             currency: 'IDR'
           }).format(detail?.Price)
-          }</Text>
+          }</Text> }
+         
+         {loading ? (<View style={{backgroundColor:"#EAEAEA" ,width:120, height:30}}/>) : (
             <Text style={{fontSize:18, fontWeight:"bold"}}>Rp. {
               new Intl.NumberFormat('id-ID', {
             // style: 'currency',
             currency: 'IDR'
           }).format(detail?.Price)
           }</Text>
+         )}
+            
           </View>
         
-          {/* <Text style={{fontSize:16}}>{detail?.Price}</Text> */}
+        
           <View style={{flexDirection:"row", alignItems:"center", marginHorizontal:20}}>
                 <View style={{backgroundColor:"#background: rgba(20, 141, 46, 0.1);", flexDirection:"row", padding:5, borderRadius:6}}>
                 <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={decrementCount}>
@@ -143,23 +152,30 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
         </View>
         <View style={{backgroundColor:"rgba(20, 141, 46, 0.1);", flexDirection:"row", paddingVertical:12, paddingLeft:15, marginTop:7, width:370, borderRadius:7}}>
             <View style={{backgroundColor:"white", borderRadius:6,  paddingVertical:12, paddingHorizontal:8, marginRight:10}}>
-                <Text style={{fontWeight:"bold", fontSize:16}}>{detail?.Product}</Text>
-                {/* <Text style={{marginTop:4}}>Detail :</Text> */}
-                <Text style={{marginTop:10, fontSize:14}}>{detail?.Description}</Text>
-                {/* <Text style={{marginTop:4, fontSize:10}}>Bahan Baku : Daging Merah Ikan Tenggiri Giling</Text> */}
+              {loading ? (<View style={{backgroundColor:"#EAEAEA", width:200, height:30}}/>) : (
+                 <Text style={{fontWeight:"bold", fontSize:16}}>{detail?.Product}</Text>
+              )}
+               
+               {loading ? (<View style={{backgroundColor:"#EAEAEA", width:300, height:350, marginTop:15}}/>) :(
+                 <Text style={{marginTop:10, fontSize:14}}>{detail?.Description}</Text>
+               )}
             </View>
            
         </View>
         <View style={{backgroundColor:"rgba(20, 141, 46, 0.1);", paddingVertical:12, paddingHorizontal:25, marginTop:8, width:370, borderRadius:7, flexDirection:"row", justifyContent:"space-between"}}>
-            <Text style={{fontSize:14}}> <Text style={{fontWeight:"bold"}}>Pengiriman </Text> :  {detail?.Branch}</Text>
+          {loading ? (<View style={{backgroundColor:"#EAEAEA", width:150, height:25}}/>) : (
+             <Text style={{fontSize:14}}> <Text style={{fontWeight:"bold"}}>Pengiriman </Text> :  {detail?.Branch}</Text>
+          )}
             {/* <TouchableOpacity>
                 <Text style={{fontSize:12, color:"blue"}}>Ubah</Text>
             </TouchableOpacity> */}
         </View>
-        
-            <TouchableOpacity style={{backgroundColor:"#148D2E", paddingVertical:14, alignItems:"center", marginTop:8, marginBottom:20, width:370, borderRadius:7}} onPress={()=>{navigation.navigate('Cart')}}>
-                <Text style={{color:"white", fontWeight:"bold"}}>MASUKKAN KE KERANJANG</Text>
-            </TouchableOpacity>
+            {loading ? (<View style={{backgroundColor:"#EAEAEA", width:370, height:50, marginTop:8, marginBottom:20}}/>): (
+                 <TouchableOpacity style={{backgroundColor:"#148D2E", paddingVertical:14, alignItems:"center", marginTop:8, marginBottom:20, width:370, borderRadius:7}} onPress={()=>{navigation.navigate('Cart')}}>
+                 <Text style={{color:"white", fontWeight:"bold"}}>MASUKKAN KE KERANJANG</Text>
+             </TouchableOpacity>
+            )}
+         
         
     </View>
     </ScrollView>

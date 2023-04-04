@@ -29,13 +29,14 @@ const ProductCards = () => {
     const [selected, setSelected] = useState(false);
     const [selectedItems, setSelectedItems] = useState([]);
     const [products, setProducts] = useState<Product[]>([]);
+    const [currentCategoryName, setCurrentCategoryName] = useState('');
     const [loading, setLoading] = useState(true);
 
     
     
 
-    const fetchData = async (token: string, selectedBranch: string) => {
-      const url = `https://ellafroze.com/api/external/getAllProduct?CatID=&BranchID=${selectedBranch}&Keyword=&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
+    const fetchData = async (token: string, selectedBranch: string, selectedCategory: string) => {
+      const url = `https://ellafroze.com/api/external/getAllProduct?CatID=${selectedCategory}&BranchID=${selectedBranch}&Keyword=&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
       const response = await axios.get(url);
       setProducts(response.data.data);
       setLoading(false)
@@ -44,8 +45,13 @@ const ProductCards = () => {
     const fetchToken = async () => {
       const tokenData = await AsyncStorage.getItem('tokenID')
       const selectedBranchData = await AsyncStorage.getItem('selectedBranch')
+      const selectedCategoryData = await AsyncStorage.getItem('categoryId')
+      const selectedCategoryName= await AsyncStorage.getItem('categoryName')
 
-      fetchData(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData);
+
+
+      fetchData(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData, selectedCategoryData == null ? "" : selectedCategoryData);
+      setCurrentCategoryName(selectedCategoryName == null? "" : selectedCategoryName)
       
     };
 
@@ -57,9 +63,6 @@ const ProductCards = () => {
       
     }, []);
   
-    if (loading) {
-      return <Text>Loading...</Text>;
-    }
 
    
 
@@ -97,6 +100,7 @@ const ProductCards = () => {
             currency: 'IDR'
           }).format(item.Price);
         return (
+              <View>
             <TouchableOpacity 
             style={{
                 width:180, 
@@ -120,26 +124,39 @@ const ProductCards = () => {
                 >
 
         <View style={{alignItems:"center"}}>
+        {loading ? (<View style={{backgroundColor:"#EAEAEA", width:100, height:120}}/>) : (
             <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:100, height:120}}/>
+            )}
         </View>
+
+        {loading? (<View style={{backgroundColor:"#EAEAEA", width:150, height:20, marginTop:5, marginLeft:8}}/>):(
             <Text style={{fontSize:15, marginTop:5, marginLeft:8}}>{item.Product}</Text>
+              )}
+
             {item.DiscountType == 1 && <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>{formattedPrice}</Text>  }
-            <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. {formattedPrice}</Text>
-            <View style={{flexDirection:"row", alignItems:"center", marginLeft:10}}>
-            <Icon  
-                name="map-marker-outline"
-                type="material-community"
-                size={15} color="black" /> 
-            <Text style={{fontSize:11, marginTop:3, marginLeft:8}}>{item.Branch}</Text>
+            {loading?(<View style={{backgroundColor:"#EAEAEA", height:16, width:80, marginTop:3, marginLeft:8,}}/>):(
+                <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. {formattedPrice}</Text>
 
-            </View>
+              )}
+
+{loading ? (<View style={{backgroundColor:"#EAEAEA", height:14, width:80, marginTop:3, marginLeft:8,}}/>):(
+                  <View style={{flexDirection:"row", alignItems:"center", marginLeft:10}}>
+                  <Icon  
+                      name="map-marker-outline"
+                      type="material-community"
+                      size={15} color="black" /> 
+                  <Text style={{fontSize:11, marginTop:3, marginLeft:8}}>{item.Branch}</Text>
+      
+                  </View>
+              )}
+
+            {loading ? (<View style={{backgroundColor:"#EAEAEA", height:12, width:60, marginTop:3, marginLeft:8,}}/>):(
             <Text style={{fontSize:11, marginTop:3, marginLeft:8}}> Terjual: {item.ItemSold}</Text>
+              )}
 
-    
-            
-       
-   
-            {isSelected  ? (
+{loading ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'85%', marginTop:6, alignSelf:"center"}}/>):(
+               <View>
+                  {isSelected  ? (
             <View style={{flexDirection:"row", justifyContent:"center", alignItems:"center", marginHorizontal:20}}>
                     <View style={{backgroundColor:"#background: rgba(20, 141, 46, 0.1);", flexDirection:"row", padding:5, borderRadius:6}}>
                     <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={decrementCount}>
@@ -158,14 +175,21 @@ const ProductCards = () => {
                       
                   </View>
                 )}
+               </View>
+
+              )}
+   
+            
            
             </TouchableOpacity>
+            </View>
         )
     }
 
   return (
     
     <View style={{}} >
+       <Text style={{fontWeight:"bold", fontSize:15, margin:4}}>Produk dalam kategori "{currentCategoryName}"</Text>
          <FlatList
         data={products}
         renderItem={renderItem}

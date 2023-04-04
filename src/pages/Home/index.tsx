@@ -137,13 +137,6 @@ const handlePickerCity = async () => {
   setPickerCity(true);
 };
 
-// const storedBranch = async () => {
-//   if (selectedCity) {
-//   await AsyncStorage.setItem('selectedBranch', selectedCity)
-//   alert(await AsyncStorage.getItem('selectedBranch'))
-// }
-//};
-
 
 useEffect(() => {
     
@@ -153,11 +146,6 @@ useEffect(() => {
   
 }, []);
  
-  const images = [
-    'https://source.unsplash.com/featured/?nature',
-    'https://source.unsplash.com/featured/?water',
-    'https://source.unsplash.com/featured/?mountain',
-  ];
 
   return (
     <View style={styles.container}>
@@ -217,7 +205,7 @@ useEffect(() => {
 >
 <View style={{paddingBottom:20, backgroundColor:"white"}}>
 <TouchableOpacity onPress={() => setPickerCity(false)} style={{alignSelf:"flex-end", marginHorizontal:15, marginTop:10}} >
-            <Text style={{fontWeight:"bold", fontSize:16}}>X</Text>
+            {/* <Text style={{fontWeight:"bold", fontSize:16}}>X</Text> */}
            </TouchableOpacity>
       {branches?.map((item, index)=>(
              <TouchableOpacity
@@ -252,17 +240,18 @@ useEffect(() => {
 
       </View>
       {/* HEADER */}
+
       <ScrollView>
       <View style={{marginTop:10}}>
          <Carousel />
         </View>
         <View style={{marginTop:10}}>
           <Text style={{fontSize:16, fontWeight:"bold", marginLeft:3}}>Produk Terlaris</Text>
-          <HomeCharts products={products} />
+          <HomeCharts products={products} loading={loading} />
         </View>
         <View style={{marginTop:10}}>
           <Text style={{fontSize:16, fontWeight:"bold", marginLeft:3}}>Diskon</Text>
-          <HomeCharts products={products}/>
+          <HomeCharts products={products} loading={loading}/>
         </View>
         <View style={{marginTop:10}}>
         <HomeCategory/>

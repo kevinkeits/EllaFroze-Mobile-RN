@@ -66,17 +66,6 @@ export default function Account() {
   }, []);
 
 
-
-
-    // const handleLogout = async () => {
-    //   const success = await logout(accessToken);
-    
-    //   if (success) {
-    //     // Redirect the user to the login screen or perform other post-logout actions
-    //   } else {
-    //     // Display an error message or retry the logout
-    //   }
-    // };
   return (
       
     <View style={{marginHorizontal:10, marginVertical:15}}>
@@ -95,9 +84,15 @@ export default function Account() {
           shadowOpacity: 0.22,
           shadowRadius: 2.22,
           }}>
-        <Text style={{fontWeight:"bold", fontSize:16}}>{users?.Name}</Text>
+            {loading ? (<View style={{backgroundColor:"#EAEAEA", width:70, height:20}}/>) : (
+         <Text style={{fontWeight:"bold", fontSize:16}}>{users?.Name}</Text>
+            )}
+            {loading ? (<View style={{backgroundColor:"#EAEAEA", width:90, height:20, marginTop:5}}/>) : (
         <Text style={{fontSize:16}}>{users?.Phone}</Text>
+        )}
+         {loading ? (<View style={{backgroundColor:"#EAEAEA", width:120, height:20, marginTop:5}}/>) : (
         <Text style={{fontSize:16}}>{users?.Email}</Text>
+        )}
       </View>
       <Text style={{marginBottom:10, fontWeight:"bold", fontSize:15}}>Pengaturan Akun</Text>
       <View style={{

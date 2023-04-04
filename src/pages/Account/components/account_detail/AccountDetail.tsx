@@ -96,36 +96,45 @@ const AccountDetail = () => {
 
   return (
     <SafeAreaView>
+      
     <View style={{ marginHorizontal: 10, marginTop: 10}}>
       <Text style={{fontWeight:"bold"}}>Nama Lengkap</Text>
+      {loading ? (<View style={{backgroundColor:"#EAEAEA", width:370, height:34, alignSelf:"center"}}/>): (
       <TextInput 
       // placeholder='Rifqi Lazuardi'
       value={txtFrmName !== '' ? txtFrmName : users?.Name}
       onChangeText={handleChangeName}
       style={{borderColor:"black", borderBottomWidth:1, alignItems: "center", justifyContent:"center", padding:8, marginVertical:5, borderRadius:6}}
       />
+      )}
     </View>
     <View style={{ marginHorizontal: 10, marginTop: 10}}>
       <Text style={{fontWeight:"bold"}}>No Handphone</Text>
+      {loading ? (<View style={{backgroundColor:"#EAEAEA", width:370, height:34, alignSelf:"center"}}/>): (
       <TextInput 
       value={txtFrmPhone !== '' ? txtFrmPhone : users?.Phone}
       onChangeText={handleChangePhone}
       style={{borderColor:"black", borderBottomWidth:1, alignItems: "center", justifyContent:"center", padding:8, marginVertical:5, borderRadius:6}}
       />
+      )}
     </View>
     <View style={{ marginHorizontal: 10, marginTop: 10}}>
       <Text style={{fontWeight:"bold"}}>Email</Text>
-      <TextInput 
-      value={txtFrmEmail !== '' ? txtFrmEmail : users?.Email}
-      onChangeText={handleChangeEmail}
-      style={{borderColor:"black", borderBottomWidth:1, alignItems: "center", justifyContent:"center", padding:8, marginVertical:5, borderRadius:6}}
-      />
+      {loading ? (<View style={{backgroundColor:"#EAEAEA", width:370, height:34, alignSelf:"center"}}/>): (
+       <TextInput 
+       value={txtFrmEmail !== '' ? txtFrmEmail : users?.Email}
+       onChangeText={handleChangeEmail}
+       style={{borderColor:"black", borderBottomWidth:1, alignItems: "center", justifyContent:"center", padding:8, marginVertical:5, borderRadius:6}}
+       />
+      )}
     </View>
     <View style={{ marginHorizontal: 10, marginTop: 13}}>
-      {/* <Button title='SIMPAN' onPress={()=> alert("TERSIMPAN")}/> */}
-      <TouchableOpacity onPress={handleSave} style={{backgroundColor:"#FA0000", borderRadius:15, alignItems:"center", paddingVertical:10}}>
-        <Text style={{color:"white", fontWeight:"bold"}}>SIMPAN</Text>
-      </TouchableOpacity>
+    {loading ? (<View style={{backgroundColor:"#EAEAEA", width:350, height:45, alignSelf:"center"}}/>): (
+       <TouchableOpacity onPress={handleSave} style={{backgroundColor:"#FA0000", borderRadius:6, alignItems:"center", paddingVertical:10}}>
+       <Text style={{color:"white", fontWeight:"bold"}}>SIMPAN</Text>
+     </TouchableOpacity>
+      )}
+      
     </View>
     </SafeAreaView>
   )

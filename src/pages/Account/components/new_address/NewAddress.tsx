@@ -247,8 +247,8 @@ const NewAddress = () => {
         onChangeText={setTxtAddressDetail}
         />
       </View>
-      <TouchableOpacity  onPress={handleCreateAddress} style={{ backgroundColor:"green", padding:10, alignItems:"center", width:"95%", alignSelf:"center", marginTop:20}}>
-        <Text style={{fontWeight:"bold"}}>SIMPAN</Text>
+      <TouchableOpacity  onPress={handleCreateAddress} style={{ backgroundColor:"#FA0000", padding:10, alignItems:"center", width:"95%", alignSelf:"center", marginTop:20, borderRadius:6}}>
+        <Text style={{fontWeight:"bold", color:"white"}}>SIMPAN</Text>
       </TouchableOpacity>
 
 

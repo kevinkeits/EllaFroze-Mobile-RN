@@ -1,6 +1,10 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BCALogo } from '../../assets';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import TransactionCard from './components/TransactionCard/TransactionCard';
 
 type Tab = {
   id: string;
@@ -8,69 +12,63 @@ type Tab = {
   content: JSX.Element;
 }
 
+interface UnpaidTransaction {
+  ExpiredDate: string;
+  GopayDeepLink: string;
+  GrossAmount: string;
+  ID: string;
+  IsExpired: number;
+  IsPaid: number;
+  OrderID: string;
+  PaymentLogo: string;
+  PaymentMethod: number;
+  PaymentMethodCategory: string;
+  ReferenceID: string;
+}
+
 const Transaction = () => {
+  const navigation = useNavigation();
   const [activeTab, setActiveTab] = useState(0);
+  const [unpaidTransactions, setUnpaidTransactions] = useState<UnpaidTransaction[]>([]);
+  const [loading, setLoading] = useState(true);
+
+
+
+  const fetchUnpaidTransaction = async (tokenData: string) => {
+    const url = `https://ellafroze.com/api/external/getUnpaidTransaction?_cb=onCompleteFetchUnpaidTransaction&_p=transaction-unpaid-wrapper&_s=${tokenData}`;
+    const response = await axios.get(url);
+    
+    setUnpaidTransactions(response.data.data);
+    setLoading(false)
+  }
+
+  const fetchToken = async () => {
+    const tokenData = await AsyncStorage.getItem('tokenID')
+    fetchUnpaidTransaction(tokenData == null ? "" : tokenData);
+    
+  };
+
+  const handleNavigate = async (itemId: string, branchName: string) => {
+    
+    await AsyncStorage.setItem('branchName', branchName)
+    navigation.navigate('ChatRoom', {itemId, branchName})
+    // alert(branchName)
+    // alert(`Button clicked for item ${itemId}`);
+  };
+
+useEffect(() => {
+    
+  fetchToken()
+  
+  
+}, []);
 
   const tabs: Tab[] = [
     {
       id: '1',
       label: 'BAYAR',
       content: (
-        <View style={{
-          margin:10, 
-          // borderWidth:1, 
-          paddingVertical:15,
-          backgroundColor: '#fff',
-          elevation:3,
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-          shadowOpacity: 0.22,
-          shadowRadius: 2.22,
-          }} >
-          <View style={{backgroundColor:"red", width:100, alignItems:"center", padding:4, borderRadius:10, alignSelf:"flex-end", marginRight:8, marginBottom:8}}>
-            <Text style={{color:"white", fontWeight:"bold"}}>Belum Bayar</Text>
-          </View>
-          <View style={{flexDirection:"row", justifyContent:"space-evenly",}}>
-          <View style={{marginVertical:10, alignItems:"center"}}>
-            <View>
-              {/* <Image source={{ uri: '../../assets/images/BCALogo.png' }}/> */}
-              <Text>BCA</Text>
-            </View>
-            <View>
-            <View style={{marginTop:40}}>
-              <Text>Jumlah Dibayar</Text>
-              <Text style={{fontWeight:"bold"}}>Rp.74,000</Text>
-            </View>
-            </View>
-          </View>
-
-          <View style={{marginVertical:10, alignItems:"center"}}>
-          <Text style={{fontWeight:"bold"}}>
-              BCA Virtual Account
-          </Text>
-            <View style={{flexDirection:"row"}}>
-            <Text>
-              3232192139733
-            </Text>
-            <TouchableOpacity>
-              <Text style={{textDecorationLine:"underline", color:"green"}}>Copy</Text>
-            </TouchableOpacity>
-            </View>
-            <View style={{marginTop:22}}>
-            <Text >
-              Bayar Sebelum
-            </Text>
-            <Text style={{fontWeight:"bold"}}>
-              2023-03-11 10:46:53
-            </Text>
-            </View>
-          </View>
-          </View>
-
-        </View>
+        <TransactionCard unpaidTransactions={unpaidTransactions}/>
       ),
     },
     {
