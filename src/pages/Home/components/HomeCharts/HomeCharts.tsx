@@ -157,9 +157,6 @@ const HomeCharts = ({products, loading}:Props) => {
               )}
           
               {loading?(<View style={{backgroundColor:"#EAEAEA", height:16, width:80, marginTop:3, marginLeft:8,}}/>):(
-                 
-            
-              
               <View>
                  {product.DiscountType == 0 &&
               <View> 

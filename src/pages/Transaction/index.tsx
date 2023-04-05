@@ -42,16 +42,10 @@ const Transaction = () => {
   const navigation = useNavigation();
   const [activeTab, setActiveTab] = useState(0);
   const [unpaidTransactions, setUnpaidTransactions] = useState<UnpaidTransaction[]>([]);
-  // const [paidTransactions, setPaidTransactions] = useState<PaidTransaction[]>([]);
   const [onProcess, setOnProcess] = useState<PaidTransaction[]>([]);
   const [sent, setSent] = useState<PaidTransaction[]>([]);
   const [doneTransactions, setDoneTransactions] = useState<PaidTransaction[]>([]);
   const [canceled, setCanceled] = useState<PaidTransaction[]>([]);
-
-
-
-
-
   const [loading, setLoading] = useState(true);
 
 
