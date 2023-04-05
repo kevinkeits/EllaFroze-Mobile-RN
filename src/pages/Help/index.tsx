@@ -33,7 +33,6 @@ export default function Help() {
     const fetchToken = async () => {
       const tokenData = await AsyncStorage.getItem('tokenID')
       fetchHelp(tokenData == null ? "" : tokenData);
-      alert(JSON.stringify(help))
 
     };
   

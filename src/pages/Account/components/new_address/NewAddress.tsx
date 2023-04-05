@@ -5,6 +5,7 @@ import Drawer  from 'react-native-modal';
 import { DropdownIcon } from '../../../../assets/icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Icon } from 'react-native-elements';
 
 
 interface AddressInput {
@@ -174,6 +175,12 @@ const NewAddress = () => {
     setPickerDistrict(true);
   };
 
+  const [toggleValue, setToggleValue] = useState(false);
+
+  const handleToggle = () => {
+    setToggleValue(!toggleValue);
+  };
+
   useEffect(() => {
     
     fetchToken()
@@ -246,6 +253,36 @@ const NewAddress = () => {
         value={txtAddressDetail}
         onChangeText={setTxtAddressDetail}
         />
+      </View>
+      <View style={{
+        flexDirection:"row",
+        justifyContent:"space-between",
+        alignItems:"center",
+        padding:10, 
+        marginTop:20, 
+        marginHorizontal:8,
+        backgroundColor: '#fff',
+        elevation:3,
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+        }}>
+      <Text>Jadikan Alamat Utama</Text>
+      <TouchableOpacity activeOpacity={1} onPress={handleToggle}>
+      {/* <View style={[styles.switchContainer, toggleValue ? styles.switchOn : styles.switchOff]}> */}
+      <View style={{}}>
+        <Icon
+                  name={toggleValue ? 'toggle-switch-outline' : 'toggle-switch-off-outline'}
+                  type="material-community"
+                  size={45}
+                  color={toggleValue ? 'green' : 'red'}
+                />
+      </View>
+    </TouchableOpacity>
       </View>
       <TouchableOpacity  onPress={handleCreateAddress} style={{ backgroundColor:"#FA0000", padding:10, alignItems:"center", width:"95%", alignSelf:"center", marginTop:20, borderRadius:6}}>
         <Text style={{fontWeight:"bold", color:"white"}}>SIMPAN</Text>

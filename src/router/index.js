@@ -123,11 +123,23 @@ const MainApp = () => {
     >
         <Tab.Screen name='Home' component={Home} options={{title: "Home", headerShown:false
         }}/>
-        <Tab.Screen name='Transaction' component={Transaction} options={{title: "Home", headerTitle: () => <HomeHeader/>, headerStyle: {
-          backgroundColor: '#FA0000',
-          height: 120,
-        },
-        }}/>
+        <Tab.Screen name='Transaction' component={Transaction} options={{title: "Transaksi",
+        headerTitleStyle:{
+        color:"white"
+      },
+    //   headerLeft:()=> 
+    //   <TouchableOpacity onPress={()=>navigation.goBack()} >
+    //   <Icon
+    //     name="chevron-left"
+    //     type="material"
+    //     size={40}
+    //     color="white"
+    //   />
+    // </TouchableOpacity>, 
+   headerStyle: {
+    backgroundColor: '#FA0000',
+    height: 120,
+  }}}/>
         <Tab.Screen name='Help' component={Help} options={{title: "Help", headerTitleStyle:{ color:"white" }, headerStyle: {
           backgroundColor: '#FA0000',
         },

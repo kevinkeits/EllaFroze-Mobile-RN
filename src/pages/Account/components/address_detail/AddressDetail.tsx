@@ -5,6 +5,7 @@ import Drawer  from 'react-native-modal';
 import { DropdownIcon } from '../../../../assets/icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Icon } from 'react-native-elements';
 
 
 interface AddressInput {
@@ -57,6 +58,12 @@ interface District {
     PostalCode: string
     Address: string
     IsDefault?: number
+  }
+
+  interface ToggleButtonProps {
+    label: string;
+    onPress: (value: boolean) => void;
+    initialValue: boolean;
   }
 
   type DetailScreenProps = {
@@ -206,6 +213,22 @@ const fetchData = async (tokenData: string) => {
     setPickerDistrict(true);
   };
 
+  const [value, setValue] = useState(false);
+
+  const handlePress = () => {
+    const newValue = !value;
+    setValue(newValue);
+    // onPress(newValue);
+  };
+
+  const [toggleValue, setToggleValue] = useState(false);
+
+  const handleToggle = () => {
+    setToggleValue(!toggleValue);
+  };
+
+
+
   useEffect(() => {
     
     fetchToken()
@@ -278,6 +301,36 @@ const fetchData = async (tokenData: string) => {
         value={txtAddressDetail !== '' ? txtAddressDetail : detail?.Address}
         onChangeText={setTxtAddressDetail}
         />
+      </View>
+      <View style={{
+        flexDirection:"row",
+        justifyContent:"space-between",
+        alignItems:"center",
+        padding:10, 
+        marginTop:20, 
+        marginHorizontal:8,
+        backgroundColor: '#fff',
+        elevation:3,
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+        }}>
+      <Text>Jadikan Alamat Utama</Text>
+      <TouchableOpacity activeOpacity={1} onPress={handleToggle}>
+      {/* <View style={[styles.switchContainer, toggleValue ? styles.switchOn : styles.switchOff]}> */}
+      <View style={{}}>
+        <Icon
+                  name={toggleValue ? 'toggle-switch-outline' : 'toggle-switch-off-outline'}
+                  type="material-community"
+                  size={45}
+                  color={toggleValue ? 'green' : 'red'}
+                />
+      </View>
+    </TouchableOpacity>
       </View>
       <TouchableOpacity  onPress={handleCreateAddress} style={{ backgroundColor:"#FA0000", padding:10, alignItems:"center", width:"95%", alignSelf:"center", marginTop:20, borderRadius:6}}>
         <Text style={{fontWeight:"bold", color:"white"}}>SIMPAN</Text>
@@ -361,4 +414,29 @@ const fetchData = async (tokenData: string) => {
 
 export default NewAddress
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  switchContainer: {
+    width: 48,
+    height: 28,
+    borderRadius: 14,
+    padding: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  switchOn: {
+    backgroundColor: '#6fbf73',
+  },
+  switchOff: {
+    backgroundColor: '#ccc',
+  },
+});
