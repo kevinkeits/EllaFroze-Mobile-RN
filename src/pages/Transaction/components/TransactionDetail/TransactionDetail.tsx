@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView, FlatList } from 'react-native';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
+import * as WebBrowser from 'expo-web-browser';
 
 
 
@@ -86,16 +86,11 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
 
     const url = `https://ellafroze.com/api/invoice?i=${itemId}`;
 
-  const openBrowser = async () => {
-    try {
-      const result = await InAppBrowser.open(url, {
-        // options
-      });
+    const openWebBrowserAsync = async () => {
+      let result = await WebBrowser.openBrowserAsync(url);
       console.log(result);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    };
+
 
     const fetchDataDetail = async (token: string) => {
       const url = `https://ellafroze.com/api/external/getTransactionDetail?_cb=onCompleteFetchTransactionDetail&ID=${itemId}&_p=transactionDetailOrderList&_s=${token}`;
@@ -111,10 +106,11 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
       fetchDataDetail(tokenData == null ? "" : tokenData);
     };
 
-    const handleNavigateContact = (itemId: string) => {
-        // navigation.navigate('ChatRoom', {itemId})
+    const handleNavigateContact  = async (itemId: string, branchName: string) => {
+        await AsyncStorage.setItem('branchName', branchName)
+        navigation.navigate('ChatRoom', {itemId})
 
-        alert(`Button clicked for item ${itemId}`);
+        // alert(`Button clicked for item ${itemId}`);
       };
 
 
@@ -151,15 +147,18 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
         }} >
       
         <View style={{marginHorizontal:8}}>
-          <View style={{marginBottom:10,flexDirection:"row", justifyContent:"space-between"}}>
-            <Text style={{fontWeight:"bold"}}>No. Pesanan</Text>
-            <Text> {detail?.ID.replace(/%/g, "/")}</Text>
+          
+          <View style={{marginBottom:20,alignSelf:"flex-end"}}>
+            <Text style={{fontWeight:"bold"}}> {detail?.ID.replace(/%/g, "/")}</Text>
           </View>
-          <TouchableOpacity
-          onPress={openBrowser} 
-          style={{backgroundColor:"red", width:100, alignItems:"center", padding:4, borderRadius:10, alignSelf:"flex-end", marginRight:8, marginBottom:20}}>
-          <Text style={{color:"white", fontWeight:"bold"}}>Invoice</Text>
-        </TouchableOpacity>
+          {detail?.orderData[0].Status != 1 && (
+               <TouchableOpacity
+               onPress={openWebBrowserAsync} 
+               style={{backgroundColor:"red", width:100, alignItems:"center", padding:4, borderRadius:10, alignSelf:"flex-end", marginRight:8, marginBottom:20}}>
+               <Text style={{color:"white", fontWeight:"bold"}}>Invoice</Text>
+             </TouchableOpacity>
+            )}
+       
                 <View>
                     <View style={{flexDirection:"row", justifyContent:"space-between", marginBottom:30}}>
                     <Text style={{fontWeight:"bold"}}>Tanggal Pesanan</Text>
@@ -167,7 +166,7 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
                     </View>
                     <View style={{flexDirection:"row", justifyContent:"space-between", marginBottom:20}}>
                     <Text style={{fontWeight:"bold"}}>Tanggal Pembayaran</Text>
-                    <Text> {detail?.paymentData.PaidDate}</Text>
+                    <Text> {detail?.paymentData.PaidDate ?? "-"}</Text>
                     </View>
                 </View> 
                 </View>
@@ -221,6 +220,7 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
                 </View>
                 <View>
                     <Text style={{fontSize:15, fontWeight:"bold", width:"90%", marginBottom:10}}>{order.Product}</Text>
+                   
                     <Text style={{marginBottom:10}}>{order.Qty} x <Text style={{textDecorationLine:"line-through", color:"gray"}}>Rp. {
                  new Intl.NumberFormat('id-ID', {
                // style: 'currency',
@@ -236,16 +236,16 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
                     <Text>Store {order.Branch}</Text>
                 </View>
                </View>
-               <View style={{marginBottom:20}}>
+               <View style={{marginBottom:20, flexDirection:"row", justifyContent:"space-between"}}>
                 <Text style={{fontWeight:"bold"}}>Kurir Pengiriman</Text>
-                <Text>{order.ShippingMethod}</Text>
+                <Text>{order.ShippingMethod ?? "-"}</Text>
                </View>
-               <View style={{marginBottom:15}}>
+               <View style={{marginBottom:15, flexDirection:"row", justifyContent:"space-between"}}>
                 <Text style={{fontWeight:"bold"}}>No. Resi</Text>
-                <Text>{order.Tracking}</Text>
+                <Text>{order.Tracking ?? "-"}</Text>
                </View>
                <TouchableOpacity 
-               onPress={()=>handleNavigateContact(order.BranchID)}
+               onPress={()=>handleNavigateContact(order.BranchID, order.Branch)}
                style={{backgroundColor:"red", alignItems:"center", padding:8, borderRadius:10, alignSelf:"flex-end", marginRight:8, marginBottom:8 }}>
                     <Text style={{color:"white", fontWeight:"bold"}}>Hubungi Penjual</Text>
                 </TouchableOpacity>
@@ -253,7 +253,6 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
           </View> 
       ))}   
          
-               {detail?.orderData?.map((order)=>(
                  <View style={{
                     width:"95%",
                     marginBottom:5, 
@@ -279,46 +278,26 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
                 <View>
                <View style={{flexDirection:"row", justifyContent:"space-between", marginBottom:20}}>
                 <Text>SubTotal</Text>
-                <Text>Rp. {
-                 new Intl.NumberFormat('id-ID', {
-               // style: 'currency',
-               currency: 'IDR'
-             }).format(order.SubTotal)
-             }</Text>
+                <Text>Rp. {detail?.orderData[0]?.SubTotal}</Text>
                </View>
                <View style={{flexDirection:"row", justifyContent:"space-between", marginBottom:20}}>
                <Text>Ongkos Kirim</Text>
-               <Text>Rp. {
-                 new Intl.NumberFormat('id-ID', {
-               // style: 'currency',
-               currency: 'IDR'
-             }).format(order.DeliveryFee)
-             }</Text>
+               <Text>Rp. {detail?.orderData[0]?.DeliveryFee} </Text>
               </View>
               <View style={{flexDirection:"row", justifyContent:"space-between", marginBottom:20}}>
                <Text>Diskon total</Text>
-               <Text>- Rp. {
-                 new Intl.NumberFormat('id-ID', {
-               // style: 'currency',
-               currency: 'IDR'
-             }).format(order.SubDiscount)
-             }</Text>
+               <Text>- Rp. {detail?.orderData[0]?.SubDiscount}</Text>
               </View>
              
               </View>
                <View style={{flexDirection:"row", justifyContent:"space-between", marginBottom:20}}>
                <Text style={{fontWeight:"bold"}}>Total</Text>
                {/* <Text>{(order.SubTotal + order.DeliveryFee) - order.SubDiscount}</Text> */}
-               <Text>Rp. {
-                 new Intl.NumberFormat('id-ID', {
-               // style: 'currency',
-               currency: 'IDR'
-             }).format(order.SubTotal + order.DeliveryFee - order.SubDiscount)
-             }</Text>
+               <Text>Rp. {(parseInt((detail?.orderData[0]?.SubTotal ?? 0).toString()) + parseInt((detail?.orderData[0]?.DeliveryFee ?? 0).toString()) - parseInt((detail?.orderData[0]?.SubDiscount ?? 0).toString()))}</Text>
               </View>
                 </View>
           </View> 
-                ))}
+                
                 
      
     </View>

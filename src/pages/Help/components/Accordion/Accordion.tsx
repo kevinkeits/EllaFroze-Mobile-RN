@@ -3,22 +3,18 @@ import { ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } fr
 import { DropdownIcon } from '../../../../assets/icons';
 
 
-const data = [
-  { header: 'Section 1', content: 'Content 1' },
-  { header: 'Section 2', content: 'Content 2' },
-  { header: 'Section 3', content: 'Content 3' }
-];
+interface Help {
+  ID: string;
+  Title: string;
+  Content: string;
 
-const Accordion = () => {
-  // const [activeSection, setActiveSection] = useState(null);
+}
 
-  // const toggleSection = (index: any) => {
-  //   if (activeSection === index) {
-  //     setActiveSection(null);
-  //   } else {
-  //     setActiveSection(index);
-  //   }
-  // };
+interface Props {
+  data:Help[]
+
+}
+const Accordion = ({data}:Props) => {
 
   const [activeSection, setActiveSection] = useState(-1);
 
@@ -31,30 +27,33 @@ const Accordion = () => {
       {/* {data.map((item, index) => (
         <View key={index} style={{ borderBottomWidth:1, marginBottom:5, paddingLeft:10, width:"100%"}}>
           <TouchableOpacity onPress={() => toggleSection(index)} style={{paddingVertical:15}}>
-            <Text>{item.header}</Text>
+            <Text>{item.Title}</Text>
           </TouchableOpacity>
           {activeSection === index && (
-            <Text style={{ marginVertical:30}}>{item.content}</Text>
+            <Text style={{ marginVertical:30}}>{item.Content}</Text>
           )}
         </View>
       ))} */}
-       <View style={{ borderBottomWidth:1, borderBottomColor:"gray", marginBottom:5, paddingHorizontal:10, width:"100%"}}>
-          <TouchableOpacity onPress={() => toggleSection(0)} style={{paddingVertical:15, flexDirection:"row", justifyContent:"space-between"}}>
-            <Text>Yuk Kenalan sama Ella</Text>
+      {data.map((item, index)=>(
+        <View
+        key={index}
+        style={{ borderBottomWidth:1, borderBottomColor:"gray", marginBottom:5, paddingHorizontal:10, width:"100%"}}>
+          <TouchableOpacity onPress={() => toggleSection(index)} style={{paddingVertical:15, flexDirection:"row", justifyContent:"space-between"}}>
+            <Text>{item.Title}</Text>
             <DropdownIcon/>
           </TouchableOpacity>
-          {activeSection === 0 && (
+          {activeSection === index && (
             <View style={{marginVertical:20}}>
-            <Text>Mau belanja seafood tapi males pergi? Lagi capek? Tidak mau repot? Ellafroze saja solusinya. Sebagai tempat belanja seafood online, Ellafroze hadir buat membantu kamu ngedapetin seafood kegemaranmu.</Text>
-            <Text style={{marginTop:13}}>Berdiri sejak 2020, dikelola dan di operasikan oleh PT Bintang Berkah Melimpah, Ellafroze berkomitmen untuk memberikan kenyamanan dan kepuasan belanja seafood serta pembayaran yang mudah dan aman.</Text>
-            <Text style={{marginTop:13}}>Simpel, praktis dan nyaman di kantong. Ellafroze memastikan kualitas seafood kamu pasti higienis, bergizi dan halal.</Text>
-            <Text style={{marginTop:13}}>Kami juga memberikan solusi yang praktis dan hemat untuk teman-teman pelaku UMKM yang perlu menggunakan bahan baku berbasis ikan laut seperti bakso, pempek, otak-otak, batagor, tekwan, seafood bakar, seafood goreng, dan lain-lainnya.</Text>
-            <Text style={{marginTop:13}}> Btw, semua produk Ellafroze sangat terjaga kualitasnya karena diproses di fasilitas pengolahan ikan milik Ellafroze dan didistribusikan melalui cabang-cabang Ellafroze yang didukung dengan fasilitas penyimpanan cold storage modern.</Text>
+              <Text>
+                {item.Content}
+              </Text>
 
             </View>
           )}
         </View>
-        <View style={{ borderBottomWidth:1, borderBottomColor:"gray", marginBottom:5, paddingHorizontal:10, width:"100%"}}>
+      ))}
+       
+        {/* <View style={{ borderBottomWidth:1, borderBottomColor:"gray", marginBottom:5, paddingHorizontal:10, width:"100%"}}>
           <TouchableOpacity onPress={() => toggleSection(1)} style={{paddingVertical:15, flexDirection:"row", justifyContent:"space-between"}}>
             <Text>Bagaimana cara melakukan pemesanan di Ella?</Text>
             <DropdownIcon/>
@@ -142,7 +141,7 @@ const Accordion = () => {
             <Text style={{marginTop:13}}>CS Cibubur: 0811-1255-707</Text>
             </View>
           )}
-        </View>
+        </View> */}
     </View>
   );
 };

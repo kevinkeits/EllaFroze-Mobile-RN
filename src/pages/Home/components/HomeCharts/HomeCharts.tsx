@@ -12,10 +12,10 @@ interface Product {
     Product: string;
     Branch: string;
     BranchID: string;
-    Discount: string;
+    Discount: number;
     DiscountType: number;
     ImagePath: string;
-    ItemSold: string;
+    ItemSold: number;
     Price: number;
     Stock: number;
     Qty?: string;
@@ -157,21 +157,56 @@ const HomeCharts = ({products, loading}:Props) => {
               )}
           
               {loading?(<View style={{backgroundColor:"#EAEAEA", height:16, width:80, marginTop:3, marginLeft:8,}}/>):(
-                 <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. 
+                 
+            
+              
+              <View>
+                 {product.DiscountType == 0 &&
+              <View> 
+                <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. 
                  {
                  new Intl.NumberFormat('id-ID', {
                // style: 'currency',
                currency: 'IDR'
              }).format(product.Price)
              }</Text>
-              )}
+          </View>  }
 
-              {product.DiscountType == 1 && <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>Rp.  {
+              {product.DiscountType == 1 &&
+              <View> 
+                <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>Rp. 
+                 {
+                 new Intl.NumberFormat('id-ID', {
+               // style: 'currency',
+               currency: 'IDR'
+             }).format(product.Price)
+             }</Text>
+              <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp.  {
               new Intl.NumberFormat('id-ID', {
             // style: 'currency',
             currency: 'IDR'
-          }).format(product.Price)
-          }</Text>  }
+          }).format(product.Price - product.Discount)
+          }</Text>
+          </View>  }
+
+          {product.DiscountType == 2 && 
+          <View>
+            <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>Rp. 
+                 {
+                 new Intl.NumberFormat('id-ID', {
+               // style: 'currency',
+               currency: 'IDR'
+             }).format(product.Price)
+             }</Text>
+          <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp.  {
+              new Intl.NumberFormat('id-ID', {
+            // style: 'currency',
+            currency: 'IDR'
+          }).format(product.Price - ((product.Price * product.Discount)/100))
+          }</Text>
+          </View>  }
+          </View>
+            )}
 
             
              

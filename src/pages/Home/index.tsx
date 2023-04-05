@@ -38,12 +38,12 @@ interface Product {
   Product: string;
   Branch: string;
   BranchID: string;
-  Discount: string;
+  Discount: number;
   DiscountType: number;
   ImagePath: string;
-  ItemSold: string;
+  ItemSold: number;
   Price: number;
-  Stock: string;
+  Stock: number;
   Qty?: string;
   selected?:string
 }
@@ -68,6 +68,8 @@ const HomePage = () => {
   const [notifications, setNotifications] = useState<Notification>();
   const [branches, setBranches] = useState<Branch[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const [discountProducts, setDiscountProducts] = useState<Product[]>([]);
+
 
   const [loading, setLoading] = useState(true);
 
@@ -84,7 +86,18 @@ const HomePage = () => {
     } else {
       handlePickerCity()
     }
-    
+  }
+
+  const fetchDiscount = async (token: string, selectedBranch: string) => {
+    //alert(selectedBranch)
+    if (selectedBranch != "") {
+      const url = `https://ellafroze.com/api/external/getDiscount?BranchID=${selectedBranch}&_cb=onCompleteFetchDiscount&_p=main-discount-slider&_s=${token}`;
+      const response = await axios.get(url);
+      setDiscountProducts(response.data.data);
+      setLoading(false)
+    } else {
+      handlePickerCity()
+    }
   }
 
   const fetchNotification = async (token: string) => {
@@ -108,6 +121,7 @@ const HomePage = () => {
 
       
     fetchData(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
+    fetchDiscount(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
     fetchNotification(tokenData == null ? "" : tokenData);
     fetchBranch(tokenData == null ? "" : tokenData);
     setSelectedBranchName(selectedBranchName == null ? "" : selectedBranchName)
@@ -251,7 +265,7 @@ useEffect(() => {
         </View>
         <View style={{marginTop:10}}>
           <Text style={{fontSize:16, fontWeight:"bold", marginLeft:3}}>Diskon</Text>
-          <HomeCharts products={products} loading={loading}/>
+          <HomeCharts products={discountProducts} loading={loading}/>
         </View>
         <View style={{marginTop:10}}>
         <HomeCategory/>

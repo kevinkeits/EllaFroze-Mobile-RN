@@ -24,6 +24,8 @@ import NewAddress from '../pages/Account/components/new_address/NewAddress';
 import Search from '../pages/Search/Search';
 import Header from '../components/Header/Header';
 import TransactionDetail from '../pages/Transaction/components/TransactionDetail/TransactionDetail';
+import ArticleScreen from '../pages/ArticleScreen/ArticleScreen';
+import ArticleDetail from '../pages/ArticleScreen/components/ArticleDetail/ArticleDetail';
 
 
 
@@ -317,6 +319,44 @@ const Router = () => {
   />
    <RootStack.Screen name='TransactionDetail' component={TransactionDetail} 
   options={{title: "Detail Pesanan",
+  headerTitleStyle:{
+    color:"white"
+  },
+  headerLeft:()=> 
+  <TouchableOpacity onPress={()=>navigation.goBack()} >
+     <Icon
+        name="chevron-left"
+        type="material"
+        size={40}
+        color="white"
+      />
+    </TouchableOpacity>, 
+   headerStyle: {
+    backgroundColor: '#FA0000',
+    height: 120,
+  }}}
+  />
+  <RootStack.Screen name='ArticleScreen' component={ArticleScreen} 
+  options={{title: "Artikel dan Resep",
+  headerTitleStyle:{
+    color:"white"
+  },
+  headerLeft:()=> 
+  <TouchableOpacity onPress={()=>navigation.goBack()} >
+     <Icon
+        name="chevron-left"
+        type="material"
+        size={40}
+        color="white"
+      />
+    </TouchableOpacity>, 
+   headerStyle: {
+    backgroundColor: '#FA0000',
+    height: 120,
+  }}}
+  />
+  <RootStack.Screen name='ArticleDetail' component={ArticleDetail} 
+  options={{title: "Artikel dan Resep Detail",
   headerTitleStyle:{
     color:"white"
   },

@@ -1,8 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
-import ArticleCard from '../../../ArticleScreen/components/ArticleCard/ArticleCard';
+import ArticleCard from './components/ArticleCard/ArticleCard';
 
 
 type Tab = {
@@ -12,17 +11,16 @@ type Tab = {
 }
 
 interface Article {
-  ID: string;
-  Type: string;
-  ImageUrl: string;
-  Contents: string;
+    ID: string;
+    Type: string;
+    ImageUrl: string;
+    Contents: string;
 
-}
+  }
 
 
 
-const HomeArticle = () => {
-  const navigation = useNavigation()
+const ArticleScreen = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [Recipe, setRecipe] = useState<Article[]>([]);
   const [Article, setArticle] = useState<Article[]>([]);
@@ -46,7 +44,7 @@ const HomeArticle = () => {
     
   };
 
- 
+
 
 useEffect(() => {
     
@@ -54,6 +52,9 @@ useEffect(() => {
   
   
 }, []);
+
+
+
 
 
   const tabs: Tab[] = [
@@ -79,12 +80,6 @@ useEffect(() => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.tabBar1}>
-        <Text>Artikel dan Resep</Text>
-        <TouchableOpacity onPress={()=> navigation.navigate("ArticleScreen")}>
-          <Text style={{color:"blue"}}>Lihat semua</Text>
-        </TouchableOpacity>
-      </View>
       <View style={styles.tabBar}>
         {tabs.map((tab, index) => (
           <TouchableOpacity
@@ -111,7 +106,7 @@ useEffect(() => {
   )
 }
 
-export default HomeArticle
+export default ArticleScreen
 
 const styles = StyleSheet.create({
   container: {

@@ -133,11 +133,63 @@ const Search = ({route}: SearchScreenProps) => {
         {loading? (<View style={{backgroundColor:"#EAEAEA", width:150, height:20, marginTop:5, marginLeft:8}}/>):(
             <Text style={{fontSize:15, marginTop:5, marginLeft:8}}>{item.Product}</Text>
               )}
-  {item.DiscountType == 1 && <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>{formattedPrice}</Text>  }
+  {/* {item.DiscountType == 1 && <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>
+    {formattedPrice}</Text> 
+     }
             {loading?(<View style={{backgroundColor:"#EAEAEA", height:16, width:80, marginTop:3, marginLeft:8,}}/>):(
                 <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. {formattedPrice}</Text>
 
-              )}
+              )} */}
+
+{loading?(<View style={{backgroundColor:"#EAEAEA", height:16, width:80, marginTop:3, marginLeft:8,}}/>):(
+              <View>
+                 {item.DiscountType == 0 &&
+              <View> 
+                <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. 
+                 {
+                 new Intl.NumberFormat('id-ID', {
+               // style: 'currency',
+               currency: 'IDR'
+             }).format(item.Price)
+             }</Text>
+          </View>  }
+
+              {item.DiscountType == 1 &&
+              <View> 
+                <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>Rp. 
+                 {
+                 new Intl.NumberFormat('id-ID', {
+               // style: 'currency',
+               currency: 'IDR'
+             }).format(item.Price)
+             }</Text>
+              <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp.  {
+              new Intl.NumberFormat('id-ID', {
+            // style: 'currency',
+            currency: 'IDR'
+          }).format(item.Price - item.Discount)
+          }</Text>
+          </View>  }
+
+          {item.DiscountType == 2 && 
+          <View>
+            <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>Rp. 
+                 {
+                 new Intl.NumberFormat('id-ID', {
+               // style: 'currency',
+               currency: 'IDR'
+             }).format(item.Price)
+             }</Text>
+          <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp.  {
+              new Intl.NumberFormat('id-ID', {
+            // style: 'currency',
+            currency: 'IDR'
+          }).format(item.Price - ((item.Price * item.Discount)/100))
+          }</Text>
+          </View>  }
+          </View>
+            )}
+
             {loading ? (<View style={{backgroundColor:"#EAEAEA", height:14, width:80, marginTop:3, marginLeft:8,}}/>):(
                   <View style={{flexDirection:"row", alignItems:"center", marginLeft:10}}>
                   <Icon  
