@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
 import React from 'react'
+import { useNavigation } from '@react-navigation/native';
 
 interface UnpaidTransaction {
     ExpiredDate: string;
@@ -15,28 +16,40 @@ interface UnpaidTransaction {
     ReferenceID: string;
   }
 interface Props{
-    unpaidTransactions: UnpaidTransaction[]
+    unpaidTransactions: UnpaidTransaction[];
+    statusLabel: string
+
 }
-const TransactionCard = ({unpaidTransactions}: Props) => {
+const TransactionCard = ({unpaidTransactions, statusLabel}: Props) => {
+    const navigation = useNavigation();
+
+
+    const handleNavigate = (itemId: string) => {
+        navigation.navigate('TransactionDetail', {itemId})
+        // alert(`Button clicked for item ${itemId}`);
+      };
   return (
-    <View style={{
-        margin:10, 
-        // borderWidth:1, 
-        paddingVertical:15,
-        backgroundColor: '#fff',
-        elevation:3,
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 1,
-        },
-        shadowOpacity: 0.22,
-        shadowRadius: 2.22,
-        }} >
+        <View>
           {unpaidTransactions?.map((item, index)=>(
+            <TouchableOpacity
+            onPress={()=>handleNavigate(item.ID)}
+            style={{
+               margin:10, 
+               // borderWidth:1, 
+               paddingVertical:15,
+               backgroundColor: '#fff',
+               elevation:3,
+               shadowColor: '#000',
+               shadowOffset: {
+                 width: 0,
+                 height: 1,
+               },
+               shadowOpacity: 0.22,
+               shadowRadius: 2.22,
+               }} >
             <View key={index}>
               <View style={{backgroundColor:"red", width:100, alignItems:"center", padding:4, borderRadius:10, alignSelf:"flex-end", marginRight:8, marginBottom:8}}>
-          <Text style={{color:"white", fontWeight:"bold"}}>Belum Bayar</Text>
+          <Text style={{color:"white", fontWeight:"bold"}}>{statusLabel}</Text>
         </View>
         <View style={{flexDirection:"row", justifyContent:"space-evenly",}}>
         <View style={{marginVertical:10, alignItems:"center"}}>
@@ -79,11 +92,13 @@ const TransactionCard = ({unpaidTransactions}: Props) => {
         </View>
         </View>
             </View>
+            </TouchableOpacity>
 
           ))}
+          </View>
         
 
-      </View>
+      
   )
 }
 

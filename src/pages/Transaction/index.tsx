@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import TransactionCard from './components/TransactionCard/TransactionCard';
+import PaidTransactionCard from './components/PaidTransactionCard/PaidTransactionCard';
 
 type Tab = {
   id: string;
@@ -15,7 +16,7 @@ type Tab = {
 interface UnpaidTransaction {
   ExpiredDate: string;
   GopayDeepLink: string;
-  GrossAmount: string;
+  GrossAmount: number;
   ID: string;
   IsExpired: number;
   IsPaid: number;
@@ -26,10 +27,31 @@ interface UnpaidTransaction {
   ReferenceID: string;
 }
 
+interface PaidTransaction {
+  CreatedDate: string;
+  Branch: string;
+  GrossAmount: number;
+  ID: string;
+  ImagePath: string;
+  Status: number;
+  Product: string;
+  TotalItem: string;
+}
+
 const Transaction = () => {
   const navigation = useNavigation();
   const [activeTab, setActiveTab] = useState(0);
   const [unpaidTransactions, setUnpaidTransactions] = useState<UnpaidTransaction[]>([]);
+  // const [paidTransactions, setPaidTransactions] = useState<PaidTransaction[]>([]);
+  const [onProcess, setOnProcess] = useState<PaidTransaction[]>([]);
+  const [sent, setSent] = useState<PaidTransaction[]>([]);
+  const [doneTransactions, setDoneTransactions] = useState<PaidTransaction[]>([]);
+  const [canceled, setCanceled] = useState<PaidTransaction[]>([]);
+
+
+
+
+
   const [loading, setLoading] = useState(true);
 
 
@@ -42,9 +64,34 @@ const Transaction = () => {
     setLoading(false)
   }
 
+  const fetchPaidTransaction = async (tokenData: string, status: number) => {
+    const url = `https://ellafroze.com/api/external/getTransaction?_cb=onCompleteFetchTransaction&Status=${status}&_p=transaction-confirmed-wrapper&_s=${tokenData}`;
+    const response = await axios.get(url);
+    
+    if(status==2) {
+    setOnProcess(response.data.data);
+    setLoading(false)}
+    else if (status==3) {
+      setSent(response.data.data);
+      setLoading(false)
+    }
+    else if (status==4) {
+      setDoneTransactions(response.data.data);
+      setLoading(false)
+    } else {
+      setCanceled(response.data.data);
+      setLoading(false)
+    }
+  }
+
   const fetchToken = async () => {
     const tokenData = await AsyncStorage.getItem('tokenID')
     fetchUnpaidTransaction(tokenData == null ? "" : tokenData);
+
+    fetchPaidTransaction(tokenData == null ? "" : tokenData, 2)
+    fetchPaidTransaction(tokenData == null ? "" : tokenData, 3)
+    fetchPaidTransaction(tokenData == null ? "" : tokenData, 4)
+    fetchPaidTransaction(tokenData == null ? "" : tokenData, 5)
     
   };
 
@@ -68,247 +115,35 @@ useEffect(() => {
       id: '1',
       label: 'BAYAR',
       content: (
-        <TransactionCard unpaidTransactions={unpaidTransactions}/>
+        <TransactionCard unpaidTransactions={unpaidTransactions} statusLabel="Belum Bayar"/>
       ),
     },
     {
       id: '2',
       label: 'DIPROSES',
       content: (
-        <View style={{
-          margin:10, 
-          paddingVertical:15,
-          backgroundColor: '#fff',
-          elevation:3,
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-          shadowOpacity: 0.22,
-          shadowRadius: 2.22,
-          }} >
-        <View style={{backgroundColor:"red", width:100, alignItems:"center", padding:4, borderRadius:10, alignSelf:"flex-end", marginRight:8, marginBottom:8}}>
-          <Text style={{color:"white", fontWeight:"bold"}}>Di Proses</Text>
-        </View>
-        <View style={{flexDirection:"row", justifyContent:"space-evenly",}}>
-        <View style={{marginVertical:10, alignItems:"center"}}>
-          <View>
-            {/* <Image source={{ uri: '../../assets/images/BCALogo.png' }}/> */}
-            <Text>BCA</Text>
-          </View>
-          <View>
-          <View style={{marginTop:40}}>
-            <Text>Jumlah Dibayar</Text>
-            <Text style={{fontWeight:"bold"}}>Rp.74,000</Text>
-          </View>
-          </View>
-        </View>
-
-        <View style={{marginVertical:10, alignItems:"center"}}>
-        <Text style={{fontWeight:"bold"}}>
-            BCA Virtual Account
-        </Text>
-          <View style={{flexDirection:"row"}}>
-          <Text>
-            3232192139733
-          </Text>
-          <TouchableOpacity>
-            <Text style={{textDecorationLine:"underline", color:"green"}}>Copy</Text>
-          </TouchableOpacity>
-          </View>
-          <View style={{marginTop:22}}>
-          <Text >
-            Bayar Sebelum
-          </Text>
-          <Text style={{fontWeight:"bold"}}>
-            2023-03-11 10:46:53
-          </Text>
-          </View>
-        </View>
-        </View>
-
-      </View>
+       <PaidTransactionCard Transactions={onProcess} statusLabel="DIPROSES"/>
       ),
     },
     {
       id: '3',
       label: 'DIKIRIM',
       content: (
-        <View style={{
-          margin:10,
-          paddingVertical:15,
-          backgroundColor: '#fff',
-          elevation:3,
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-          shadowOpacity: 0.22,
-          shadowRadius: 2.22,
-          }} >
-        <View style={{backgroundColor:"red", width:100, alignItems:"center", padding:4, borderRadius:10, alignSelf:"flex-end", marginRight:8, marginBottom:8}}>
-          <Text style={{color:"white", fontWeight:"bold"}}>Dikirim</Text>
-        </View>
-        <View style={{flexDirection:"row", justifyContent:"space-evenly",}}>
-        <View style={{marginVertical:10, alignItems:"center"}}>
-          <View>
-            {/* <Image source={{ uri: '../../assets/images/BCALogo.png' }}/> */}
-            <Text>BCA</Text>
-          </View>
-          <View>
-          <View style={{marginTop:40}}>
-            <Text>Jumlah Dibayar</Text>
-            <Text style={{fontWeight:"bold"}}>Rp.74,000</Text>
-          </View>
-          </View>
-        </View>
-
-        <View style={{marginVertical:10, alignItems:"center"}}>
-        <Text style={{fontWeight:"bold"}}>
-            BCA Virtual Account
-        </Text>
-          <View style={{flexDirection:"row"}}>
-          <Text>
-            3232192139733
-          </Text>
-          <TouchableOpacity>
-            <Text style={{textDecorationLine:"underline", color:"green"}}>Copy</Text>
-          </TouchableOpacity>
-          </View>
-          <View style={{marginTop:22}}>
-          <Text >
-            Bayar Sebelum
-          </Text>
-          <Text style={{fontWeight:"bold"}}>
-            2023-03-11 10:46:53
-          </Text>
-          </View>
-        </View>
-        </View>
-
-      </View>
+        <PaidTransactionCard Transactions={sent} statusLabel="DIKIRIM"/>
       ),
     },
     {
       id: '4',
       label: 'SELESAI',
       content: (
-        <View style={{
-          margin:10, 
-          paddingVertical:15,
-          backgroundColor: '#fff',
-          elevation:3,
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-          shadowOpacity: 0.22,
-          shadowRadius: 2.22,
-          }} >
-        <View style={{backgroundColor:"red", width:100, alignItems:"center", padding:4, borderRadius:10, alignSelf:"flex-end", marginRight:8, marginBottom:8}}>
-          <Text style={{color:"white", fontWeight:"bold"}}>Selesai</Text>
-        </View>
-        <View style={{flexDirection:"row", justifyContent:"space-evenly",}}>
-        <View style={{marginVertical:10, alignItems:"center"}}>
-          <View>
-            {/* <Image source={{ uri: '../../assets/images/BCALogo.png' }}/> */}
-            <Text>BCA</Text>
-          </View>
-          <View>
-          <View style={{marginTop:40}}>
-            <Text>Jumlah Dibayar</Text>
-            <Text style={{fontWeight:"bold"}}>Rp.74,000</Text>
-          </View>
-          </View>
-        </View>
-
-        <View style={{marginVertical:10, alignItems:"center"}}>
-        <Text style={{fontWeight:"bold"}}>
-            BCA Virtual Account
-        </Text>
-          <View style={{flexDirection:"row"}}>
-          <Text>
-            3232192139733
-          </Text>
-          <TouchableOpacity>
-            <Text style={{textDecorationLine:"underline", color:"green"}}>Copy</Text>
-          </TouchableOpacity>
-          </View>
-          <View style={{marginTop:22}}>
-          <Text >
-            Bayar Sebelum
-          </Text>
-          <Text style={{fontWeight:"bold"}}>
-            2023-03-11 10:46:53
-          </Text>
-          </View>
-        </View>
-        </View>
-
-      </View>
+        <PaidTransactionCard Transactions={doneTransactions} statusLabel="SELESAI"/>
       ),
     },
     {
       id: '5',
       label: 'BATAL',
       content: (
-        <View style={{
-          margin:10, 
-          paddingVertical:15,
-          backgroundColor: '#fff',
-          elevation:3,
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-          shadowOpacity: 0.22,
-          shadowRadius: 2.22,
-          }} >
-          <View style={{backgroundColor:"red", width:100, alignItems:"center", padding:4, borderRadius:10, alignSelf:"flex-end", marginRight:8, marginBottom:8}}>
-            <Text style={{color:"white", fontWeight:"bold"}}>Batal</Text>
-          </View>
-          <View style={{flexDirection:"row", justifyContent:"space-evenly",}}>
-          <View style={{marginVertical:10, alignItems:"center"}}>
-            <View>
-              {/* <Image source={{ uri: '../../assets/images/BCALogo.png' }}/> */}
-              <Text>BCA</Text>
-            </View>
-            <View>
-            <View style={{marginTop:40}}>
-              <Text>Jumlah Dibayar</Text>
-              <Text style={{fontWeight:"bold"}}>Rp.74,000</Text>
-            </View>
-            </View>
-          </View>
-
-          <View style={{marginVertical:10, alignItems:"center"}}>
-          <Text style={{fontWeight:"bold"}}>
-              BCA Virtual Account
-          </Text>
-            <View style={{flexDirection:"row"}}>
-            <Text>
-              3232192139733
-            </Text>
-            <TouchableOpacity>
-              <Text style={{textDecorationLine:"underline", color:"green"}}>Copy</Text>
-            </TouchableOpacity>
-            </View>
-            <View style={{marginTop:22}}>
-            <Text >
-              Bayar Sebelum
-            </Text>
-            <Text style={{fontWeight:"bold"}}>
-              2023-03-11 10:46:53
-            </Text>
-            </View>
-          </View>
-          </View>
-
-        </View>
+        <PaidTransactionCard Transactions={canceled} statusLabel={"BATAL"}/>
       ),
     },
   ];

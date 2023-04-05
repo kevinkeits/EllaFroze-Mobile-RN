@@ -23,6 +23,7 @@ import NotificationIcon from '../components/Icon/Icon';
 import NewAddress from '../pages/Account/components/new_address/NewAddress';
 import Search from '../pages/Search/Search';
 import Header from '../components/Header/Header';
+import TransactionDetail from '../pages/Transaction/components/TransactionDetail/TransactionDetail';
 
 
 
@@ -297,6 +298,25 @@ const Router = () => {
   />
   <RootStack.Screen name='AddressDetail' component={AddressDetail} 
   options={{title: "Detail Alamat",
+  headerTitleStyle:{
+    color:"white"
+  },
+  headerLeft:()=> 
+  <TouchableOpacity onPress={()=>navigation.goBack()} >
+     <Icon
+        name="chevron-left"
+        type="material"
+        size={40}
+        color="white"
+      />
+    </TouchableOpacity>, 
+   headerStyle: {
+    backgroundColor: '#FA0000',
+    height: 120,
+  }}}
+  />
+   <RootStack.Screen name='TransactionDetail' component={TransactionDetail} 
+  options={{title: "Detail Pesanan",
   headerTitleStyle:{
     color:"white"
   },

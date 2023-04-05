@@ -1,9 +1,14 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Keyboard, Alert } from 'react-native'
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Keyboard, Alert, Button } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Logo } from '../../assets'
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// import * as Google from 'expo-google-app-auth';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+
+WebBrowser.maybeCompleteAuthSession();
 
 
 interface LoginCredentials {
@@ -17,9 +22,15 @@ interface Props {
   }
 
 const Login: React.FC<Props> = ({ navigation }) => {
-  
     const [txtUsername, setTxtUsername] = useState('');
     const [txtPassword, setTxtPassword] = useState('');
+    const [accessToken, setAccessToken] = React.useState<any | null>(null);
+    const [user, setUser] = React.useState(null);
+    const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+      clientId: "208326548212-g9brb9uhdlgldsq8ij2dha9k7lkt19pv.apps.googleusercontent.com",
+      // iosClientId: "your cliend id goes here!",
+      androidClientId: "208326548212-854bfkduu8g4dim685gci717e4fclhbl.apps.googleusercontent.com"
+    });
     
     //const dispatch = useDispatch();
 
@@ -48,9 +59,51 @@ const Login: React.FC<Props> = ({ navigation }) => {
       }
     };
 
-    useEffect (() => {
-      
-    }, []);
+    // async function signInWithGoogleAsync() {
+    //   try {
+    //     const result = await Google.logInAsync({
+    //       androidClientId: 'YOUR_ANDROID_CLIENT_ID',
+    //       iosClientId: 'YOUR_IOS_CLIENT_ID',
+    //       scopes: ['profile', 'email'],
+    //     });
+    
+    //     if (result.type === 'success') {
+    //       // user signed in
+    //       console.log(result.user);
+    //     } else {
+    //       console.log('Google sign-in cancelled');
+    //     }
+    //   } catch (e) {
+    //     console.log('Google sign-in error', e);
+    //   }
+    // }
+
+    React.useEffect(() => {
+      if(response?.type === "success") {
+        setAccessToken(response?.authentication?.accessToken);
+        accessToken && fetchUserInfo();
+      }
+    }, [response, accessToken])
+  
+    async function fetchUserInfo() {
+      let response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+      const useInfo = await response.json();
+      setUser(useInfo);
+    }
+  
+    // const ShowUserInfo = () => {
+    //   if(user) {
+    //     return(
+    //       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    //         <Text style={{fontSize: 35, fontWeight: 'bold', marginBottom: 20}}>Welcome</Text>
+    //         <Image source={{uri: user.picture}} style={{width: 100, height: 100, borderRadius: 50}} />
+    //         <Text style={{fontSize: 20, fontWeight: 'bold'}}>{user.name}</Text>
+    //       </View>
+    //     )
+    //   }
+    // }
   
 
   
@@ -135,6 +188,16 @@ const Login: React.FC<Props> = ({ navigation }) => {
         <Text style={{color:"white", marginTop:8, marginLeft:5}}>Daftar disini</Text>
       </TouchableOpacity>
       </View>
+      {/* <Button title="Sign in with Google" onPress={signInWithGoogleAsync} /> */}
+      <TouchableOpacity
+          disabled={!request}
+          onPress={() => {
+            promptAsync();
+            }} 
+        >
+          {/* <Image source={require("./btn.png")} style={{width: 300, height: 40}} /> */}
+          <Text>Login Google</Text>
+        </TouchableOpacity>
       
     </View>
     </View>

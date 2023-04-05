@@ -50,7 +50,7 @@ const Cart = () => {
   const navigation = useNavigation()
 const [count, setCount] = useState(0);
 const [isSelected, setSelection] = useState(false);
-const [selectedGopay, setSelectedGopay] = useState(false);
+const [selectedPayment, setSelectedPayment] = useState(false);
 const [selectedBCA, setSelectedBCA] = useState(false);
 const [cart, setCart] = useState<Cart[]>([]);
 const [address, setAddress] = useState<Address[]>([]);
@@ -63,6 +63,8 @@ const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 const fetchData = async (token: string) => {
   const url = `https://ellafroze.com/api/external/getCart?_cb=onCompleteFetchCart_new&_p=cartItemWrapper&_s=${token}`;
   const response = await axios.get(url);
+
+  alert(JSON.stringify(response.data.data))
   setCart(response.data.data);
   setLoading(false)
 }
@@ -119,13 +121,11 @@ const openAddressPopup = async () => {
   };
 
   const handleSelectBCA = () =>{
-    setSelectedGopay(false);
     setSelectedBCA(!selectedBCA);
   }
 
-  const handleSelectGopay = () =>{
-    setSelectedGopay(!selectedGopay);
-    setSelectedBCA(false);
+  const handleSelectPayment = (id:string) =>{
+    setSelectedPayment(true)
   }
 
 
@@ -139,38 +139,40 @@ const openAddressPopup = async () => {
 
   return (
     <View style={styles.container}>
-    <View style={{backgroundColor:"rgba(20, 141, 46, 0.1);", paddingVertical:10, paddingLeft:10, marginTop:8, width:370, borderRadius:7, flexDirection:"row", gap:6}}>
-    <TouchableOpacity onPress={handlePress}>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <View
-          style={{
-            height: 24,
-            width: 24,
-            borderRadius: 12,
-            borderWidth: 2,
-            borderColor: isSelected ? '#007AFF' : '#C7C7CC',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          {isSelected && (
+     
+        <View style={{backgroundColor:"rgba(20, 141, 46, 0.1);", paddingVertical:10, paddingLeft:10, marginTop:8, width:370, borderRadius:7, flexDirection:"row", gap:6}}>
+        <TouchableOpacity onPress={handlePress}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View
               style={{
-                height: 12,
-                width: 12,
-                borderRadius: 6,
-                backgroundColor: '#007AFF',
+                height: 24,
+                width: 24,
+                borderRadius: 12,
+                borderWidth: 2,
+                borderColor: isSelected ? '#007AFF' : '#C7C7CC',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
-            />
-          )}
-        </View>
-        <Text style={{fontSize:16, marginLeft:8}}>Pilih Semua</Text>
-      </View>
-    </TouchableOpacity>  
-        </View>
+            >
+              {isSelected && (
+                <View
+                  style={{
+                    height: 12,
+                    width: 12,
+                    borderRadius: 6,
+                    backgroundColor: '#007AFF',
+                  }}
+                />
+              )}
+            </View>
+            <Text style={{fontSize:16, marginLeft:8}}>Pilih Semua</Text>
+          </View>
+        </TouchableOpacity>  
+            </View>
+      
+    
 
-  {cart?.map((item)=>(
-          
+  {cart?.map((item)=>(   
 <View 
   key={item.ProductID}
   style={{
@@ -288,7 +290,8 @@ const openAddressPopup = async () => {
 <View style={{flexDirection:"row", justifyContent:"space-between", width:340, marginHorizontal:10}}>
 <Text style={{fontSize:16}}> <Text style={{fontWeight:"bold"}}>Total Harga </Text> :  </Text>
 <Text style={{fontSize:16, color:"black"}}>Rp. 100.000</Text>
-</View>          
+</View>   
+
   )}   
             
         
@@ -389,7 +392,7 @@ const openAddressPopup = async () => {
     <View
     key={item.ID} 
     style={{paddingVertical:2, borderBottomWidth:1, borderRadius:8}}>
-       <TouchableOpacity onPress={handleSelectBCA}style={{paddingLeft:12}}>
+       <TouchableOpacity onPress={()=>handleSelectPayment(item.ID)}style={{paddingLeft:12}}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <View
           style={{

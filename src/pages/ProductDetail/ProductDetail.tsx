@@ -38,6 +38,14 @@ interface Product {
 
 }
 
+interface SaveCart {
+  ProductID: string;
+  Qty: number;
+  Notes?: string;
+  Source: string;
+  _s:string
+}
+
 interface ImagePath {
   ID: string;
   ImagePath: string;
@@ -55,6 +63,14 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
     const [products, setProducts] = useState<Product[]>([]);
     const [image, setImage] = useState<ImagePath[]>([]);
     const [detail, setDetail] = useState<ProductDetail>();
+    const [ProductID, setProductID] = useState('');
+    const [Qty, setQty] = useState(0);
+    const [Notes, setNotes] = useState('');
+    const [Source, setSource] = useState('');
+    const [_s, setToken] = useState('');
+
+
+
     const [loading, setLoading] = useState(true);
 
     const fetchData = async (token: string) => {
@@ -78,8 +94,39 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
       setLoading(false)
     }
 
+    async function saveCart(cartInput: SaveCart): Promise<void> {
+      const apiUrl = 'https://ellafroze.com/api/external/doSaveCart';
+    
+      try {
+         const response = await axios.post(apiUrl, cartInput);
+         
+         if (!response.data.status){
+          alert(response.data.message);
+         } else {
+          if (response.data.message != '') alert(response.data.message)
+          else  navigation.navigate("Cart")
+        }   
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    }
+
+    const handleSaveCart = async () => {
+      try {
+        await saveCart({  ProductID, Qty, Notes, Source, _s });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     const fetchToken = async () => {
       const tokenData = await AsyncStorage.getItem('tokenID')
+      setToken(tokenData == null ? "" : tokenData);
+      setNotes("")
+      setQty(count)
+      setSource("product")
+      setProductID(itemId)
       fetchData(tokenData == null ? "" : tokenData);
       fetchDataDetail(tokenData == null ? "" : tokenData);
       fetchImage(tokenData == null ? "" : tokenData);
@@ -108,6 +155,11 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
   return (
         <ScrollView>
     <View style={styles.container}>
+    {detail?.Stock == 0 && (
+            <View style={{backgroundColor:"black", padding:10, zIndex:2, width:"50%", alignItems:"center", alignSelf:"center", position:"absolute", marginTop:250, opacity:0.7, borderRadius:8}}>
+              <Text style={{color:"white", fontWeight:"bold"}}>HABIS</Text>
+            </View>
+          )}
         <View style={{height:500}}>
             {/* <Image source={DetailProduct1}/> */}
             {/* <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${image?.ImagePath}`}} style={{width:200, height:250}}/> */}
@@ -171,7 +223,7 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
             </TouchableOpacity> */}
         </View>
             {loading ? (<View style={{backgroundColor:"#EAEAEA", width:370, height:50, marginTop:8, marginBottom:20}}/>): (
-                 <TouchableOpacity style={{backgroundColor:"#148D2E", paddingVertical:14, alignItems:"center", marginTop:8, marginBottom:20, width:370, borderRadius:7}} onPress={()=>{navigation.navigate('Cart')}}>
+                 <TouchableOpacity style={{backgroundColor:"#148D2E", paddingVertical:14, alignItems:"center", marginTop:8, marginBottom:20, width:370, borderRadius:7}} onPress={handleSaveCart}>
                  <Text style={{color:"white", fontWeight:"bold"}}>MASUKKAN KE KERANJANG</Text>
              </TouchableOpacity>
             )}

@@ -119,6 +119,11 @@ const Search = ({route}: SearchScreenProps) => {
             }} 
                 onPress={()=>handleNavigate(item.ProductID)}
                 >
+                   {item.Stock == 0 && (
+            <View style={{backgroundColor:"black", padding:10, zIndex:2, width:"50%", alignItems:"center", alignSelf:"center", position:"absolute", marginTop:40, opacity:0.7, borderRadius:8}}>
+              <Text style={{color:"white", fontWeight:"bold"}}>HABIS</Text>
+            </View>
+          )}
 
         <View style={{alignItems:"center"}}>
         {loading ? (<View style={{backgroundColor:"#EAEAEA", width:100, height:120}}/>) : (

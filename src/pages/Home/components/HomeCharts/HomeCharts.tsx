@@ -17,7 +17,7 @@ interface Product {
     ImagePath: string;
     ItemSold: string;
     Price: number;
-    Stock: string;
+    Stock: number;
     Qty?: string;
     selected?:string
   }
@@ -88,9 +88,7 @@ const HomeCharts = ({products, loading}:Props) => {
   }, []);
 
   
-    // if (loading) {
-    //   return <Text>Loading...</Text>;
-    // }
+  
 
 
   const incrementCount = () => {
@@ -141,7 +139,12 @@ const HomeCharts = ({products, loading}:Props) => {
               }} 
                   onPress={()=>handleNavigate(product.ProductID)}
                   >
-  
+
+  {product.Stock == 0 && (
+            <View style={{backgroundColor:"black", padding:10, zIndex:2, width:"50%", alignItems:"center", alignSelf:"center", position:"absolute", marginTop:40, opacity:0.7, borderRadius:8}}>
+              <Text style={{color:"white", fontWeight:"bold"}}>HABIS</Text>
+            </View>
+          )}
           <View style={{alignItems:"center"}}>
             {loading ? (<View style={{backgroundColor:"#EAEAEA", width:100, height:120}}/>) : (
               <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${product.ImagePath}`}} style={{width:100, height:120}}/>
@@ -213,20 +216,9 @@ const HomeCharts = ({products, loading}:Props) => {
                </View>
 
               )}
-     
-            
-
-{/* {product.selected ? (
-            <TouchableOpacity onPress={() => handleSelect(product.ProductID)}>
-              <Text>Deselect</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity onPress={() => handleSelect(product.ProductID)}>
-              <Text>Select</Text>
-            </TouchableOpacity>
-          )} */}
              
               </TouchableOpacity>
+           
         ))}
         </ScrollView>
       
