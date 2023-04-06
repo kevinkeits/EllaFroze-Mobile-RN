@@ -6,6 +6,7 @@ import { DropdownIcon } from '../../../../assets/icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Icon } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
 
 
 interface AddressInput {
@@ -45,9 +46,10 @@ interface District {
     Name: string;
   }
 const NewAddress = () => {
-  const [selectedState, setSelectedState] = useState<string>("");
-  const [selectedCity, setSelectedCity] = useState<string>("");
-  const [selectedDistrict, setSelectedDistrict] = useState<string>("");
+  const navigation = useNavigation()
+  // const [selectedState, setSelectedState] = useState<string>("");
+  // const [selectedCity, setSelectedCity] = useState<string>("");
+  // const [selectedDistrict, setSelectedDistrict] = useState<string>("");
   const [pickerProvince, setPickerProvince] = useState<boolean>(false);
   const [pickerCity, setPickerCity] = useState<boolean>(false);
   const [pickerDistrict, setPickerDistrict] = useState<boolean>(false);
@@ -79,22 +81,25 @@ const NewAddress = () => {
 
   
 
-  const fetchState = async (tokenData: string) => {
+  const fetchState = async () => {
+    const tokenData = await AsyncStorage.getItem('tokenID')
     const url = `https://ellafroze.com/api/global/getState?_cb=onCompleteFetchAddressState&_p=&_s=${tokenData}`;
     const response = await axios.get(url);
     setState(response.data.data);
     setLoading(false)
   }
 
-  const fetchCity = async (tokenData: string) => {
-    const url = `https://ellafroze.com/api/global/getCity?stateID=${selectedState}&_cb=onCompleteFetchAddressCity&_p=&_s=${tokenData}`;
+  const fetchCity = async (stateID: string) => {
+    const tokenData = await AsyncStorage.getItem('tokenID')
+    const url = `https://ellafroze.com/api/global/getCity?stateID=${stateID}&_cb=onCompleteFetchAddressCity&_p=&_s=${tokenData}`;
     const response = await axios.get(url);
     setCity(response.data.data);
     setLoading(false)
   }
 
-  const fetchDistrict = async (tokenData: string) => {
-    const url = `https://ellafroze.com/api/global/getDistrict?cityID=${selectedCity}&_cb=onCompleteFetchAddressDistrict&_p=&_s=${tokenData}`;
+  const fetchDistrict = async (cityID: string) => {
+    const tokenData = await AsyncStorage.getItem('tokenID')
+    const url = `https://ellafroze.com/api/global/getDistrict?cityID=${cityID}&_cb=onCompleteFetchAddressDistrict&_p=&_s=${tokenData}`;
     const response = await axios.get(url);
     setDistrict(response.data.data);
     setLoading(false)
@@ -103,11 +108,11 @@ const NewAddress = () => {
   const fetchToken = async () => {
     const tokenData = await AsyncStorage.getItem('tokenID')
     setToken(tokenData == null ? "" : tokenData);
-    fetchState(tokenData == null ? "" : tokenData);
-    fetchCity(tokenData == null ? "" : tokenData);
-    fetchDistrict(tokenData == null ? "" : tokenData);
+    fetchState();
+    // fetchCity(tokenData == null ? "" : tokenData);
+    // fetchDistrict(tokenData == null ? "" : tokenData);
     setHdnFrmID('')
-    setHdnAction('Add')
+    setHdnAction('add')
   };
 
   async function saveAddress(addressInput: AddressInput): Promise<void> {
@@ -133,6 +138,7 @@ const NewAddress = () => {
   const handleCreateAddress = async () => {
     try {
       await saveAddress({ txtAddressName, txtFrmPhone, SelFrmState, SelFrmCity, SelFrmDistrict, txtPostalCode, txtAddressDetail, hdnFrmID, hdnAction, _s });
+      navigation.goBack()
     } catch (error) {
       console.error(error);
     }
@@ -144,6 +150,8 @@ const NewAddress = () => {
     // setSelectedState(value);
     setSelFrmState(value);
     setPickerProvince(false);
+    fetchCity(value)
+    setDistrict([]);
 
     //alert(token)
     // fetchCity(token);
@@ -153,6 +161,7 @@ const NewAddress = () => {
     // setSelectedCity(value);
     setSelFrmCity(value);
     setPickerCity(false);
+    fetchDistrict(value)
   };
 
   const handleDistrictChange = (value: string) => {

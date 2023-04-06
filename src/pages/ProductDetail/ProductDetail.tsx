@@ -173,7 +173,7 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
               <View>
                  {detail?.DiscountType == 0 &&
               <View> 
-                <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. 
+                <Text style={{fontSize:16, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. 
                  {
                  new Intl.NumberFormat('id-ID', {
                // style: 'currency',

@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RootStackParams } from '../../../App';
 import { AccountIcon, AddressIcon, ChatIcon, HistoryIcon } from '../../assets/icons';
 import axios from 'axios';
@@ -51,6 +51,36 @@ export default function Account() {
       console.error(error);
     }
   };
+
+  const handleLogoutPress = () => {
+    Alert.alert(
+      'Confirmation',
+      'Are you sure you want to logout?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        {
+          text: 'Confirm',
+          onPress: handleLogout,
+          style: 'destructive',
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  // const handleDeleteConfirm = async () => {
+  //   try {
+  //     await deleteAddress({ hdnFrmID, _s });
+  //     navigation.goBack()
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  //   console.log('Item deleted');
+  // };
 
   const fetchToken = async () => {
     const tokenData = await AsyncStorage.getItem('tokenID')
@@ -198,7 +228,7 @@ export default function Account() {
           shadowRadius: 2.22,
           }}>
         <TouchableOpacity style={{flexDirection:"row", gap:10, paddingVertical:15, marginLeft:30}}
-       onPress={handleLogout}
+       onPress={handleLogoutPress}
        >
           <AccountIcon/>
           <Text style={{fontWeight:"700"}}>Logout</Text>

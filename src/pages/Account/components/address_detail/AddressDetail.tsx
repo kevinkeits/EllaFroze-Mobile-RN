@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {Picker} from '@react-native-picker/picker';
 import Drawer  from 'react-native-modal';
@@ -6,6 +6,7 @@ import { DropdownIcon } from '../../../../assets/icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Icon } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
 
 
 interface AddressInput {
@@ -20,6 +21,11 @@ interface AddressInput {
     hdnAction: string;
     _s: string;
     chkDefaultAddress?: string;
+}
+
+interface RemoveAddress {
+  hdnFrmID: string;
+  _s: string;
 }
 
 // export const createAddress = async (addressData: AddressInput) => {
@@ -72,10 +78,11 @@ interface District {
 
 const NewAddress = ({ route }: DetailScreenProps) => {
   const { itemId } = route.params;
+  const navigation = useNavigation()
 
-  const [selectedState, setSelectedState] = useState<string>("");
-  const [selectedCity, setSelectedCity] = useState<string>("");
-  const [selectedDistrict, setSelectedDistrict] = useState<string>("");
+  // const [selectedState, setSelectedState] = useState<string>("");
+  // const [selectedCity, setSelectedCity] = useState<string>("");
+  // const [selectedDistrict, setSelectedDistrict] = useState<string>("");
   const [pickerProvince, setPickerProvince] = useState<boolean>(false);
   const [pickerCity, setPickerCity] = useState<boolean>(false);
   const [pickerDistrict, setPickerDistrict] = useState<boolean>(false);
@@ -95,6 +102,10 @@ const NewAddress = ({ route }: DetailScreenProps) => {
   const [hdnAction, setHdnAction] = useState('');
   const [txtAddressDetail, setTxtAddressDetail] = useState('');
 
+  const [selFrmStateName, setSelFrmStateName] = useState('');
+  const [selFrmCityName, setSelFrmCityName] = useState('');
+  const [selFrmDistictName, setSelFrmDistrictName] = useState('');
+
   const [_s, setToken] = useState('');
   const [_p, set_p] = useState('');
 
@@ -108,43 +119,67 @@ const NewAddress = ({ route }: DetailScreenProps) => {
 //     txtAddressDetail:'',
 //   });
 
-const fetchData = async (tokenData: string) => {
+const fetchData = async () => {
+  const tokenData = await AsyncStorage.getItem('tokenID')
   const url = `https://ellafroze.com/api/external/getUserAddress?_cb=onCompleteFetchUserAddressDetail&_p=${itemId}&_s=${tokenData}`;
   const response = await axios.get(url);
-  setDetail(response.data.data[0]);
+  const rawData = response.data.data
+  const filteredData = rawData.filter((data:AddressDetail)=>(
+    data.ID == itemId
+  ))
+  setDetail(filteredData[0]);
+  setSelFrmState(filteredData[0].StateID)
+  setSelFrmStateName(filteredData[0].StateName)
+  fetchCity(filteredData[0].StateID)
+  setSelFrmCity(filteredData[0].CityID)
+  setSelFrmCityName(filteredData[0].CityName)
+  fetchDistrict(filteredData[0].CityID)
+  setSelFrmDistrict(filteredData[0].DistrictID)
+  setSelFrmDistrictName(filteredData[0].DistrictName)
+  setTxtAddressName(filteredData[0].Name)
+  setTxtAddressDetail(filteredData[0].Address)
+  setTxtFrmPhone(filteredData[0].Phone)
+  setTxtPostalCode(filteredData[0].PostalCode)
+  setHdnFrmID(itemId)
+  setHdnAction("edit")
+
+  setToken(tokenData ?? '')
+
   setLoading(false)
-  alert(JSON.stringify(detail))
 }
 
-  const fetchState = async (tokenData: string) => {
+  const fetchState = async () => {
+    const tokenData = await AsyncStorage.getItem('tokenID')
     const url = `https://ellafroze.com/api/global/getState?_cb=onCompleteFetchAddressState&_p=&_s=${tokenData}`;
     const response = await axios.get(url);
     setState(response.data.data);
     setLoading(false)
   }
 
-  const fetchCity = async (tokenData: string) => {
-    const url = `https://ellafroze.com/api/global/getCity?stateID=${selectedState}&_cb=onCompleteFetchAddressCity&_p=&_s=${tokenData}`;
+  const fetchCity = async (stateID: string) => {
+    const tokenData = await AsyncStorage.getItem('tokenID')
+    const url = `https://ellafroze.com/api/global/getCity?stateID=${stateID}&_cb=onCompleteFetchAddressCity&_p=&_s=${tokenData}`;
     const response = await axios.get(url);
     setCity(response.data.data);
     setLoading(false)
   }
 
-  const fetchDistrict = async (tokenData: string) => {
-    const url = `https://ellafroze.com/api/global/getDistrict?cityID=${selectedCity}&_cb=onCompleteFetchAddressDistrict&_p=&_s=${tokenData}`;
+  const fetchDistrict = async (cityID: string) => {
+    const tokenData = await AsyncStorage.getItem('tokenID')
+    const url = `https://ellafroze.com/api/global/getDistrict?cityID=${cityID}&_cb=onCompleteFetchAddressDistrict&_p=&_s=${tokenData}`;
     const response = await axios.get(url);
     setDistrict(response.data.data);
     setLoading(false)
   }
 
   const fetchToken = async () => {
-    const tokenData = await AsyncStorage.getItem('tokenID')
+    // const tokenData = await AsyncStorage.getItem('tokenID')
     set_p(itemId)
-    setToken(tokenData == null ? "" : tokenData);
-    fetchData(tokenData == null ? "" : tokenData);
-    fetchState(tokenData == null ? "" : tokenData);
-    fetchCity(tokenData == null ? "" : tokenData);
-    fetchDistrict(tokenData == null ? "" : tokenData);
+    // setToken(tokenData == null ? "" : tokenData);
+    await fetchData();
+    fetchState();
+    // fetchCity(tokenData == null ? "" : tokenData);
+    // fetchDistrict(tokenData == null ? "" : tokenData);
    
   };
 
@@ -152,7 +187,28 @@ const fetchData = async (tokenData: string) => {
     const apiUrl = 'https://ellafroze.com/api/external/doSaveAddress';
   
     try {
+      alert(JSON.stringify(addressInput))
        const response = await axios.post(apiUrl, addressInput);
+       await AsyncStorage.getItem('tokenID')
+       //alert(JSON.stringify(response.data.status))
+       if (!response.data.status){
+        alert(response.data.message);
+       } else {
+        //navigation.navigate("Login")
+        alert(response.data.message)
+       }   
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  async function deleteAddress(deleteAddressInput: RemoveAddress): Promise<void> {
+    const apiUrl = 'https://ellafroze.com/api/external/doRemoveAddress';
+  
+    try {
+      // alert(JSON.stringify(deleteAddressInput))
+       const response = await axios.post(apiUrl, deleteAddressInput);
        await AsyncStorage.getItem('tokenID')
        //alert(JSON.stringify(response.data.status))
        if (!response.data.status){
@@ -176,12 +232,54 @@ const fetchData = async (tokenData: string) => {
     }
   };
 
+  const handleDeletePress = () => {
+    Alert.alert(
+      'Confirmation',
+      'Are you sure you want to delete this item?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: handleDeleteConfirm,
+          style: 'destructive',
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      await deleteAddress({ hdnFrmID, _s });
+      navigation.goBack()
+    } catch (error) {
+      console.error(error);
+    }
+    console.log('Item deleted');
+  };
+
+
 
 
   const handleStateChange = (value: string) => {
     // setSelectedState(value);
     setSelFrmState(value);
     setPickerProvince(false);
+    fetchCity(value);
+    setDistrict([])
+    const filteredData = state.filter((data:State)=>(
+      data.ID == value
+    ))
+    setSelFrmStateName(filteredData[0].Name)
+
+    setSelFrmCity('')
+    setSelFrmCityName('')
+    setSelFrmDistrict('')
+    setSelFrmDistrictName('')
 
     //alert(token)
     // fetchCity(token);
@@ -191,12 +289,26 @@ const fetchData = async (tokenData: string) => {
     // setSelectedCity(value);
     setSelFrmCity(value);
     setPickerCity(false);
+    fetchDistrict(value);
+
+    const filteredData = city.filter((data:State)=>(
+      data.ID == value
+    ))
+    setSelFrmCityName(filteredData[0].Name)
+
+    setSelFrmDistrict('')
+    setSelFrmDistrictName('')
   };
 
   const handleDistrictChange = (value: string) => {
     // setSelectedDistrict(value);
     setSelFrmDistrict(value);
     setPickerDistrict(false);
+
+    const filteredData = district.filter((data:State)=>(
+      data.ID == value
+    ))
+    setSelFrmDistrictName(filteredData[0].Name)
   };
 
   const selectedStateLabel = state.find(item => item.ID === SelFrmState);
@@ -239,10 +351,22 @@ const fetchData = async (tokenData: string) => {
 
   return (
     <View>
+      <View style={{}}>
       <Text style={{marginTop:20, marginLeft:8, fontWeight:"bold", fontSize:16}}>Detail Alamat</Text>
+      <TouchableOpacity
+      onPress={handleDeletePress} 
+      style={{backgroundColor:"#FA0000", padding:10,  width:60, alignSelf:"flex-end", marginRight:8, borderRadius:6}}>
+      <Icon
+                  name="delete"
+                  type="material-community"
+                  size={25}
+                  color="white"
+                />
+      </TouchableOpacity>
+      </View>
       <View style={{
         padding:10, 
-        marginTop:20, 
+        marginTop:10, 
         marginHorizontal:8,
         backgroundColor: '#fff',
         elevation:3,
@@ -269,21 +393,21 @@ const fetchData = async (tokenData: string) => {
 
         <TouchableOpacity onPress={handlePickerProvince} style={{margin:20, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
         <Text>
-          Province : {detail?.StateName}
+          Province : {selFrmStateName}
         </Text>
         <DropdownIcon/>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={handlePickerCity} style={{margin:20, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
         <Text>
-          City : {detail?.CityName}
+          City : {selFrmCityName}
         </Text>
         <DropdownIcon/>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={handlePickerDistrict} style={{margin:20, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
         <Text>
-          District : {detail?.DistrictName}
+          District : {selFrmDistictName}
         </Text>
         <DropdownIcon/>
         </TouchableOpacity>
