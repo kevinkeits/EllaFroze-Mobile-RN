@@ -24,7 +24,7 @@ const Accordion = ({data}:Props) => {
   };
 
   return (
-    <View>
+    <ScrollView>
       {/* {data.map((item, index) => (
         <View key={index} style={{ borderBottomWidth:1, marginBottom:5, paddingLeft:10, width:"100%"}}>
           <TouchableOpacity onPress={() => toggleSection(index)} style={{paddingVertical:15}}>
@@ -51,7 +51,7 @@ const Accordion = ({data}:Props) => {
           {activeSection === index && (
             <View style={{marginVertical:20}}>
               <Text style={{width:"90%"}}>
-                {item.Content.replace(/<\/?p>/g, '\n')}
+                {item.Content.replace(/<\/?p>|<\/?P>/g, '\n')}
               </Text>
 
             </View>
@@ -60,7 +60,7 @@ const Accordion = ({data}:Props) => {
       ))}
        
       
-    </View>
+    </ScrollView>
   );
 };
 

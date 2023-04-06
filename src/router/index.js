@@ -138,7 +138,6 @@ const MainApp = () => {
     // </TouchableOpacity>, 
    headerStyle: {
     backgroundColor: '#FA0000',
-    height: 120,
   }}}/>
         <Tab.Screen name='Help' component={Help} options={{title: "Help", headerTitleStyle:{ color:"white" }, headerStyle: {
           backgroundColor: '#FA0000',
