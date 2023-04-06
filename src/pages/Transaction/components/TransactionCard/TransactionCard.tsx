@@ -1,6 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
+import * as Clipboard from 'expo-clipboard';
+
 
 interface UnpaidTransaction {
     ExpiredDate: string;
@@ -77,7 +79,7 @@ const TransactionCard = ({unpaidTransactions, statusLabel}: Props) => {
           <Text>
             {item.ReferenceID}
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => Clipboard.setStringAsync(item.ReferenceID)}>
             <Text style={{textDecorationLine:"underline", color:"green"}}>Copy</Text>
           </TouchableOpacity>
           </View>

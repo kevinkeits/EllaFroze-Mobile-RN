@@ -264,7 +264,7 @@ useEffect(() => {
           <HomeCharts products={products} loading={loading} />
         </View>
         <View style={{marginTop:10}}>
-          <Text style={{fontSize:16, fontWeight:"bold", marginLeft:3}}>Diskon</Text>
+          <Text style={{fontSize:16, fontWeight:"bold", marginLeft:3}}>Diskon hari ini!</Text>
           <HomeCharts products={discountProducts} loading={loading}/>
         </View>
         <View style={{marginTop:10}}>

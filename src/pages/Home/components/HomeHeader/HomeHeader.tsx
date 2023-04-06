@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Modal } fro
 import { CartIcon, LocationIcon, MessageIcon } from '../../../../assets/icons';
 import Drawer  from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
-import { Icon, Badge } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import NotificationIcon from './components/Icon/Icon';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';

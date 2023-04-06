@@ -3,6 +3,8 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView, FlatList } from 'react-native';
+import Clipboard from '@react-native-community/clipboard';
+
 import * as WebBrowser from 'expo-web-browser';
 
 
@@ -82,7 +84,28 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
     const [loading, setLoading] = useState(true);
 
 
-    const total = subtotal + deliveryFee - subdiscount;
+    const total = (parseInt((detail?.orderData[0]?.SubTotal ?? 0).toString()) + parseInt((detail?.orderData[0]?.DeliveryFee ?? 0).toString()) - parseInt((detail?.orderData[0]?.SubDiscount ?? 0).toString()));
+
+    const formattedTotal = new Intl.NumberFormat('id-ID', {
+      // style: 'currency',
+      currency: 'IDR'
+    }).format(total);
+    const formattedSubtotal = new Intl.NumberFormat('id-ID', {
+      // style: 'currency',
+      currency: 'IDR'
+    }).format(detail?.orderData[0]?.SubTotal ?? 0);
+
+    const formattedDeliveryFee = new Intl.NumberFormat('id-ID', {
+      // style: 'currency',
+      currency: 'IDR'
+    }).format(detail?.orderData[0]?.DeliveryFee ?? 0);
+
+    const formattedSubDiscount = new Intl.NumberFormat('id-ID', {
+      // style: 'currency',
+      currency: 'IDR'
+    }).format(detail?.orderData[0]?.SubDiscount ?? 0);
+
+  
 
     const url = `https://ellafroze.com/api/invoice?i=${itemId}`;
 
@@ -154,7 +177,16 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
           {detail?.orderData[0].Status != 1 && (
                <TouchableOpacity
                onPress={openWebBrowserAsync} 
-               style={{backgroundColor:"red", width:100, alignItems:"center", padding:4, borderRadius:10, alignSelf:"flex-end", marginRight:8, marginBottom:20}}>
+               style={{
+                elevation:3,
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 1,
+                },
+                shadowOpacity: 0.22,
+                shadowRadius: 2.22,
+                backgroundColor:"red", width:100, alignItems:"center", padding:4, borderRadius:10, alignSelf:"flex-end", marginRight:8, marginBottom:20}}>
                <Text style={{color:"white", fontWeight:"bold"}}>Invoice</Text>
              </TouchableOpacity>
             )}
@@ -278,22 +310,22 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
                 <View>
                <View style={{flexDirection:"row", justifyContent:"space-between", marginBottom:20}}>
                 <Text>SubTotal</Text>
-                <Text>Rp. {detail?.orderData[0]?.SubTotal}</Text>
+                <Text>Rp. {formattedSubtotal}</Text>
                </View>
                <View style={{flexDirection:"row", justifyContent:"space-between", marginBottom:20}}>
                <Text>Ongkos Kirim</Text>
-               <Text>Rp. {detail?.orderData[0]?.DeliveryFee} </Text>
+               <Text>Rp. {formattedDeliveryFee} </Text>
               </View>
               <View style={{flexDirection:"row", justifyContent:"space-between", marginBottom:20}}>
                <Text>Diskon total</Text>
-               <Text>- Rp. {detail?.orderData[0]?.SubDiscount}</Text>
+               <Text>- Rp. {formattedSubDiscount}</Text>
               </View>
              
               </View>
                <View style={{flexDirection:"row", justifyContent:"space-between", marginBottom:20}}>
                <Text style={{fontWeight:"bold"}}>Total</Text>
                {/* <Text>{(order.SubTotal + order.DeliveryFee) - order.SubDiscount}</Text> */}
-               <Text>Rp. {(parseInt((detail?.orderData[0]?.SubTotal ?? 0).toString()) + parseInt((detail?.orderData[0]?.DeliveryFee ?? 0).toString()) - parseInt((detail?.orderData[0]?.SubDiscount ?? 0).toString()))}</Text>
+               <Text>Rp. {formattedTotal}</Text>
               </View>
                 </View>
           </View> 

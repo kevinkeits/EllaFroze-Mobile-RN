@@ -43,7 +43,7 @@ const ArticleCard = ({data}:Props) => {
     <View style={{flexDirection:"row", gap:4}}>
     <View style={{marginVertical:10, alignItems:"center", width:"40%"}}>
       <View>
-      <Image source={{ uri: `https://ellafroze.com/api/uploaded${item.ImageUrl}`}} style={{width:55, height:55}}/>
+      <Image source={{ uri: `https://ellafroze.com/api/uploaded/${item.ImageUrl}`}} style={{width:55, height:55}}/>
         <Text>IMAGE</Text>
       </View>
     </View>

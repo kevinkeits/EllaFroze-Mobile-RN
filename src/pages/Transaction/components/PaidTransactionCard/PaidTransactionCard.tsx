@@ -10,7 +10,7 @@ interface PaidTransaction {
     ImagePath: string;
     Status: number;
     Product: string;
-    TotalItem: string;
+    TotalItem: number;
   }
 interface Props{
    Transactions: PaidTransaction[];
@@ -70,8 +70,8 @@ const PaidTransactionCard = ({Transactions, statusLabel}: Props) => {
             {item.Product}
         </Text>
           <View style={{flexDirection:"row"}}>
-          <Text>
-            {item.TotalItem} barang
+          <Text style={{color:"grey"}}>
+           {item.TotalItem > 1 ? `+ ${item.TotalItem - 1} barang lainya` : `${item.TotalItem} barang`}
           </Text>
           </View>
         </View>

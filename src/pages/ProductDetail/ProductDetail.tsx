@@ -28,7 +28,7 @@ interface Product {
   Product: string;
   Branch: string;
   BranchID: string;
-  Discount: string;
+  Discount: number;
   DiscountType: number;
   ImagePath: string;
   ItemSold: string;
@@ -68,10 +68,8 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
     const [Notes, setNotes] = useState('');
     const [Source, setSource] = useState('');
     const [_s, setToken] = useState('');
-
-
-
     const [loading, setLoading] = useState(true);
+
 
     const fetchData = async (token: string) => {
       const url = `https://ellafroze.com/api/external/getAllProduct?CatID=&BranchID=e0251060-1c70-11ec-9ac9-ca13603aef66&Keyword=&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
@@ -171,21 +169,54 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
         <View style={{backgroundColor:"rgba(20, 141, 46, 0.1);", alignItems:"center", flexDirection:"row", justifyContent:"space-evenly", paddingVertical:10, paddingLeft:25, marginTop:8, width:370, borderRadius:7}}>
           <View>
 
-            {detail?.DiscountType == 1 &&  <Text style={{fontSize:16, textDecorationLine:"line-through"}}>Rp. {
+          {loading?(<View style={{backgroundColor:"#EAEAEA", height:16, width:80, marginTop:3, marginLeft:8,}}/>):(
+              <View>
+                 {detail?.DiscountType == 0 &&
+              <View> 
+                <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. 
+                 {
+                 new Intl.NumberFormat('id-ID', {
+               // style: 'currency',
+               currency: 'IDR'
+             }).format(detail?.Price)
+             }</Text>
+          </View>  }
+
+              {detail?.DiscountType == 1 &&
+              <View> 
+                <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>Rp. 
+                 {
+                 new Intl.NumberFormat('id-ID', {
+               // style: 'currency',
+               currency: 'IDR'
+             }).format(detail?.Price)
+             }</Text>
+              <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp.  {
               new Intl.NumberFormat('id-ID', {
             // style: 'currency',
             currency: 'IDR'
-          }).format(detail?.Price)
-          }</Text> }
-         
-         {loading ? (<View style={{backgroundColor:"#EAEAEA" ,width:120, height:30}}/>) : (
-            <Text style={{fontSize:18, fontWeight:"bold"}}>Rp. {
-              new Intl.NumberFormat('id-ID', {
-            // style: 'currency',
-            currency: 'IDR'
-          }).format(detail?.Price)
+          }).format(detail?.Price - detail?.Discount)
           }</Text>
-         )}
+          </View>  }
+
+          {detail?.DiscountType == 2 && 
+          <View>
+            <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>Rp. 
+                 {
+                 new Intl.NumberFormat('id-ID', {
+               // style: 'currency',
+               currency: 'IDR'
+             }).format(detail?.Price)
+             }</Text>
+          <Text style={{fontSize:16, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp.  {
+              new Intl.NumberFormat('id-ID', {
+            // style: 'currency',
+            currency: 'IDR'
+          }).format(detail?.Price - ((detail?.Price * detail?.Discount)/100))
+          }</Text>
+          </View>  }
+          </View>
+            )}
             
           </View>
         

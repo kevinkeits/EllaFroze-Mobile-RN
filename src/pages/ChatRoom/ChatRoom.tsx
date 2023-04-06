@@ -167,8 +167,8 @@ const ChatRoom = ({ route, branchName }: ChatScreenProps) => {
           </View>
         ))} */}
         {messagesData?.map((message, index) => (
-          <View key={index} style={message.IsReadByCustomer === 1 ? styles.userMessageContainer : styles.otherMessageContainer}>
-            <Text style={message.IsReadByCustomer === 1 ? styles.userMessage : styles.otherMessage}>{message.Message}</Text>
+          <View key={index} style={message.IsReply == 0 ? styles.userMessageContainer : styles.otherMessageContainer}>
+            <Text selectable={true} style={message.IsReply == 0 ? styles.userMessage : styles.otherMessage}>{message.Message.replace(/<br\s*\/?>/gi, "")}</Text>
           </View>
         ))}
       </ScrollView>
@@ -181,7 +181,15 @@ const ChatRoom = ({ route, branchName }: ChatScreenProps) => {
         numberOfLines={4}
           placeholder="Type your message here"
         />
-        <Button title="Send" onPress={handleMessageUser} />
+        {/* <Button title="Send" onPress={handleMessageUser} /> */}
+        <TouchableOpacity onPress={handleMessageUser}>
+        <Icon
+                  name="send"
+                  type="material"
+                  size={40}
+                  color="blue"
+                />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -198,25 +206,49 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   userMessageContainer: {
-    backgroundColor: '#ECEFF1',
-    alignSelf: 'flex-end',
-    padding: 10,
-    marginVertical: 5,
-    marginRight: 10,
+    // backgroundColor: '#1982FC',
+    // alignSelf: 'flex-end',
+    // padding: 10,
+    // marginVertical: 5,
+    // marginRight: 10,
+    // maxWidth: '80%',
+    // borderRadius: 10,
+    backgroundColor: '#1982FC',
+    borderRadius: 20,
+    // borderTopRightRadius: 2,
+    borderBottomRightRadius:3,
+    borderWidth: 1,
+    borderColor: 'white',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginHorizontal: 8,
+    marginVertical: 4,
     maxWidth: '80%',
-    borderRadius: 10,
+    alignSelf: 'flex-end'
   },
   otherMessageContainer: {
+    // backgroundColor: '#F5F5F5',
+    // alignSelf: 'flex-start',
+    // padding: 10,
+    // marginVertical: 5,
+    // marginLeft: 10,
+    // maxWidth: '80%',
+    // borderRadius: 10,
     backgroundColor: '#F5F5F5',
-    alignSelf: 'flex-start',
-    padding: 10,
-    marginVertical: 5,
-    marginLeft: 10,
+    borderRadius: 20,
+    // borderTopRightRadius: 2,
+    borderBottomLeftRadius:8,
+    borderWidth: 1,
+    borderColor: 'white',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginHorizontal: 8,
+    marginVertical: 4,
     maxWidth: '80%',
-    borderRadius: 10,
+    alignSelf: 'flex-start'
   },
   userMessage: {
-    color: '#000',
+    color: 'white',
   },
   otherMessage: {
     color: '#000',

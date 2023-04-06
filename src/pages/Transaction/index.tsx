@@ -35,7 +35,7 @@ interface PaidTransaction {
   ImagePath: string;
   Status: number;
   Product: string;
-  TotalItem: string;
+  TotalItem: number;
 }
 
 const Transaction = () => {
