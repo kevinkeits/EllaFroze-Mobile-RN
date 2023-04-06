@@ -111,8 +111,9 @@ const NewAddress = ({ route }: DetailScreenProps) => {
 const fetchData = async (tokenData: string) => {
   const url = `https://ellafroze.com/api/external/getUserAddress?_cb=onCompleteFetchUserAddressDetail&_p=${itemId}&_s=${tokenData}`;
   const response = await axios.get(url);
-  setDetail(response.data.data);
+  setDetail(response.data.data[0]);
   setLoading(false)
+  alert(JSON.stringify(detail))
 }
 
   const fetchState = async (tokenData: string) => {
@@ -144,8 +145,7 @@ const fetchData = async (tokenData: string) => {
     fetchState(tokenData == null ? "" : tokenData);
     fetchCity(tokenData == null ? "" : tokenData);
     fetchDistrict(tokenData == null ? "" : tokenData);
-    // setHdnFrmID('')
-    // setHdnAction('Add')
+   
   };
 
   async function saveAddress(addressInput: AddressInput): Promise<void> {

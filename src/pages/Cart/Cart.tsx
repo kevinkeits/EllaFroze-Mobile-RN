@@ -46,6 +46,14 @@ interface Address {
   ImagePath: string;
 }
 
+interface SaveCart {
+  ProductID: string;
+  Qty: string;
+  Notes?: string;
+  Source: string;
+  _s:string
+}
+
 const Cart = () => {
   const navigation = useNavigation()
 const [count, setCount] = useState(0);
@@ -59,6 +67,11 @@ const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
 const [showAddressPopup, setShowAddressPopup] = useState(false);
 const [loading, setLoading] = useState(true);
 const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+const [ProductID, setProductID] = useState('');
+const [Qty, setQty] = useState('');
+const [Notes, setNotes] = useState('');
+const [Source, setSource] = useState('');
+const [_s, setToken] = useState('');
 
 const fetchData = async (token: string) => {
   const url = `https://ellafroze.com/api/external/getCart?_cb=onCompleteFetchCart_new&_p=cartItemWrapper&_s=${token}`;
@@ -83,8 +96,40 @@ const fetchPaymentMethod = async (token: string) => {
   setLoading(false)
 }
 
+async function deleteItem(cartInput: SaveCart): Promise<void> {
+  const apiUrl = 'https://ellafroze.com/api/external/doSaveCart';
+
+  try {
+     const response = await axios.post(apiUrl, cartInput);
+     
+     if (!response.data.status){
+      alert(response.data.message);
+     } else {
+      alert('SUCCESS')
+      // else  navigation.navigate("Cart")
+    }   
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+const handleDeleteItem = async (itemCartId: string) => {
+  try {
+    setProductID(itemCartId)
+    await deleteItem({  ProductID, Qty, Notes, Source, _s });
+    
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const fetchToken = async () => {
   const tokenData = await AsyncStorage.getItem('tokenID')
+  setToken(tokenData == null ? "" : tokenData);
+  setNotes("undefined")
+  setQty("undefined")
+  setSource("cart")
   fetchData(tokenData == null ? "" : tokenData);
   fetchAddresses(tokenData == null ? "" : tokenData);
   fetchPaymentMethod(tokenData == null ? "" : tokenData);
@@ -252,6 +297,7 @@ const openAddressPopup = async () => {
                 <Text style={{marginTop:4, marginHorizontal:4, fontSize:10}}>{item.Notes}</Text>
         <View style={{flexDirection:"row",gap:5, marginHorizontal:4}}>
         <TouchableOpacity
+        onPress={()=>handleDeleteItem(item.ProductID)}
                 style={{
                   backgroundColor:"#background: rgba(20, 141, 46, 0.1);", 
                   alignItems:"center",
