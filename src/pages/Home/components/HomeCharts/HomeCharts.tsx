@@ -25,11 +25,12 @@ interface Product {
   interface Props {
     products: Product[]
     loading?: boolean
+    onConfirm?: (values: Product) => void
   }
   
 
 
-const HomeCharts = ({products, loading}:Props) => {
+const HomeCharts = ({products, loading, onConfirm}:Props) => {
     const navigation = useNavigation();
     const [count, setCount] = useState(0);
     const [selected, setSelected] = useState(false);
@@ -101,9 +102,15 @@ const HomeCharts = ({products, loading}:Props) => {
     setCount(newCount);
   };
 
-  const handleButtonPress = (itemId: any) => {
-    setSelected(itemId);
-    alert(`Button clicked for item ${itemId}`);
+  const handleButtonPress = (values: Product, type: string) => {
+    const postData: Product = {
+      ...values,
+      Qty: type == '+' ? (values.Qty == null ? '1' : (parseInt(values.Qty) + 1).toString()) : (values.Qty == null ? '0' : (parseInt(values.Qty) - 1).toString())
+      // groupRoleID: role?.id,
+      // merchantID: merchant.map((x) => x.id),
+      // isActive: isActive?.id
+    }
+    onConfirm?.(postData)
   };
 
   const handleNavigate = (itemId: string) => {
@@ -226,20 +233,20 @@ const HomeCharts = ({products, loading}:Props) => {
               
   {loading ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'85%', marginTop:6, alignSelf:"center"}}/>):(
                <View>
-                  {selected  ? (
+                  {(product.Qty != null && product.Qty != '0')  ? (
               <View style={{flexDirection:"row", justifyContent:"center", alignItems:"center", marginHorizontal:20}}>
                       <View style={{backgroundColor:"#background: rgba(20, 141, 46, 0.1);", flexDirection:"row", padding:5, borderRadius:6}}>
-                      <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={decrementCount}>
+                      <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={()=>handleButtonPress(product,'-')}>
                           <Text style={{color:"#148D2E"}}>-</Text>
                       </TouchableOpacity>
-                      <Text style={{paddingVertical:5, alignItems:"center", textAlign:"center", width:30}}>{count}</Text>
-                      <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={incrementCount}>
+                      <Text style={{paddingVertical:5, alignItems:"center", textAlign:"center", width:30}}>{product.Qty}</Text>
+                      <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={()=>handleButtonPress(product,'+')}>
                           <Text style={{color:"#148D2E"}}>+</Text>
                       </TouchableOpacity>
                       </View>
               </View>):(
                         <View style={{justifyContent:"center", alignItems:"center"}}>
-                        <TouchableOpacity onPress={()=>handleButtonPress(product.ProductID)} style={{backgroundColor: '#148D2E', width:'85%', marginTop:6, alignItems:"center", paddingVertical:3, borderRadius:6}}>
+                        <TouchableOpacity onPress={()=>handleButtonPress(product,'+')} style={{backgroundColor: '#148D2E', width:'85%', marginTop:6, alignItems:"center", paddingVertical:3, borderRadius:6}}>
                             <Text style={{color:"white", fontWeight:"bold"}}>BELI</Text>
                         </TouchableOpacity>
                         

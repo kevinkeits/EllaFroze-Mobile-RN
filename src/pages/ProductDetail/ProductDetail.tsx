@@ -81,8 +81,12 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
     const fetchDataDetail = async (token: string) => {
       const url = `https://ellafroze.com/api/external/getProductDetail?_i=${itemId}&_cb=onCompleteFetchProduct&_p=&_s=${token}`;
       const response = await axios.get(url);
+      //alert(JSON.stringify(response.data.data))
+      setCount(response.data.data.Qty)
+      setQty(response.data.data.Qty)
       setDetail(response.data.data);
       setLoading(false)
+      //setQty(response.data.data.Qty)
     }
 
     const fetchImage = async (token: string) => {
@@ -96,13 +100,14 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
       const apiUrl = 'https://ellafroze.com/api/external/doSaveCart';
     
       try {
+        //(JSON.stringify(cartInput))
          const response = await axios.post(apiUrl, cartInput);
          
          if (!response.data.status){
           alert(response.data.message);
          } else {
           if (response.data.message != '') alert(response.data.message)
-          else  navigation.navigate("Cart")
+          else navigation.goBack()
         }   
       } catch (error) {
         console.error(error);
@@ -122,21 +127,27 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
       const tokenData = await AsyncStorage.getItem('tokenID')
       setToken(tokenData == null ? "" : tokenData);
       setNotes("")
-      setQty(count)
-      setSource("product")
+      //setQty(count)
+      setSource("cart")
       setProductID(itemId)
-      fetchData(tokenData == null ? "" : tokenData);
+      //fetchData(tokenData == null ? "" : tokenData);
       fetchDataDetail(tokenData == null ? "" : tokenData);
       fetchImage(tokenData == null ? "" : tokenData);
     };
 
   const incrementCount = () => {
-      setCount(count + 1);
+    const newCount = parseInt(count.toString())
+      setCount(newCount + 1);
+      setQty(newCount + 1)
     };
 
   const decrementCount = () => {
-    const newCount = count - 1 >= 1 ? count - 1 : 1;
-    setCount(newCount);
+    const newCount = parseInt(count.toString())
+    if (newCount > 0) {
+      setCount(newCount - 1)
+      setQty(newCount - 1)
+    }
+    
   };
 
   useEffect(() => {

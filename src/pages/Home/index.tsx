@@ -41,9 +41,9 @@ interface Product {
   Discount: number;
   DiscountType: number;
   ImagePath: string;
-  ItemSold: number;
+  ItemSold?: number;
   Price: number;
-  Stock: number;
+  Stock?: number;
   Qty?: string;
   selected?:string
 }
@@ -59,6 +59,14 @@ interface Branch {
   Name: string;
 }
 
+interface SaveCart {
+  ProductID: string;
+  Qty: number;
+  Notes?: string;
+  Source: string;
+  _s:string
+}
+
 const HomePage = () => {
   const navigation = useNavigation()
   const [searchText, setSearchText] = useState('');
@@ -69,57 +77,163 @@ const HomePage = () => {
   const [branches, setBranches] = useState<Branch[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [discountProducts, setDiscountProducts] = useState<Product[]>([]);
+  const [tokenID, setToken] = useState<string>('')
 
 
-  const [loading, setLoading] = useState(true);
+  const [loadingBranch, setLoadingBranch] = useState(true)
+  const [loadingProduct, setLoadingProduct] = useState(true)
+  const [loadingProductDiscount, setLoadingProductDiscount] = useState(true)
+  const [loadingNotification, setLoadingNotification] = useState(true)
 
   //const selectedBranchLabel = branches.find(item => item.ID === selectedCity);
 
+  // const fetchCartData = async () => {
+  //   const tokenData = await AsyncStorage.getItem('tokenID')
+  //   const url = `https://ellafroze.com/api/external/getCart?_cb=onCompleteFetchCart_new&_p=cartItemWrapper&_s=${tokenData}`;
+  //   const response = await axios.get(url);
+  
+  //   //alert(JSON.stringify(response.data.data))
+  //   setCartProducts(response.data.data)
+  //   setLoading(false)
+  // }
 
   const fetchData = async (token: string, selectedBranch: string) => {
-    //alert(selectedBranch)
+    setLoadingProduct(true)
     if (selectedBranch != "") {
       const url = `https://ellafroze.com/api/external/getAllProduct?CatID=&BranchID=${selectedBranch}&Keyword=&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
-      const response = await axios.get(url);
+      const response = await axios.get(url)
       setProducts(response.data.data);
-      setLoading(false)
+      //alert('welcome back')
+      setLoadingProduct(false)
     } else {
       handlePickerCity()
+      setLoadingProduct(false)
+    }
+  }
+
+  async function saveCart(cartInput: SaveCart): Promise<void> {
+    const apiUrl = 'https://ellafroze.com/api/external/doSaveCart';
+  
+    try {
+       const response = await axios.post(apiUrl, cartInput);
+       if (!response.data.status){
+        alert(response.data.message);
+       }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  const setSelected = async (values?: Product) => {
+    try {
+      //alert(JSON.stringify(values))
+      const newListProduct = products.map((item) => {
+        if (item.ProductID === values?.ProductID) {
+          const updatedItem = {
+            ...item,
+            Qty: values.Qty,
+          };
+  
+          return updatedItem;
+        }
+        return item;
+      });
+      setProducts(newListProduct)
+
+      const newListProductDiscount = discountProducts.map((item) => {
+        if (item.ProductID === values?.ProductID) {
+          const updatedItem = {
+            ...item,
+            Qty: values.Qty,
+          };
+  
+          return updatedItem;
+        }
+        return item;
+      });
+      setDiscountProducts(newListProductDiscount)
+
+      if (values) await saveCart({  ProductID: values.ProductID, Qty: parseInt(values.Qty ?? '0'), Notes:'', Source:'cart', _s:tokenID });
+
+      //setProducts(newList);
+    } catch (err) {
+      
+    }
+  }
+
+  const setSelectedDiscount = async (values?: Product) => {
+    try {
+      const newListProduct = products.map((item) => {
+        if (item.ProductID === values?.ProductID) {
+          const updatedItem = {
+            ...item,
+            Qty: values.Qty,
+          };
+  
+          return updatedItem;
+        }
+        return item;
+      });
+      setProducts(newListProduct)
+
+      const newListProductDiscount = discountProducts.map((item) => {
+        if (item.ProductID === values?.ProductID) {
+          const updatedItem = {
+            ...item,
+            Qty: values.Qty,
+          };
+  
+          return updatedItem;
+        }
+        return item;
+      });
+      setDiscountProducts(newListProductDiscount)
+    } catch (err) {
+      
     }
   }
 
   const fetchDiscount = async (token: string, selectedBranch: string) => {
-    //alert(selectedBranch)
+    setLoadingProductDiscount(true)
     if (selectedBranch != "") {
       const url = `https://ellafroze.com/api/external/getDiscount?BranchID=${selectedBranch}&_cb=onCompleteFetchDiscount&_p=main-discount-slider&_s=${token}`;
       const response = await axios.get(url);
       setDiscountProducts(response.data.data);
-      setLoading(false)
+      setLoadingProductDiscount(false)
     } else {
       handlePickerCity()
+      setLoadingProductDiscount(false)
     }
   }
 
   const fetchNotification = async (token: string) => {
+    setLoadingNotification(true)
     const url = `https://ellafroze.com/api/external/getNotification?_cb=onCompleteFetchNotification&_s=${token}`;
     const response = await axios.get(url);
     setNotifications(response.data.data);
-    setLoading(false)
+    setLoadingNotification(false)
   }
 
   const fetchBranch = async (token: string) => {
+    setLoadingBranch(true)
     const url = `https://ellafroze.com/api/external/getBranch?_cb=onCompleteFetchBranch&_p=&_s=${token}`;
     const response = await axios.get(url);
     setBranches(response.data.data);
-    setLoading(false)
+    setLoadingBranch(false)
   }
 
   const fetchToken = async () => {
+    setLoadingProduct(true)
+    setLoadingProductDiscount(true)
+
     const tokenData = await AsyncStorage.getItem('tokenID')
     const selectedBranchData = await AsyncStorage.getItem('selectedBranch')
     const selectedBranchName = await AsyncStorage.getItem('selectedBranchName')
 
+    setToken(tokenData == null ? "" : tokenData)
       
+    //fetchCartData()
     fetchData(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
     fetchDiscount(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
     fetchNotification(tokenData == null ? "" : tokenData);
@@ -154,9 +268,16 @@ const handlePickerCity = async () => {
 
 useEffect(() => {
     
-  fetchToken()
+  const unsubscribe = navigation.addListener('focus', () => {
+    fetchToken()
+  })
+  
+  
   // storedBranch()
   
+  return () => {
+    unsubscribe
+  }
   
 }, []);
  
@@ -261,11 +382,11 @@ useEffect(() => {
         </View>
         <View style={{marginTop:10}}>
           <Text style={{fontSize:16, fontWeight:"bold", marginLeft:3}}>Produk Terlaris</Text>
-          <HomeCharts products={products} loading={loading} />
+          <HomeCharts products={products} loading={loadingProduct} onConfirm={setSelected} />
         </View>
         <View style={{marginTop:10}}>
           <Text style={{fontSize:16, fontWeight:"bold", marginLeft:3}}>Diskon hari ini!</Text>
-          <HomeCharts products={discountProducts} loading={loading}/>
+          <HomeCharts products={discountProducts} loading={loadingProductDiscount} onConfirm={setSelectedDiscount}/>
         </View>
         <View style={{marginTop:10}}>
         <HomeCategory/>
@@ -291,7 +412,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    backgroundColor:"red",
+    backgroundColor:"#FA0000",
     height:120,
     paddingTop:20,
     // backgroundColor: 'rgba(255, 203, 0, 0.2);',
