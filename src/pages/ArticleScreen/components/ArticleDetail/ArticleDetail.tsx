@@ -57,9 +57,9 @@ const ArticleDetail = ({ route }: DetailScreenProps) => {
   return (
         <ScrollView>
     <View style={styles.container}>
-    <View>
-      <Image source={{ uri: `${detail?.ImageUrl}`}} style={{width:"100%", height:300}}/>
-      </View>
+    <View style={{width:"100%", height:300, backgroundColor:"grey"}}>
+      {/* <Image source={{ uri: `${detail?.ImageUrl}`}} style={{width:"100%", height:300}}/> */}
+    </View>
     <View style={{
          width:"95%",
          marginTop:5,
@@ -78,7 +78,7 @@ const ArticleDetail = ({ route }: DetailScreenProps) => {
         }} >
       
       <View style={{marginHorizontal:10}}>
-        <Text>{detail?.Contents}</Text>
+        <Text>{detail?.Contents.replace(/<\/?b>/g, "").replace(/<br\s*\/?>/g, "")}</Text>
       </View>
 
     </View> 

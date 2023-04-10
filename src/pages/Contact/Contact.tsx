@@ -80,9 +80,11 @@ export default function Contact() {
                 shadowOpacity: 0.22,
                 shadowRadius: 2.22,
                 }}>
+                   {item.UnreadMessage > 0 &&(
                   <View style={styles.badgeContainer}>
-          <Text style={styles.badgeText}>{item.UnreadMessage}</Text>
+              <Text style={styles.badgeText}>{item.UnreadMessage}</Text>        
         </View>
+        )}
                   <View style={{flexDirection:"row", alignItems:"center"}}>
                 <Image source={require('../../assets/images/logo.png')} style={{width:50, height:50, marginHorizontal:20}} />
                 <Text style={{fontSize:16, alignItems:"center"}}>Admin {item.Name}</Text>

@@ -215,53 +215,65 @@ const NewAddress = () => {
         shadowOpacity: 0.22,
         shadowRadius: 2.22,
         }}>
+          <View style={{margin:15}}>
+          <Text style={{fontWeight:"bold", marginBottom:6}}>Label Alamat</Text>
         <TextInput 
-        placeholder='Label Alamat cth. Rumah/Kantor' 
-        style={{margin:20, borderBottomWidth:1}}
+        placeholder='Tulis disini ...' 
+        style={{paddingVertical:3, borderBottomWidth:1}}
         value={txtAddressName}
         onChangeText={setTxtAddressName}
         />
+        </View>
+        <View style={{margin:15}}>
+          <Text style={{fontWeight:"bold", marginBottom:6}}>No. Telepon</Text>
         <TextInput 
-        placeholder='No. Telepon' 
-        style={{margin:20, borderBottomWidth:1}}
+        placeholder='Tulis disini ...' 
+        style={{paddingVertical:3, borderBottomWidth:1}}
         value={txtFrmPhone}
         onChangeText={setTxtFrmPhone}
         />
+        </View>
 
-        <TouchableOpacity onPress={handlePickerProvince} style={{margin:20, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
+        <TouchableOpacity onPress={handlePickerProvince} style={{margin:15, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
         <Text>
-          Province : {selectedStateLabel?.Name}
+        <Text style={{fontWeight:"bold"}}>Provinsi :</Text> {selectedStateLabel?.Name}
         </Text>
         <DropdownIcon/>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handlePickerCity} style={{margin:20, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
+        <TouchableOpacity onPress={handlePickerCity} style={{margin:15, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
         <Text>
-          City : {selectedCityLabel?.Name}
+        <Text style={{fontWeight:"bold"}}>Kota/Kabupaten :</Text> {selectedCityLabel?.Name}
         </Text>
         <DropdownIcon/>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handlePickerDistrict} style={{margin:20, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
+        <TouchableOpacity onPress={handlePickerDistrict} style={{margin:15, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
         <Text>
-          District : {selectedDistrictLabel?.Name}
+        <Text style={{fontWeight:"bold"}}>Kecamatan :</Text> {selectedDistrictLabel?.Name}
         </Text>
         <DropdownIcon/>
         </TouchableOpacity>
 
 
+        <View style={{margin:15}}>
+          <Text style={{fontWeight:"bold", marginBottom:6}}>Kode Pos</Text>
         <TextInput 
-        placeholder='Kode Pos' 
-        style={{margin:20, borderBottomWidth:1}}
+        placeholder='Tulis disini ...' 
+        style={{paddingVertical:3, borderBottomWidth:1}}
         value={txtPostalCode}
         onChangeText={setTxtPostalCode}
         />
+        </View>
+        <View style={{margin:15}}>
+          <Text style={{fontWeight:"bold", marginBottom:6}}>Alamat Lengkap</Text>
         <TextInput 
-        placeholder='Detail Alamat' 
-        style={{margin:20, borderBottomWidth:1}}
+        placeholder='Tulis disini ...' 
+        style={{paddingVertical:3, borderBottomWidth:1}}
         value={txtAddressDetail}
         onChangeText={setTxtAddressDetail}
         />
+        </View>
       </View>
       <View style={{
         flexDirection:"row",

@@ -35,8 +35,9 @@ const AccountDetail = () => {
     
       try {
          const response = await axios.post(apiUrl, userInput);
-         await AsyncStorage.getItem('tokenID')
-         //alert(JSON.stringify(userInput))
+        //  alert(JSON.stringify(userInput))
+        alert(txtFrmPhone)
+
          if (!response.data.status){
           alert(response.data.message);
          } else {
@@ -101,7 +102,6 @@ const AccountDetail = () => {
       <Text style={{fontWeight:"bold"}}>Nama Lengkap</Text>
       {loading ? (<View style={{backgroundColor:"#EAEAEA", width:370, height:34, alignSelf:"center"}}/>): (
       <TextInput 
-      // placeholder='Rifqi Lazuardi'
       value={txtFrmName !== '' ? txtFrmName : users?.Name}
       onChangeText={handleChangeName}
       style={{borderColor:"black", borderBottomWidth:1, alignItems: "center", justifyContent:"center", padding:8, marginVertical:5, borderRadius:6}}

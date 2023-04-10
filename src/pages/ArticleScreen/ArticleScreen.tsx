@@ -62,14 +62,14 @@ useEffect(() => {
       id: '1',
       label: 'Resep',
       content: (
-       <ArticleCard data={Recipe}/>
+       <ArticleCard data={Recipe} loading={loading}/>
       ),
     },
     {
       id: '2',
       label: 'Artikel',
       content: (
-        <ArticleCard data={Article}/>
+        <ArticleCard data={Article} loading={loading}/>
       ),
     },
   ];

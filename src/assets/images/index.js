@@ -5,7 +5,9 @@ import BCALogo from './BCALogo.png'
 import SuccessImage from './success-image.webp'
 import GopayLogo from './wallet-logo-gopay.png'
 import BannerImage from './BannerImage.png'
+import GoogleLogo from './google-logo.png'
 
 
 
-export {Logo, Fish1, DetailProduct1, BCALogo, SuccessImage, GopayLogo, BannerImage}
+
+export {Logo, GoogleLogo, Fish1, DetailProduct1, BCALogo, SuccessImage, GopayLogo, BannerImage}

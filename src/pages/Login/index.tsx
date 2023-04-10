@@ -188,16 +188,22 @@ const Login: React.FC<Props> = ({ navigation }) => {
         <Text style={{color:"white", marginTop:8, marginLeft:5}}>Daftar disini</Text>
       </TouchableOpacity>
       </View>
-      {/* <Button title="Sign in with Google" onPress={signInWithGoogleAsync} /> */}
-      <TouchableOpacity
+      {/* <TouchableOpacity
           disabled={!request}
           onPress={() => {
             promptAsync();
             }} 
         >
-          {/* <Image source={require("./btn.png")} style={{width: 300, height: 40}} /> */}
           <Text>Login Google</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <TouchableOpacity style={styles.button} >
+  <View style={styles.buttonContainer}>
+    <View style={{backgroundColor:"white"}}>
+    <Image source={require('../../assets/images/google-logo.png')} style={{width:30, height:30}} />
+    </View>
+    <Text style={styles.buttonText}>Sign in with Google</Text>
+  </View>
+</TouchableOpacity>
       
     </View>
     </View>
@@ -211,4 +217,24 @@ const styles = StyleSheet.create({
     logo: {
     width: 254,
     height: 254,
-  },})
+  },
+  button: {
+    backgroundColor: '#4285F4',
+    padding: 8,
+    borderRadius: 5,
+    width:"80%",
+    marginTop:20,
+    alignItems:"center",
+    alignSelf:"center" 
+ },
+  buttonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    marginLeft: 10,
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+})

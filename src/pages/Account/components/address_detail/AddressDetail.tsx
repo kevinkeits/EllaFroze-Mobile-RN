@@ -333,10 +333,10 @@ const fetchData = async () => {
     // onPress(newValue);
   };
 
-  const [toggleValue, setToggleValue] = useState(false);
+  const [toggleValue, setToggleValue] = useState(0);
 
   const handleToggle = () => {
-    setToggleValue(!toggleValue);
+    setToggleValue(toggleValue === 0 ? 1 : 0);
   };
 
 
@@ -355,7 +355,7 @@ const fetchData = async () => {
       <Text style={{marginTop:20, marginLeft:8, fontWeight:"bold", fontSize:16}}>Detail Alamat</Text>
       <TouchableOpacity
       onPress={handleDeletePress} 
-      style={{backgroundColor:"#FA0000", padding:10,  width:60, alignSelf:"flex-end", marginRight:8, borderRadius:6}}>
+      style={{backgroundColor:"#FA0000", padding:8,  width:50, alignSelf:"flex-end", marginRight:8, borderRadius:6}}>
       <Icon
                   name="delete"
                   type="material-community"
@@ -366,7 +366,7 @@ const fetchData = async () => {
       </View>
       <View style={{
         padding:10, 
-        marginTop:10, 
+        marginTop:8, 
         marginHorizontal:8,
         backgroundColor: '#fff',
         elevation:3,
@@ -378,53 +378,60 @@ const fetchData = async () => {
         shadowOpacity: 0.22,
         shadowRadius: 2.22,
         }}>
+          <View style={{margin:15}}>
+          <Text style={{fontWeight:"bold", marginBottom:6}}>Label Alamat</Text>
         <TextInput 
-        placeholder='Label Alamat cth. Rumah/Kantor' 
-        style={{margin:20, borderBottomWidth:1}}
+        style={{paddingVertical:3, borderBottomWidth:1}}
         value={txtAddressName !== '' ? txtAddressName : detail?.Name}
         onChangeText={setTxtAddressName}
         />
+        </View>
+        <View style={{margin:15,}}>
+          <Text style={{fontWeight:"bold", marginBottom:6}}>No. Telepon</Text>
         <TextInput 
-        placeholder='No. Telepon' 
-        style={{margin:20, borderBottomWidth:1}}
+        style={{paddingVertical:3, borderBottomWidth:1}}
         value={txtFrmPhone !== '' ? txtFrmPhone : detail?.Phone}
         onChangeText={setTxtFrmPhone}
         />
+        </View>
 
-        <TouchableOpacity onPress={handlePickerProvince} style={{margin:20, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
+        <TouchableOpacity onPress={handlePickerProvince} style={{margin:15, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
         <Text>
-          Province : {selFrmStateName}
+          <Text style={{fontWeight:"bold"}}>Provinsi :</Text> {selFrmStateName}
         </Text>
         <DropdownIcon/>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handlePickerCity} style={{margin:20, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
+        <TouchableOpacity onPress={handlePickerCity} style={{margin:15, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
         <Text>
-          City : {selFrmCityName}
+        <Text style={{fontWeight:"bold"}}>Kota/Kabupaten :</Text> {selFrmCityName}
         </Text>
         <DropdownIcon/>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handlePickerDistrict} style={{margin:20, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
+        <TouchableOpacity onPress={handlePickerDistrict} style={{margin:15, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
         <Text>
-          District : {selFrmDistictName}
+        <Text style={{fontWeight:"bold"}}>Kecamatan :</Text> {selFrmDistictName}
         </Text>
         <DropdownIcon/>
         </TouchableOpacity>
 
-
+        <View style={{margin:15,}}>
+          <Text style={{fontWeight:"bold", marginBottom:6}}>Kode Pos</Text>
         <TextInput 
-        placeholder='Kode Pos' 
-        style={{margin:20, borderBottomWidth:1}}
+        style={{paddingVertical:3, borderBottomWidth:1}}
         value={txtPostalCode !== '' ? txtPostalCode : detail?.PostalCode}
         onChangeText={setTxtPostalCode}
         />
+        </View>
+        <View style={{margin:15,}}>
+          <Text style={{fontWeight:"bold", marginBottom:6}}>Alamat Lengkap</Text>
         <TextInput 
-        placeholder='Detail Alamat' 
-        style={{margin:20, borderBottomWidth:1}}
+        style={{paddingVertical:3, borderBottomWidth:1}}
         value={txtAddressDetail !== '' ? txtAddressDetail : detail?.Address}
         onChangeText={setTxtAddressDetail}
         />
+        </View>
       </View>
       <View style={{
         flexDirection:"row",
@@ -445,14 +452,29 @@ const fetchData = async () => {
         }}>
       <Text>Jadikan Alamat Utama</Text>
       <TouchableOpacity activeOpacity={1} onPress={handleToggle}>
-      {/* <View style={[styles.switchContainer, toggleValue ? styles.switchOn : styles.switchOff]}> */}
       <View style={{}}>
+      {toggleValue === 1 ? (
         <Icon
+        name='toggle-switch-outline'
+          type="material-community"
+          size={45}
+          color='green' 
+               /> 
+    
+  ) : (
+<Icon
+    name='toggle-switch-off-outline'
+    type="material-community"
+    size={45}
+    color='red'
+  /> 
+        )}
+        {/* <Icon
                   name={toggleValue ? 'toggle-switch-outline' : 'toggle-switch-off-outline'}
                   type="material-community"
                   size={45}
                   color={toggleValue ? 'green' : 'red'}
-                />
+                /> */}
       </View>
     </TouchableOpacity>
       </View>

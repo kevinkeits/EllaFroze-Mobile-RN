@@ -13,8 +13,9 @@ interface Article {
 
   interface Props {
     data: Article[]
+    loading: boolean
   }
-const ArticleCard = ({data}:Props) => {
+const ArticleCard = ({data, loading}:Props) => {
     const navigation = useNavigation();
     const handleNavigate = (itemId: string) => {
         navigation.navigate('ArticleDetail', {itemId})
@@ -42,16 +43,21 @@ const ArticleCard = ({data}:Props) => {
   
     <View style={{flexDirection:"row", gap:4}}>
     <View style={{marginVertical:10, alignItems:"center", width:"40%"}}>
-      <View>
-      <Image source={{ uri: `https://ellafroze.com/api/uploaded/${item.ImageUrl}`}} style={{width:55, height:55}}/>
-        <Text>IMAGE</Text>
-      </View>
+    {loading ? (<View style={{backgroundColor:"#EAEAEA", width:80, height:80}}/>) : (
+ <View style={{backgroundColor:"grey", width:80, height:80}}>
+ <Image source={{ uri: `https://ellafroze.com/api/uploaded/${item.ImageUrl}`}} style={{width:55, height:55}}/>
+ </View>           
+  )}
+     
     </View>
 
     <View style={{marginVertical:10}}>
-    <Text style={{fontWeight:"bold", fontSize:16, marginBottom:4}}>
-    {item.Contents}
-    </Text>
+    {loading ? (<View style={{backgroundColor:"#EAEAEA", width:120, height:30}}/>) : (
+      <Text style={{fontWeight:"bold", fontSize:16, marginBottom:4}}>
+    {item.Contents.replace(/<\/?b>/g, "").replace(/<br\s*\/?>/g, "")}
+    </Text>          
+  )}
+    
     </View>
     </View>
 
