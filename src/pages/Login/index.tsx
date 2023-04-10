@@ -6,7 +6,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import * as Google from 'expo-google-app-auth';
 import * as WebBrowser from 'expo-web-browser';
-import * as Google from 'expo-auth-session/providers/google';
+//import * as Google from 'expo-auth-session/providers/google';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -26,11 +26,11 @@ const Login: React.FC<Props> = ({ navigation }) => {
     const [txtPassword, setTxtPassword] = useState('');
     const [accessToken, setAccessToken] = React.useState<any | null>(null);
     const [user, setUser] = React.useState(null);
-    const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-      clientId: "208326548212-g9brb9uhdlgldsq8ij2dha9k7lkt19pv.apps.googleusercontent.com",
-      // iosClientId: "your cliend id goes here!",
-      androidClientId: "208326548212-854bfkduu8g4dim685gci717e4fclhbl.apps.googleusercontent.com"
-    });
+    // const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    //   clientId: "208326548212-g9brb9uhdlgldsq8ij2dha9k7lkt19pv.apps.googleusercontent.com",
+    //   // iosClientId: "your cliend id goes here!",
+    //   androidClientId: "208326548212-854bfkduu8g4dim685gci717e4fclhbl.apps.googleusercontent.com"
+    // });
     
     //const dispatch = useDispatch();
 
@@ -78,12 +78,12 @@ const Login: React.FC<Props> = ({ navigation }) => {
     //   }
     // }
 
-    React.useEffect(() => {
-      if(response?.type === "success") {
-        setAccessToken(response?.authentication?.accessToken);
-        accessToken && fetchUserInfo();
-      }
-    }, [response, accessToken])
+    // React.useEffect(() => {
+    //   if(response?.type === "success") {
+    //     setAccessToken(response?.authentication?.accessToken);
+    //     accessToken && fetchUserInfo();
+    //   }
+    // }, [response, accessToken])
   
     async function fetchUserInfo() {
       let response = await fetch("https://www.googleapis.com/userinfo/v2/me", {

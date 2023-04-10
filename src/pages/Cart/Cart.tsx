@@ -54,6 +54,12 @@ interface Deliveryfee {
   IsFound: number;
 }
 
+interface UpdatePrimaryAddress {
+  hdnFrmID: string;
+  _cb: string;
+  _s:string
+}
+
 interface SaveCart {
   ProductID: string;
   Qty: string;
@@ -146,6 +152,20 @@ const fetchPaymentMethod = async (token: string) => {
   setLoading(false)
 }
 
+async function savePrimaryAddress(payloads: UpdatePrimaryAddress): Promise<void> {
+  const apiUrl = 'https://ellafroze.com/api/external/doSetPrimaryAddress';
+
+  try {
+     const response = await axios.post(apiUrl, payloads);
+     if (!response.data.status){
+      alert(response.data.message);
+     }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 async function saveCart(cartInput: SaveCart): Promise<void> {
   const apiUrl = 'https://ellafroze.com/api/external/doSaveCart';
 
@@ -217,14 +237,17 @@ const fetchToken = async () => {
   setToken(tokenData == null ? "" : tokenData);
   fetchData();
   fetchAddresses(tokenData == null ? "" : tokenData);
-  fetchCalculateDelivery(tokenData == null ? "" : tokenData);
+  //fetchCalculateDelivery(tokenData == null ? "" : tokenData);
   fetchPaymentMethod(tokenData == null ? "" : tokenData);
   
 };
 
-const handleSelectAddress = (address: Address) => {
+const handleSelectAddress = async (address: Address) => {
+  await savePrimaryAddress({  hdnFrmID: address.ID, _cb: 'cart', _s }); 
+  const tokenData = await AsyncStorage.getItem('tokenID')
   setSelectedAddress(address);
   setShowAddressPopup(false);
+  fetchCalculateDelivery(tokenData == null ? "" : tokenData);
 };
 
 const openAddressPopup = async () => {
@@ -368,16 +391,19 @@ const doCheckout = async () => {
 
     await updateCart({  ProductID: lstProductID, Qty: lstQty, Notes: lstNotes, Source: 'cart', _s });
 
-    if (selectedAddress){
-      setIsDrawerOpen(true)}
-    else {
-      alert("Alamat belum dipilih")
-    }
+    const tempDeliveryFee = deliveryFee?.Fee ?? 0
+    
+      if (selectedAddress){
+        if (tempDeliveryFee == 0)
+        {
+          alert("Maaf, tidak bisa menghitung Biaya kirim ke tempatmu")
+        } else setIsDrawerOpen(true)}
+      else {
+        alert("Alamat belum dipilih")
+      }
+    
    }
   
-
-
-
   useEffect(() => {
       
     fetchToken()

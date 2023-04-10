@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 import * as Clipboard from 'expo-clipboard';
@@ -31,7 +31,7 @@ const TransactionCard = ({unpaidTransactions, statusLabel}: Props) => {
         // alert(`Button clicked for item ${itemId}`);
       };
   return (
-        <View>
+        <ScrollView>
           {unpaidTransactions?.map((item, index)=>(
             <TouchableOpacity
             onPress={()=>handleNavigate(item.ID)}
@@ -112,7 +112,7 @@ const TransactionCard = ({unpaidTransactions, statusLabel}: Props) => {
             </TouchableOpacity>
 
           ))}
-          </View>
+          </ScrollView>
         
 
       

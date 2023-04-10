@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { BCALogo } from '../../assets';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -149,7 +149,9 @@ useEffect(() => {
   return (
     <View style={styles.container}>
       <View style={styles.tabBar}>
+  
         {tabs.map((tab, index) => (
+          <ScrollView>
           <TouchableOpacity
             key={tab.id}
             style={[
@@ -167,7 +169,9 @@ useEffect(() => {
               {tab.label}
             </Text>
           </TouchableOpacity>
+          </ScrollView>
         ))}
+   
       </View>
       {tabs[activeTab].content}
     </View>

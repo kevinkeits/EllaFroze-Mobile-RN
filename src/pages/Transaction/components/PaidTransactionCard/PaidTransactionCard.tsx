@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 
@@ -25,7 +25,7 @@ const PaidTransactionCard = ({Transactions, statusLabel}: Props) => {
       };
 
   return (
-    <View>
+    <ScrollView>
           {Transactions?.map((item, index)=>(
             <TouchableOpacity
             onPress={()=>handleNavigate(item.ID)} 
@@ -82,7 +82,7 @@ const PaidTransactionCard = ({Transactions, statusLabel}: Props) => {
         
 
       
-      </View>
+      </ScrollView>
   )
 }
 

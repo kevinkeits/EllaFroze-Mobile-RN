@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "EllaFroze",
-    "slug": "EllaFroze",
+    "slug": "ellafroze",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/images/logo.png",
@@ -41,8 +41,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "f34f6b45-e435-495c-8b39-f0f4134bc184"
+        "projectId": "e4e1a7fb-b0ac-4d41-83c9-b64b0f7d6d1c"
       }
-    }
+    },
+    "owner": "ellafroze"
   }
 }
