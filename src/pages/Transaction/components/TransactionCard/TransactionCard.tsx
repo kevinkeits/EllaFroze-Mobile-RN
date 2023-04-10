@@ -70,20 +70,20 @@ const TransactionCard = ({unpaidTransactions, statusLabel}: Props) => {
           </View>
           </View>
         </View>
-
-        <View style={{marginVertical:10, alignItems:"center"}}>
-        <Text style={{fontWeight:"bold"}}>
-            BCA Virtual Account
-        </Text>
-          <View style={{flexDirection:"row"}}>
-          <Text>
-            {item.ReferenceID}
-          </Text>
-          <TouchableOpacity onPress={() => Clipboard.setStringAsync(item.ReferenceID)}>
-            <Text style={{textDecorationLine:"underline", color:"green"}}>Copy</Text>
-          </TouchableOpacity>
-          </View>
-          <View style={{marginTop:22}}>
+{ item.PaymentMethodCategory != 'gopay' && (
+  <View style={{marginVertical:10, alignItems:"center"}}>
+  <Text style={{fontWeight:"bold"}}>
+      Virtual Account
+  </Text>
+    <View style={{flexDirection:"row"}}>
+    <Text>
+      {item.ReferenceID}
+    </Text>
+    <TouchableOpacity onPress={() => Clipboard.setStringAsync(item.ReferenceID)}>
+      <Text style={{textDecorationLine:"underline", color:"green"}}>Copy</Text>
+    </TouchableOpacity>
+    </View>
+    <View style={{marginTop:22}}>
           <Text >
             Bayar Sebelum
           </Text>
@@ -92,6 +92,21 @@ const TransactionCard = ({unpaidTransactions, statusLabel}: Props) => {
           </Text>
           </View>
         </View>
+)}
+{ item.PaymentMethodCategory == 'gopay' && (
+  <View style={{marginVertical:10, alignItems:"center"}}>
+    <View style={{marginTop:22}}>
+          <Text >
+            Bayar Sebelum
+          </Text>
+          <Text style={{fontWeight:"bold"}}>
+            {item.ExpiredDate}
+          </Text>
+          </View>
+        </View>
+)}
+        
+          
         </View>
             </View>
             </TouchableOpacity>

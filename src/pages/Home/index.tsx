@@ -154,7 +154,7 @@ const HomePage = () => {
       });
       setDiscountProducts(newListProductDiscount)
 
-      if (values) await saveCart({  ProductID: values.ProductID, Qty: parseInt(values.Qty ?? '0'), Notes:'', Source:'cart', _s:tokenID });
+      if (values) saveCart({  ProductID: values.ProductID, Qty: parseInt(values.Qty ?? '0'), Notes:'', Source:'cart', _s:tokenID });
 
       //setProducts(newList);
     } catch (err) {

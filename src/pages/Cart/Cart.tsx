@@ -45,6 +45,7 @@ interface Address {
   Category: string;
   ID: string;
   ImagePath: string;
+  isSelected?: boolean
 }
 
 interface Deliveryfee {
@@ -69,6 +70,11 @@ interface UpdateCart {
   _s:string
 }
 
+interface Checkout {
+  paymentMethod: string;
+  _s:string
+}
+
 const Cart = () => {
   const navigation = useNavigation()
 const [count, setCount] = useState(0);
@@ -84,9 +90,6 @@ const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
 const [showAddressPopup, setShowAddressPopup] = useState(false);
 const [loading, setLoading] = useState(true);
 const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-const [ProductID, setProductID] = useState<string[]>([]);
-const [Qty, setQty] = useState<string[]>([]);
-const [notes, setNotes] = useState<string>('');
 const [_s, setToken] = useState('');
 const forceUpdate = React.useReducer((x) => x + 1, 0)[1]
 
@@ -143,7 +146,7 @@ const fetchPaymentMethod = async (token: string) => {
   setLoading(false)
 }
 
-async function deleteItem(cartInput: SaveCart): Promise<void> {
+async function saveCart(cartInput: SaveCart): Promise<void> {
   const apiUrl = 'https://ellafroze.com/api/external/doSaveCart';
 
   try {
@@ -159,9 +162,51 @@ async function deleteItem(cartInput: SaveCart): Promise<void> {
   }
 }
 
+async function doSaveCheckout(payload: Checkout): Promise<void> {
+  const apiUrl = 'https://ellafroze.com/api/external/doPay';
+
+  try {
+     const response = await axios.post(apiUrl, payload);
+     if (!response.data.status){
+      alert(response.data.message);
+     } else {
+      setIsDrawerOpen(false)
+      alert(JSON.stringify(response.data.data))
+      await AsyncStorage.setItem('payExpDate',response.data.data.ExpiredDate)
+      await AsyncStorage.setItem('payDL',response.data.data.GoPayDeepLink)
+      await AsyncStorage.setItem('payAmount',response.data.data.GrossAmount.toString())
+      await AsyncStorage.setItem('payMethodDesc',response.data.data.PaymentMethod)
+      await AsyncStorage.setItem('payMethodCat',response.data.data.PaymentMethodCategory)
+      await AsyncStorage.setItem('payMethodLogo',response.data.data.PaymentMethodLogo)
+      await AsyncStorage.setItem('payRefID',response.data.data.ReferenceID)
+      navigation.navigate('Payment')
+
+    }   
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+async function updateCart(values: UpdateCart): Promise<void> {
+  const apiUrl = 'https://ellafroze.com/api/external/doUpdateCart';
+
+  try {
+     const response = await axios.post(apiUrl, values);
+     if (!response.data.status){
+      alert(response.data.message);
+     } else {
+      fetchData()
+    }   
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 const handleDeleteItem = async (itemCartId: string) => {
   try {    
-    await deleteItem({  ProductID: itemCartId, Qty: '0', Notes: '', Source: 'cart', _s });
+    await saveCart({  ProductID: itemCartId, Qty: '0', Notes: '', Source: 'cart', _s });
   } catch (error) {
     console.error(error);
   }
@@ -188,6 +233,12 @@ const openAddressPopup = async () => {
   setShowAddressPopup(true);
 };
 
+const doCheckout = async () => {
+  const newList = paymentMethod.filter((item) => item.isSelected)
+  const paymentID = newList[0].ID.split('|')[0]
+  await doSaveCheckout({  paymentMethod: paymentID, _s });
+};
+
   const incrementCount = () => {
     setCount(count + 1);
   };
@@ -210,38 +261,42 @@ const openAddressPopup = async () => {
     setSelectedBCA(!selectedBCA);
   }
 
-  const handleSelectPayment = (id:string) =>{
-    setSelectedPayment(true)
-  }
+  // const handleSelectPayment = (id:string) =>{
+  //   setSelectedPayment(true)
+  // }
 
-  const onConfirm = (values?: Cart) => {
+  const onConfirm = async(referer: string, values?: Cart) => {
     try {
-      let subTotal = 0
-      const newList = cart.map((item) => {
-        if (item.ProductID === values?.ProductID) {
-          const updatedItem = {
-            ...item,
-            Qty: values.Qty,
-            Selected: values.Selected
-          };
-          return updatedItem;
-        }
-        return item;
-      });
+      //if (values) await saveCart({  ProductID: values?.ProductID, Qty: values?.Qty.toString(), Notes: values?.Notes, Source: 'cart', _s });
 
-      const newListAll = newList.map((item) => {
-        const finalPrice = item.Price - (item.DiscountType == '1' ? item.Discount : ((item.Price * item.Discount)/100))
-        subTotal += finalPrice * item.Qty
-        return item;
-      });
+      if (referer == 'product')
+      {
+        let subTotal = 0
+        const newList = cart.map((item) => {
+          if (item.ProductID === values?.ProductID) {
+            const updatedItem = {
+              ...item,
+              Qty: values.Qty,
+              Selected: values.Selected
+            };
+            return updatedItem;
+          }
+          return item;
+        });
+  
+        const newListAll = newList.map((item) => {
+          if (item.Selected === true) {
+            const finalPrice = item.Price - (item.DiscountType == '1' ? item.Discount : ((item.Price * item.Discount)/100))
+            subTotal += finalPrice * item.Qty
+          }
+          return item;
+        });
+        
+        setTotalPrice(subTotal)
+  
+        setCart(newList)
+      }
       
-      setTotalPrice(subTotal)
-
-      setCart(newList)
-
-      //if (values) await saveCart({  ProductID: values.ProductID, Qty: parseInt(values.Qty ?? '0'), Notes:'', Source:'cart', _s:tokenID });
-
-      //setProducts(newList);
     } catch (err) {
       
     }
@@ -254,7 +309,7 @@ const openAddressPopup = async () => {
       // merchantID: merchant.map((x) => x.id),
       // isActive: isActive?.id
     }
-     onConfirm(postData)
+     onConfirm('product',postData)
     
   };
 
@@ -263,13 +318,58 @@ const openAddressPopup = async () => {
       ...values,
       Selected: values.Selected != null ? (values.Selected ? false : true) : true
     }
-     onConfirm(postData)
+     onConfirm('product',postData)
     
   };
 
-   const handlePayment = () => {
+  const handleSelectPayment =  (values: PaymentMethod) => {
+    const newList = paymentMethod.map((item) => {
+      if (item.ID === values?.ID) {
+        const updatedItem = {
+          ...item,
+          isSelected: true
+        };
+        return updatedItem;
+      } else {
+        const updatedItem = {
+          ...item,
+          isSelected: false
+        };
+        return updatedItem;
+      }
+      return item;
+    });
+    setPaymentMethod(newList)
+  };
+
+  const handleChangeNotes =  (text: string, values: Cart) => {
+    const newList = cart.map((item) => {
+      if (item.ProductID === values?.ProductID) {
+        const updatedItem = {
+          ...item,
+          Notes: text
+        };
+        return updatedItem;
+      }
+      return item;
+    });
+    setCart(newList)
+  };
+
+   const handlePayment = async () => {
+    let lstProductID : string[] = []
+    let lstQty : string[] = []
+    let lstNotes : string[] = []
+    const newList = cart.map((item) => {
+      lstProductID.push((item.ProductID).toString())
+      lstQty.push((item.Qty).toString())
+      lstNotes.push((item.Notes).toString())
+    });
+
+    await updateCart({  ProductID: lstProductID, Qty: lstQty, Notes: lstNotes, Source: 'cart', _s });
+
     if (selectedAddress){
-    setIsDrawerOpen(true)}
+      setIsDrawerOpen(true)}
     else {
       alert("Alamat belum dipilih")
     }
@@ -282,7 +382,7 @@ const openAddressPopup = async () => {
       
     fetchToken()
 
-    alert(JSON.stringify(cart))
+    //alert(JSON.stringify(cart))
     
     
   }, []);
@@ -335,7 +435,7 @@ const openAddressPopup = async () => {
     marginTop:7, 
     width:370, 
     borderRadius:7}}>
-        <TouchableOpacity onPress={()=>handleSelect(item)}>
+        {/* <TouchableOpacity onPress={()=>handleSelect(item)}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
       <View
           style={{
@@ -357,7 +457,7 @@ const openAddressPopup = async () => {
         </View>
         <Text style={{fontSize:16, marginLeft:8}}>Pilih Produk</Text>
       </View>
-    </TouchableOpacity>
+    </TouchableOpacity> */}
 
     <View style={{flexDirection:"row", gap:2, justifyContent:"center", alignItems:"center"}}>
         <View style={{backgroundColor:"white", padding:4}}>
@@ -472,48 +572,52 @@ const openAddressPopup = async () => {
     
     </View>
     <View style={{marginTop:10}}>
-    <Text style={{fontSize:15, color:"black"}}>Catatan</Text>
-  <TextInput 
-        placeholder='tulis catatan disini ...' 
+      <Text style={{fontSize:15, color:"black"}}>Catatan</Text>
+      <TextInput 
+        placeholder='Tulis catatan disini ...' 
         style={{borderBottomWidth:1, marginTop:10, width:"90%"}}
-        value={notes}
-        onChangeText={setNotes}
-        />
+        value={item.Notes}
+        onChangeText={value => {
+          handleChangeNotes(value, item);
+        }}
+
+        // onChangeText={setNotes}
+      />
     </View>
             
-</View>
+  </View>
 
-))}
+  ))}
 
-<View style={{backgroundColor:"rgba(20, 141, 46, 0.1);", paddingVertical:12, paddingHorizontal:10, marginTop:8, width:370, borderRadius:7}}>
-        <View style={{flexDirection:"row", justifyContent:"space-between"}}>
-          <Text style={{fontWeight:"bold", fontSize:16}}>Alamat Tujuan</Text>
-            <TouchableOpacity style={{ padding: 5, backgroundColor:"#FA0000", borderRadius:7}}>
-                <Text style={{fontSize:12, color:"white"}} onPress={openAddressPopup}>Ubah Alamat</Text>
-            </TouchableOpacity>
-        </View>
-        {loading ? (<View style={{backgroundColor:"#EAEAEA", width:200, height:30, marginTop:4}}/>):(
-          <View style={{marginTop:4}}>
-        <Text>{selectedAddress ? selectedAddress.Name : 'Please select an address'}</Text>
-        {selectedAddress && (
-          <>
-            <Text>{selectedAddress.Address}</Text>
-            <Text>{selectedAddress.DistrictName}, {selectedAddress.CityName}, {selectedAddress.StateName} {selectedAddress.PostalCode}</Text>
-          </>
-        )}
-      </View>         
+    <View style={{backgroundColor:"rgba(20, 141, 46, 0.1);", paddingVertical:12, paddingHorizontal:10, marginTop:8, width:370, borderRadius:7}}>
+      <View style={{flexDirection:"row", justifyContent:"space-between"}}>
+        <Text style={{fontWeight:"bold", fontSize:16}}>Alamat Tujuan</Text>
+          <TouchableOpacity style={{ padding: 5, backgroundColor:"#FA0000", borderRadius:7}}>
+              <Text style={{fontSize:12, color:"white"}} onPress={openAddressPopup}>Ubah Alamat</Text>
+          </TouchableOpacity>
+      </View>
+      {loading ? (<View style={{backgroundColor:"#EAEAEA", width:200, height:30, marginTop:4}}/>):(
+        <View style={{marginTop:4}}>
+      <Text>{selectedAddress ? selectedAddress.Name : 'Please select an address'}</Text>
+      {selectedAddress && (
+        <>
+          <Text>{selectedAddress.Address}</Text>
+          <Text>{selectedAddress.DistrictName}, {selectedAddress.CityName}, {selectedAddress.StateName} {selectedAddress.PostalCode}</Text>
+        </>
+      )}
+    </View>
   )}   
-        
-        </View>
+  
+  </View>
 
 
-<View style={{backgroundColor:"rgba(20, 141, 46, 0.1);", paddingVertical:12, paddingHorizontal:10, marginTop:8, width:370, borderRadius:7}}>
-        {loading ? (<View style={{backgroundColor:"#EAEAEA", width:340, height:30, marginTop:4}}/>):(
-<View style={{flexDirection:"row", justifyContent:"space-between", width:340, marginHorizontal:10}}>
-<Text style={{fontSize:16}}> <Text style={{fontWeight:"bold"}}>Total Harga </Text> :  </Text>
-<Text style={{fontSize:14, color:"black"}}>Rp. { new Intl.NumberFormat('id-ID', {currency: 'IDR'}).format(totalPrice)}</Text>
-</View>
-  )}    
+  <View style={{backgroundColor:"rgba(20, 141, 46, 0.1);", paddingVertical:12, paddingHorizontal:10, marginTop:8, width:370, borderRadius:7}}>{loading ? (<View style={{backgroundColor:"#EAEAEA", width:340, height:30, marginTop:4}}/>):(
+    <View style={{flexDirection:"row", justifyContent:"space-between", width:340, marginHorizontal:10}}>
+    <Text style={{fontSize:16}}> <Text style={{fontWeight:"bold"}}>Total Harga </Text> :  </Text>
+    <Text style={{fontSize:14, color:"black"}}>Rp. { new Intl.NumberFormat('id-ID', {currency: 'IDR'}).format(totalPrice)}</Text>
+  </View>
+)}
+
   {loading ? (<View style={{backgroundColor:"#EAEAEA", width:340, height:30, marginTop:10}}/>):(
 <View style={{flexDirection:"row", justifyContent:"space-between", width:340, marginHorizontal:10, marginTop:6}}>
 <Text style={{fontSize:16}}> <Text style={{fontWeight:"bold"}}>Biaya Kirim </Text> :  </Text>
@@ -529,7 +633,7 @@ const openAddressPopup = async () => {
 <View style={{flexDirection:"row", justifyContent:"space-between", width:340, marginHorizontal:10, marginTop:6}}>
 <Text style={{fontSize:16}}> <Text style={{fontWeight:"bold"}}>Total Bayar </Text> :  </Text>
 {selectedAddress ? (
-    <Text style={{fontSize:14, color:"black"}}>Rp. { new Intl.NumberFormat('id-ID', {currency: 'IDR'}).format(totalPrice - deliveryFee?.Fee)}</Text>
+    <Text style={{fontSize:14, color:"black"}}>Rp. { new Intl.NumberFormat('id-ID', {currency: 'IDR'}).format(parseInt(totalPrice.toString()) + parseInt((deliveryFee?.Fee ?? 0).toString()))}</Text>
 ):<Text></Text>}
 </View>
   )} 
@@ -543,7 +647,7 @@ const openAddressPopup = async () => {
         </View> */}
        
             <TouchableOpacity style={{backgroundColor:"#148D2E", paddingVertical:14, alignItems:"center", marginTop:8, marginBottom:25, width:370, borderRadius:7}} onPress={handlePayment}>
-                <Text style={{color:"white", fontWeight:"bold"}}>LANJUT KE PEMBAYARAN</Text>
+                <Text style={{color:"white", fontWeight:"bold"}}>SIMPAN & LANJUT PEMBAYARAN</Text>
             </TouchableOpacity>
 
 
@@ -612,7 +716,7 @@ const openAddressPopup = async () => {
     <View
     key={item.ID} 
     style={{paddingVertical:2, borderBottomWidth:1, borderRadius:8}}>
-       <TouchableOpacity onPress={()=>handleSelectPayment(item.ID)}style={{paddingLeft:12}}>
+       <TouchableOpacity onPress={()=>handleSelectPayment(item)}style={{paddingLeft:12}}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <View
           style={{
@@ -625,7 +729,7 @@ const openAddressPopup = async () => {
             justifyContent: 'center',
           }}
         >
-          {selectedBCA && (
+          {item.isSelected && (
             <View
               style={{
                 height: 12,
@@ -648,11 +752,7 @@ const openAddressPopup = async () => {
 
      
 
-      <TouchableOpacity style={{backgroundColor:"#148D2E", paddingVertical:14, alignItems:"center", marginTop:8, width:"100%", borderRadius:7}} onPress={()=>
-      {
-        navigation.navigate('Payment')
-        setIsDrawerOpen(false)
-        }}>
+      <TouchableOpacity style={{backgroundColor:"#148D2E", paddingVertical:14, alignItems:"center", marginTop:8, width:"100%", borderRadius:7}} onPress={doCheckout}>
                 <Text style={{color:"white", fontWeight:"bold"}}>LANJUTKAN</Text>
             </TouchableOpacity>
     </View>

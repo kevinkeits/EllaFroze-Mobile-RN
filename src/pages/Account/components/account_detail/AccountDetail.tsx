@@ -36,7 +36,7 @@ const AccountDetail = () => {
       try {
          const response = await axios.post(apiUrl, userInput);
         //  alert(JSON.stringify(userInput))
-        alert(txtFrmPhone)
+        //alert(txtFrmPhone)
 
          if (!response.data.status){
           alert(response.data.message);
@@ -62,7 +62,13 @@ const AccountDetail = () => {
   const fetchData = async (tokenData: string) => {
     const url = `https://ellafroze.com/api/external/getUser?_cb=onCompleteFetchUserDetail&_p=&_s=${tokenData}`;
     const response = await axios.get(url);
-    setUsers(response.data.data);
+    const tempData = response.data.data
+    //alert(JSON.stringify(tempData))
+    setUsers(tempData);
+
+    setTxtFrmName(tempData.Name)
+    setTxtFrmEmail(tempData.Email)
+    setTxtFrmPhone(tempData.Phone)
 
     // alert(JSON.stringify(response.data.data))
     //alert(JSON.stringify(users))
