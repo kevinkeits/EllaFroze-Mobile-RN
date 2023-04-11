@@ -186,8 +186,8 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
                 },
                 shadowOpacity: 0.22,
                 shadowRadius: 2.22,
-                backgroundColor:"red", width:100, alignItems:"center", padding:4, borderRadius:10, alignSelf:"flex-end", marginRight:8, marginBottom:20}}>
-               <Text style={{color:"white", fontWeight:"bold"}}>Invoice</Text>
+                backgroundColor:"#148D2E", width:100, alignItems:"center", padding:4, borderRadius:10, alignSelf:"flex-end", marginRight:8, marginBottom:20}}>
+               <Text style={{color:"white", fontWeight:"bold"}}>Lihat Invoice</Text>
              </TouchableOpacity>
             )}
        
@@ -278,7 +278,7 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
                </View>
                <TouchableOpacity 
                onPress={()=>handleNavigateContact(order.BranchID, order.Branch)}
-               style={{backgroundColor:"red", alignItems:"center", padding:8, borderRadius:10, alignSelf:"flex-end", marginRight:8, marginBottom:8 }}>
+               style={{backgroundColor:"#148D2E", alignItems:"center", padding:8, borderRadius:10, alignSelf:"flex-end", marginRight:8, marginBottom:8 }}>
                     <Text style={{color:"white", fontWeight:"bold"}}>Hubungi Penjual</Text>
                 </TouchableOpacity>
                 </View>

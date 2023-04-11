@@ -15,26 +15,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
       "bundleIdentifier": "com.ellafroze.app",
-      "config": {
-        "googleSignIn": {
-          "reservedClientId": "YOUR_IOS_CLIENT_ID"
-        }
-      }
+      "buildNumber": "1.0.0"
     },
     "android": {
-      "config": {
-        "googleSignIn": {
-          "apiKey": "YOUR_WEB_API_KEY",
-          "certificateHash": "YOUR_CERTIFICATE_HASH"
-        }
-      },
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "package": "com.ellafroze.app"
+      "package": "com.ellafroze.app",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"

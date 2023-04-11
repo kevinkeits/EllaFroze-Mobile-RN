@@ -136,7 +136,7 @@ const AccountDetail = () => {
     </View>
     <View style={{ marginHorizontal: 10, marginTop: 13}}>
     {loading ? (<View style={{backgroundColor:"#EAEAEA", width:350, height:45, alignSelf:"center"}}/>): (
-       <TouchableOpacity onPress={handleSave} style={{backgroundColor:"#FA0000", borderRadius:6, alignItems:"center", paddingVertical:10}}>
+       <TouchableOpacity onPress={handleSave} style={{backgroundColor:"#148D2E", borderRadius:6, alignItems:"center", paddingVertical:10}}>
        <Text style={{color:"white", fontWeight:"bold"}}>SIMPAN</Text>
      </TouchableOpacity>
       )}

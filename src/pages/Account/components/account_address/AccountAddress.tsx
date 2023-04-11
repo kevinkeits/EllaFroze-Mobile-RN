@@ -96,7 +96,7 @@ useEffect(() => {
       ))}
       
       {loading ? (<View style={{backgroundColor:"#EAEAEA", alignSelf:'center', marginTop:25,  width:"80%", height:50}}/>):(
-      <TouchableOpacity onPress={()=>navigation.navigate("NewAddress")} style={{backgroundColor:"#FA0000", justifyContent:"center", alignItems:"center", alignSelf:'center', marginTop:25, paddingVertical:10, width:"95%", borderRadius:6}}>
+      <TouchableOpacity onPress={()=>navigation.navigate("NewAddress")} style={{backgroundColor:"#148D2E", justifyContent:"center", alignItems:"center", alignSelf:'center', marginTop:25, paddingVertical:10, width:"95%", borderRadius:6}}>
       <Text style={{fontWeight:"bold", color:"white"}}>BUAT ALAMAT</Text>
       </TouchableOpacity>       
  )}

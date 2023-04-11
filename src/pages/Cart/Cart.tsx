@@ -618,13 +618,13 @@ const doCheckout = async () => {
     <View style={{backgroundColor:"rgba(20, 141, 46, 0.1);", paddingVertical:12, paddingHorizontal:10, marginTop:8, width:370, borderRadius:7}}>
       <View style={{flexDirection:"row", justifyContent:"space-between"}}>
         <Text style={{fontWeight:"bold", fontSize:16}}>Alamat Tujuan</Text>
-          <TouchableOpacity style={{ padding: 5, backgroundColor:"#FA0000", borderRadius:7}}>
-              <Text style={{fontSize:12, color:"white"}} onPress={openAddressPopup}>Ubah Alamat</Text>
+          <TouchableOpacity style={{ padding: 5, backgroundColor:"#148D2E", borderRadius:7}}>
+              <Text style={{fontSize:12, color:"white"}} onPress={openAddressPopup}>Pilih Alamat</Text>
           </TouchableOpacity>
       </View>
       {loading ? (<View style={{backgroundColor:"#EAEAEA", width:200, height:30, marginTop:4}}/>):(
         <View style={{marginTop:4}}>
-      <Text>{selectedAddress ? selectedAddress.Name : 'Please select an address'}</Text>
+      <Text>{selectedAddress ? selectedAddress.Name : 'Alamat pengiriman belum dipilih'}</Text>
       {selectedAddress && (
         <>
           <Text>{selectedAddress.Address}</Text>

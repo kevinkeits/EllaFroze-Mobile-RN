@@ -5,8 +5,8 @@ import { useNavigation } from '@react-navigation/native'
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import * as Google from 'expo-google-app-auth';
-import * as WebBrowser from 'expo-web-browser';
 //import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
 
 WebBrowser.maybeCompleteAuthSession();
 
