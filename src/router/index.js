@@ -60,17 +60,10 @@ const AccountApp = () => {
 const MainApp = () => {
   const navigation = useNavigation();
   return (
-  //   <Tab.Navigator
-  //   screenOptions={{
-  //     tabBarStyle: {
-  //       backgroundColor: '#FA0000',
-  //     },
-  //   tabBarActiveTintColor: '#ffff', 
-  //   tabBarInactiveTintColor: 'black',  
-  // }}
-  //   >
   <Tab.Navigator
       screenOptions={({ route }) => ({
+        activeTintColor: 'black',
+        inactiveTintColor: 'white',
         tabBarStyle: {
                 backgroundColor: '#FA0000',
               },
@@ -116,10 +109,6 @@ const MainApp = () => {
           );
         },
       })}
-      tabBarOptions={{
-        activeTintColor: 'black',
-        inactiveTintColor: 'white',
-      }}
     >
         <Tab.Screen name='Home' component={Home} options={{title: "Home", headerShown:false
         }}/>
@@ -144,14 +133,6 @@ const MainApp = () => {
         },
         }}/>
       <Tab.Screen name='AccountApp' component={AccountApp} options={{title: "AccountApp", headerShown: false,
-        // tabBarIcon: ({color, size}) => (
-        //   <ProfileIcon color={color} size={size}  />
-        // ),
-        // tabBarActiveBackgroundColor: "#BA0000",
-        // headerTintColor: '#fff',
-        // headerTitleStyle: {
-        //   fontWeight: 'bold',
-        // }
         }}/>
     </Tab.Navigator>
   )

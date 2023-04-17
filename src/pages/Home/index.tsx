@@ -12,6 +12,9 @@ import HomeCharts from './components/HomeCharts/HomeCharts';
 import NotificationIcon from './components/HomeHeader/components/Icon/Icon';
 import ProductCards from './components/ProductCards/ProductCards';
 import Drawer  from 'react-native-modal';
+import {Dimensions} from 'react-native';
+
+
 
 
 const items= [
@@ -78,6 +81,7 @@ const HomePage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [discountProducts, setDiscountProducts] = useState<Product[]>([]);
   const [tokenID, setToken] = useState<string>('')
+  const [enableScrollView, setEnableScrollView] = useState<boolean>(true)
 
 
   const [loadingBranch, setLoadingBranch] = useState(true)
@@ -265,12 +269,28 @@ const handlePickerCity = async () => {
   setPickerCity(true);
 };
 
+const handleEnableScroll= (value: boolean) => {
+    setEnableScrollView(value)
+};
+
+const trueEnableScroll= () => {
+  setEnableScrollView(true)
+};
+
+const falseEnableScroll= () => {
+  setEnableScrollView(false)
+};
+
 
 useEffect(() => {
     
   const unsubscribe = navigation.addListener('focus', () => {
     fetchToken()
   })
+
+  const windowWidth = Dimensions.get('window').width;
+  const windowHeight = Dimensions.get('window').height;
+  alert("W:" + windowWidth + " x H:" + windowHeight)
   
   
   // storedBranch()
@@ -376,7 +396,7 @@ useEffect(() => {
       </View>
       {/* HEADER */}
 
-      <ScrollView>
+      <ScrollView scrollEnabled={enableScrollView} horizontal={false}>
       <View style={{marginTop:10}}>
          <Carousel />
         </View>
@@ -389,7 +409,7 @@ useEffect(() => {
           <HomeCharts products={discountProducts} loading={loadingProductDiscount} onConfirm={setSelectedDiscount}/>
         </View>
         <View style={{marginTop:10}}>
-        <HomeCategory/>
+        <HomeCategory onEnableScrollTrue={trueEnableScroll} onEnableScrollFalse={falseEnableScroll}/>
         </View>
       <View style={{marginTop:10}}>
       {/* <ProductCards/> */}

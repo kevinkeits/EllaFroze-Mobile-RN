@@ -23,8 +23,9 @@ const ArticleCard = ({data, loading}:Props) => {
       };
   return (
     <View>
-        {data.map((item)=>(
+        {data.map((item, index)=>(
  <TouchableOpacity
+ key={index}
  onPress={()=>handleNavigate(item.ID)} 
  style={{
     margin:7, 

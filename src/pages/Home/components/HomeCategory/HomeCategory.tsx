@@ -12,7 +12,13 @@ interface Category {
     Name: string;
   }
 
-const HomeCategory = () => {
+  interface Props {
+    onEnableScrollTrue : any
+    onEnableScrollFalse : any
+
+  }
+
+const HomeCategory = ({onEnableScrollTrue, onEnableScrollFalse}: Props) => {
     const navigation = useNavigation();
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
@@ -38,6 +44,7 @@ const HomeCategory = () => {
       navigation.navigate('Category', {itemId, categoryName})
     };
 
+   
 
     useEffect(() => {
       
@@ -55,6 +62,12 @@ const HomeCategory = () => {
     
     <View style={{backgroundColor:"white", flexDirection:"row" }} >
          <FlatList
+          onTouchStart={() => {
+            onEnableScrollFalse
+         }}
+         onMomentumScrollEnd={() => {
+            onEnableScrollTrue
+         }}
         data={categories}
         renderItem={({item}) => 
         <TouchableOpacity style={{width:80, height:80, alignItems:"center",  margin:8}} onPress={()=>handleNavigate(item.ID, item.Name)}>
