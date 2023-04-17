@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, TextInput, Image } from 'react-native';
 import ProductCards from '../Home/components/ProductCards/ProductCards';
 import TopCategory from './components/TopCategory/TopCategory';
 
+
 const Category = () => {
   const [searchText, setSearchText] = useState('');
 
