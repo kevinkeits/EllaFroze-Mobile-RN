@@ -30,15 +30,22 @@ interface Product {
     _s:string
   }
 
+  interface Props {
+    route: { params: { searchText: string } };
+  }
+
  
 
 const ProductCards = () => {
     const [count, setCount] = useState(0);
-    const [selected, setSelected] = useState(false);
+    // const [selected, setSelected] = useState(false);
     const [selectedItems, setSelectedItems] = useState([]);
     const [products, setProducts] = useState<Product[]>([]);
     const [currentCategoryName, setCurrentCategoryName] = useState('');
     const [loading, setLoading] = useState(true);
+    const [loadingSave, setLoadingSave] = useState(false)
+    const [tokenID, setToken] = useState<string>('')
+
 
     
     
@@ -56,12 +63,37 @@ const ProductCards = () => {
       const selectedCategoryData = await AsyncStorage.getItem('categoryId')
       const selectedCategoryName= await AsyncStorage.getItem('categoryName')
 
-
+      setToken(tokenData == null ? "" : tokenData)
 
       fetchData(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData, selectedCategoryData == null ? "" : selectedCategoryData);
       setCurrentCategoryName(selectedCategoryName == null? "" : selectedCategoryName)
       
     };
+
+  
+  
+    //     // const newListProductDiscount = products.map((item) => {
+    //     //   if (item.ProductID === values?.ProductID) {
+    //     //     const updatedItem = {
+    //     //       ...item,
+    //     //       Qty: values.Qty,
+    //     //     };
+    
+    //     //     return updatedItem;
+    //     //   }
+    //     //   return item;
+    //     // });
+    //     // setProducts(newListProductDiscount)
+  
+    //     if (values) saveCart({  ProductID: values.ProductID, Qty: parseInt(values.Qty ?? '0'), Notes:'', Source:'cart', _s:tokenID });
+  
+    //     //setProducts(newList);
+    //   } catch (err) {
+        
+    //   }
+    // }
+
+
 
 
     useEffect(() => {
@@ -95,14 +127,19 @@ const ProductCards = () => {
        const response = await axios.post(apiUrl, cartInput);
        if (!response.data.status){
         alert(response.data.message);
-       }
+        setLoadingSave(false)
+      } else {
+       setLoadingSave(false)
+      }
     } catch (error) {
       console.error(error);
+      setLoadingSave(false)
       throw error;
     }
   }
   const onConfirm = async (values?: Product) => {
     try {
+      setLoadingSave(true)
       //alert(JSON.stringify(values))
       const newList = products.map((item) => {
         if (item.ProductID === values?.ProductID) {
@@ -126,7 +163,7 @@ const ProductCards = () => {
     }
   }
 
-  const handleButtonPress = async (values: Product, type: string) => {
+  const handleButtonPress = (values: Product, type: string) => {
     const postData: Product = {
       ...values,
       Qty: type == '+' ? (values.Qty == null ? '1' : (parseInt(values.Qty) + 1).toString()) : (values.Qty == null ? '0' : (parseInt(values.Qty) - 1).toString())
@@ -134,8 +171,7 @@ const ProductCards = () => {
       // merchantID: merchant.map((x) => x.id),
       // isActive: isActive?.id
     }
-    await onConfirm(postData)
-    
+    onConfirm?.(postData)
   };
 
   // const handleButtonPress = (itemId: any) => {
@@ -153,16 +189,16 @@ const ProductCards = () => {
     const numColumns = 2;
 
     const renderItem = ({item}:any) => {
-        const isSelected = item.ProductID === selected;
+        // const isSelected = item.ProductID === selected;
         const formattedPrice = new Intl.NumberFormat('id-ID', {
             // style: 'currency',
             currency: 'IDR'
           }).format(item.Price);
         return (
-              <View>
+              <View style={{alignSelf:"center", justifyContent:"center"}}>
             <TouchableOpacity 
             style={{
-                width:180, 
+                width:160, 
                 // height:250,
                 paddingBottom:10, 
                 backgroundColor: '#fff',
@@ -194,11 +230,11 @@ const ProductCards = () => {
             )}
         </View>
 
-        {/* {loading? (<View style={{backgroundColor:"#EAEAEA", width:150, height:20, marginTop:5, marginLeft:8}}/>):(
-            <Text style={{fontSize:15, marginTop:5, marginLeft:8}}>{item.Product}</Text>
+        {loading? (<View style={{backgroundColor:"#EAEAEA", width:150, height:20, marginTop:5, marginLeft:8}}/>):(
+            <Text style={{fontSize:13, marginTop:5, marginLeft:8, fontWeight:"bold"}}>{item.Product}</Text>
               )}
 
-            {item.DiscountType == 1 && <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>{formattedPrice}</Text>  }
+            {/* {item.DiscountType == 1 && <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>{formattedPrice}</Text>  }
             {loading?(<View style={{backgroundColor:"#EAEAEA", height:16, width:80, marginTop:3, marginLeft:8,}}/>):(
                 <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. {formattedPrice}</Text>
 
@@ -267,7 +303,7 @@ const ProductCards = () => {
             <Text style={{fontSize:11, marginTop:3, marginLeft:8}}> Terjual: {item.ItemSold}</Text>
               )}
 
-{loading ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'85%', marginTop:6, alignSelf:"center"}}/>):(
+{(loading || loadingSave)? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'85%', marginTop:6, alignSelf:"center"}}/>):(
                <View>
                   {(item.Qty != null && item.Qty != '0')  ? (
             <View style={{flexDirection:"row", justifyContent:"center", alignItems:"center", marginHorizontal:20}}>

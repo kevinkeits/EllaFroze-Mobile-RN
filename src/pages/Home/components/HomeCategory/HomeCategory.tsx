@@ -13,48 +13,24 @@ interface Category {
   }
 
   interface Props {
-    onEnableScrollTrue : any
-    onEnableScrollFalse : any
+    categories: Category[]
+    loadingCategory: boolean
   }
 
-const HomeCategory = ({onEnableScrollTrue, onEnableScrollFalse}: Props) => {
+const HomeCategory = ({categories, loadingCategory}: Props) => {
     const navigation = useNavigation();
-    const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
-
-    const fetchData = async (token: string) => {
-      const url = `https://ellafroze.com/api/external/getCategory?_cb=onCompleteFetchCategory&_p=main-category-slider&_s=${token}`;
-      const response = await axios.get(url);
-      setCategories(response.data.data);
-      setLoading(false)
-    }
-
-    const fetchToken = async () => {
-      const tokenData = await AsyncStorage.getItem('tokenID')
-
-      fetchData(tokenData == null ? "" : tokenData);
-      
-    };
-
-    const handleNavigate = async (itemId: string, categoryName: string) => {
-      
-      await AsyncStorage.setItem('categoryId', itemId)
-      await AsyncStorage.setItem('categoryName', categoryName)
-      navigation.navigate('Category', {itemId, categoryName})
-    };
 
    
 
-    useEffect(() => {
-      
-      fetchToken()
-      
-      
-    }, []);
+    const handleNavigate = async (itemId: string, categoryName: string) => {
+      alert('clicked')
+      await AsyncStorage.setItem('categoryId', itemId)
+      await AsyncStorage.setItem('categoryName', categoryName)
+      navigation.navigate('Category', {itemId, categoryName})
   
+    }
   
-
-
     const numColumns = 4;
 
   return (
@@ -65,10 +41,10 @@ const HomeCategory = ({onEnableScrollTrue, onEnableScrollFalse}: Props) => {
         data={categories}
         renderItem={({item}) => 
         <TouchableOpacity style={{width:80, height:80, alignItems:"center",  margin:8}} onPress={()=>handleNavigate(item.ID, item.Name)}>
-          {loading ? (<View style={{backgroundColor:"#EAEAEA", width:50, height:50}}/>): (
+          {loadingCategory ? (<View style={{backgroundColor:"#EAEAEA", width:50, height:50}}/>): (
               <Image source={{ uri: `https://ellafroze.com/api/uploaded/category/${item.ImagePath}`}} style={{width:50, height:50}}/>
           )}
-          {loading ? (<View style={{backgroundColor:"#EAEAEA", width:50, height:10, marginTop:4}}/>):(
+          {loadingCategory ? (<View style={{backgroundColor:"#EAEAEA", width:50, height:10, marginTop:4}}/>):(
            <Text style={{fontSize:10, marginTop:4}}>{item.Name}</Text>
           )}
         </TouchableOpacity>}

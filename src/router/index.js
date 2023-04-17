@@ -188,7 +188,39 @@ const Router = () => {
                 backgroundColor: '#FA0000',
                 height: 120,
                 }}}/>
-          <RootStack.Screen name='ProductDetail' component={ProductDetail} options={{
+          <RootStack.Screen name='ProductDetail' component={ProductDetail} screenOptions={{
+        headerShown: false,
+        cardStyle: { backgroundColor: '#fff' },
+        transitionSpec: {
+          open: {
+            animation: 'timing',
+            config: {
+              duration: 300,
+            },
+          },
+          close: {
+            animation: 'timing',
+            config: {
+              duration: 300,
+            },
+          },
+        },
+        cardStyleInterpolator: ({ current: { progress } }) => {
+          return {
+            cardStyle: {
+              transform: [
+                {
+                  translateX: progress.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [1000, 0],
+                  }),
+                },
+              ],
+            },
+          };
+        },
+      }}
+          options={{
               title: "Detail Produk",
               headerTitleStyle:{
                 color:"white"

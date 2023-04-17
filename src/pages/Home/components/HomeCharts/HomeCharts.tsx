@@ -22,15 +22,17 @@ interface Product {
     selected?:string
   }
 
-  interface Props {
-    products: Product[]
+
+  interface cardProps {
+    item: any
     loading?: boolean
+    loadingSave?: boolean
     onConfirm?: (values: Product) => void
   }
   
 
 
-const HomeCharts = ({products, loading, onConfirm}:Props) => {
+const HomeCharts = ({item, loadingSave, loading, onConfirm}:cardProps) => {
     const navigation = useNavigation();
     const [count, setCount] = useState(0);
     const [selected, setSelected] = useState(false);
@@ -122,10 +124,10 @@ const HomeCharts = ({products, loading, onConfirm}:Props) => {
   return (
     
     <View style={{ flexDirection:"row" }} >
-      <ScrollView horizontal={true} style={{width: '100%', height: '100%'}}>
-           {products.map((product, index)=>(
+      {/* <ScrollView horizontal={true} style={{width: '100%', height: '100%'}}>
+           {products.map((product, index)=>( */}
               <TouchableOpacity
-              key={product.ProductID} 
+              key={item.ProductID} 
               style={{
                   width:180, 
                   // height:250,
@@ -144,69 +146,69 @@ const HomeCharts = ({products, loading, onConfirm}:Props) => {
                   margin:8,
                   borderRadius:8
               }} 
-                  onPress={()=>handleNavigate(product.ProductID)}
+                  onPress={()=>handleNavigate(item.ProductID)}
                   >
 
-  {product.Stock == 0 && (
+  {item.Stock == 0 && (
             <View style={{backgroundColor:"black", padding:10, zIndex:2, width:"50%", alignItems:"center", alignSelf:"center", position:"absolute", marginTop:40, opacity:0.7, borderRadius:8}}>
               <Text style={{color:"white", fontWeight:"bold"}}>HABIS</Text>
             </View>
           )}
           <View style={{alignItems:"center"}}>
             {loading ? (<View style={{backgroundColor:"#EAEAEA", width:100, height:120}}/>) : (
-              <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${product.ImagePath}`}} style={{width:100, height:120}}/>
+              <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:100, height:120}}/>
             )}
           </View>
 
               {loading? (<View style={{backgroundColor:"#EAEAEA", width:150, height:20, marginTop:5, marginLeft:8}}/>):(
-               <Text style={{fontSize:15, marginTop:5, marginLeft:8}}>{product.Product}</Text>
+               <Text style={{fontSize:15, marginTop:5, marginLeft:8}}>{item.Product}</Text>
 
               )}
           
               {loading?(<View style={{backgroundColor:"#EAEAEA", height:16, width:80, marginTop:3, marginLeft:8,}}/>):(
               <View>
-                 {product.DiscountType == 0 &&
+                 {item.DiscountType == 0 &&
               <View> 
                 <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. 
                  {
                  new Intl.NumberFormat('id-ID', {
                // style: 'currency',
                currency: 'IDR'
-             }).format(product.Price)
+             }).format(item.Price)
              }</Text>
           </View>  }
 
-              {product.DiscountType == 1 &&
+              {item.DiscountType == 1 &&
               <View> 
                 <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>Rp. 
                  {
                  new Intl.NumberFormat('id-ID', {
                // style: 'currency',
                currency: 'IDR'
-             }).format(product.Price)
+             }).format(item.Price)
              }</Text>
               <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp.  {
               new Intl.NumberFormat('id-ID', {
             // style: 'currency',
             currency: 'IDR'
-          }).format(product.Price - product.Discount)
+          }).format(item.Price - item.Discount)
           }</Text>
           </View>  }
 
-          {product.DiscountType == 2 && 
+          {item.DiscountType == 2 && 
           <View>
             <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>Rp. 
                  {
                  new Intl.NumberFormat('id-ID', {
                // style: 'currency',
                currency: 'IDR'
-             }).format(product.Price)
+             }).format(item.Price)
              }</Text>
           <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp.  {
               new Intl.NumberFormat('id-ID', {
             // style: 'currency',
             currency: 'IDR'
-          }).format(product.Price - ((product.Price * product.Discount)/100))
+          }).format(item.Price - ((item.Price * item.Discount)/100))
           }</Text>
           </View>  }
           </View>
@@ -220,33 +222,33 @@ const HomeCharts = ({products, loading, onConfirm}:Props) => {
                       name="map-marker-outline"
                       type="material-community"
                       size={15} color="black" /> 
-                  <Text style={{fontSize:11, marginTop:3, marginLeft:8}}>{product.Branch}</Text>
+                  <Text style={{fontSize:11, marginTop:3, marginLeft:8}}>{item.Branch}</Text>
                   </View>
               )}
              
              {loading ? (<View style={{backgroundColor:"#EAEAEA", height:12, width:60, marginTop:3, marginLeft:8,}}/>):(
-               <Text style={{fontSize:11, marginTop:3, marginLeft:8}}> Terjual: {product.ItemSold}</Text>
+               <Text style={{fontSize:11, marginTop:3, marginLeft:8}}> Terjual: {item.ItemSold}</Text>
 
               )}
   
       
               
-  {loading ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'85%', marginTop:6, alignSelf:"center"}}/>):(
+  {(loading || loadingSave) ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'85%', marginTop:6, alignSelf:"center"}}/>):(
                <View>
-                  {(product.Qty != null && product.Qty != '0')  ? (
+                  {(item.Qty != null && item.Qty != '0')  ? (
               <View style={{flexDirection:"row", justifyContent:"center", alignItems:"center", marginHorizontal:20}}>
                       <View style={{backgroundColor:"#background: rgba(20, 141, 46, 0.1);", flexDirection:"row", padding:5, borderRadius:6}}>
-                      <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={()=>handleButtonPress(product,'-')}>
+                      <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={()=>handleButtonPress(item,'-')}>
                           <Text style={{color:"#148D2E"}}>-</Text>
                       </TouchableOpacity>
-                      <Text style={{paddingVertical:5, alignItems:"center", textAlign:"center", width:30}}>{product.Qty}</Text>
-                      <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={()=>handleButtonPress(product,'+')}>
+                      <Text style={{paddingVertical:5, alignItems:"center", textAlign:"center", width:30}}>{item.Qty}</Text>
+                      <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={()=>handleButtonPress(item,'+')}>
                           <Text style={{color:"#148D2E"}}>+</Text>
                       </TouchableOpacity>
                       </View>
               </View>):(
                         <View style={{justifyContent:"center", alignItems:"center"}}>
-                        <TouchableOpacity onPress={()=>handleButtonPress(product,'+')} style={{backgroundColor: '#148D2E', width:'85%', marginTop:6, alignItems:"center", paddingVertical:3, borderRadius:6}}>
+                        <TouchableOpacity onPress={()=>handleButtonPress(item,'+')} style={{backgroundColor: '#148D2E', width:'85%', marginTop:6, alignItems:"center", paddingVertical:3, borderRadius:6}}>
                             <Text style={{color:"white", fontWeight:"bold"}}>BELI</Text>
                         </TouchableOpacity>
                         
@@ -258,8 +260,7 @@ const HomeCharts = ({products, loading, onConfirm}:Props) => {
              
               </TouchableOpacity>
            
-        ))}
-        </ScrollView>
+       
       
  </View>
   )

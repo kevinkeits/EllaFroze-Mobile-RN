@@ -82,7 +82,7 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
       const url = `https://ellafroze.com/api/external/getProductDetail?_i=${itemId}&_cb=onCompleteFetchProduct&_p=&_s=${token}`;
       const response = await axios.get(url);
       //alert(JSON.stringify(response.data.data))
-      setCount(response.data.data.Qty)
+      setCount(response.data.data.Qty == 0 ? 1 : response.data.data.Qty)
       setQty(response.data.data.Qty)
       setDetail(response.data.data);
       setLoading(false)

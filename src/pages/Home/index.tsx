@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView, FlatList } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { CartIcon, LocationIcon, MessageIcon } from '../../assets/icons';
 import Carousel from './components/Carousel';
@@ -13,6 +13,7 @@ import NotificationIcon from './components/HomeHeader/components/Icon/Icon';
 import ProductCards from './components/ProductCards/ProductCards';
 import Drawer  from 'react-native-modal';
 import {Dimensions} from 'react-native';
+import ListProduct from './components/ListProduct/ListProduct';
 
 
 
@@ -70,6 +71,12 @@ interface SaveCart {
   _s:string
 }
 
+interface Category {
+  ID: string;
+  ImagePath: string;
+  Name: string;
+}
+
 const HomePage = () => {
   const navigation = useNavigation()
   const [searchText, setSearchText] = useState('');
@@ -80,14 +87,19 @@ const HomePage = () => {
   const [branches, setBranches] = useState<Branch[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [discountProducts, setDiscountProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+
   const [tokenID, setToken] = useState<string>('')
   const [enableScrollView, setEnableScrollView] = useState<boolean>(true)
 
 
   const [loadingBranch, setLoadingBranch] = useState(true)
   const [loadingProduct, setLoadingProduct] = useState(true)
+  const [loadingCategory, setLoadingCategory] = useState(true)
+
   const [loadingProductDiscount, setLoadingProductDiscount] = useState(true)
   const [loadingNotification, setLoadingNotification] = useState(true)
+  const [loadingSave, setLoadingSave] = useState(false)
 
   //const selectedBranchLabel = branches.find(item => item.ID === selectedCity);
 
@@ -104,7 +116,7 @@ const HomePage = () => {
   const fetchData = async (token: string, selectedBranch: string) => {
     setLoadingProduct(true)
     if (selectedBranch != "") {
-      const url = `https://ellafroze.com/api/external/getAllProduct?CatID=&BranchID=${selectedBranch}&Keyword=&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
+      const url = `https://ellafroze.com/api/external/getHighestSold?CatID=&BranchID=${selectedBranch}&Keyword=&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
       const response = await axios.get(url)
       setProducts(response.data.data);
       //alert('welcome back')
@@ -115,6 +127,18 @@ const HomePage = () => {
     }
   }
 
+  const fetchCategory = async (token: string) => {
+    setLoadingCategory(true)
+ 
+      const url = `https://ellafroze.com/api/external/getCategory?_cb=onCompleteFetchCategory&_p=main-category-slider&_s=${token}`;
+      const response = await axios.get(url)
+      setCategories(response.data.data);
+      //alert('welcome back')
+      setLoadingCategory(false)
+  }
+
+
+
   async function saveCart(cartInput: SaveCart): Promise<void> {
     const apiUrl = 'https://ellafroze.com/api/external/doSaveCart';
   
@@ -122,15 +146,20 @@ const HomePage = () => {
        const response = await axios.post(apiUrl, cartInput);
        if (!response.data.status){
         alert(response.data.message);
+        setLoadingSave(false)
+       } else {
+        setLoadingSave(false)
        }
     } catch (error) {
       console.error(error);
+      setLoadingSave(false)
       throw error;
     }
   }
 
   const setSelected = async (values?: Product) => {
     try {
+      setLoadingSave(true)
       //alert(JSON.stringify(values))
       const newListProduct = products.map((item) => {
         if (item.ProductID === values?.ProductID) {
@@ -168,6 +197,7 @@ const HomePage = () => {
 
   const setSelectedDiscount = async (values?: Product) => {
     try {
+      setLoadingSave(true)
       const newListProduct = products.map((item) => {
         if (item.ProductID === values?.ProductID) {
           const updatedItem = {
@@ -193,6 +223,8 @@ const HomePage = () => {
         return item;
       });
       setDiscountProducts(newListProductDiscount)
+
+      if (values) saveCart({  ProductID: values.ProductID, Qty: parseInt(values.Qty ?? '0'), Notes:'', Source:'cart', _s:tokenID });
     } catch (err) {
       
     }
@@ -232,17 +264,29 @@ const HomePage = () => {
     setLoadingProductDiscount(true)
 
     const tokenData = await AsyncStorage.getItem('tokenID')
-    const selectedBranchData = await AsyncStorage.getItem('selectedBranch')
-    const selectedBranchName = await AsyncStorage.getItem('selectedBranchName')
 
+    const selectedBranchData = await AsyncStorage.getItem('selectedBranch')
     setToken(tokenData == null ? "" : tokenData)
       
-    //fetchCartData()
     fetchData(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
     fetchDiscount(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
     fetchNotification(tokenData == null ? "" : tokenData);
+    
+  };
+
+  const fetchLimitedContent = async () => {
+
+    const tokenData = await AsyncStorage.getItem('tokenID')
+    const selectedBranchName = await AsyncStorage.getItem('selectedBranchName')
+
+    setToken(tokenData == null ? "" : tokenData)
+    const selectedBranchData = await AsyncStorage.getItem('selectedBranch')
+      
+    //fetchCartData()
     fetchBranch(tokenData == null ? "" : tokenData);
     setSelectedBranchName(selectedBranchName == null ? "" : selectedBranchName)
+    fetchCategory(tokenData == null ? "" : tokenData);
+
     
   };
 
@@ -291,9 +335,11 @@ useEffect(() => {
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   alert("W:" + windowWidth + " x H:" + windowHeight)
+
+  fetchLimitedContent()
   
   
-  // storedBranch()
+
   
   return () => {
     unsubscribe
@@ -308,7 +354,7 @@ useEffect(() => {
        <View style={styles.header}>
         <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
         <View style={{width:'100%'}}>
-          <View style={{flexDirection:'row', marginVertical:2, justifyContent:'space-between', width:293}}>
+          <View style={{flexDirection:'row', marginVertical:2, justifyContent:'space-between', width:"70%"}}>
           <TouchableOpacity onPress={handlePickerCity} style={{flexDirection:"row", gap:8}}>           
            <LocationIcon  />
             <Text style={{color:"white"}}>{selectedBranchName ? selectedBranchName : 'Pilih Cabang'}</Text>
@@ -402,20 +448,18 @@ useEffect(() => {
         </View>
         <View style={{marginTop:10}}>
           <Text style={{fontSize:16, fontWeight:"bold", marginLeft:3}}>Produk Terlaris</Text>
-          <HomeCharts products={products} loading={loadingProduct} onConfirm={setSelected} />
+          <ListProduct loadingSave={loadingSave} products={products} loading={loadingProduct} onConfirm={setSelected} />
         </View>
         <View style={{marginTop:10}}>
           <Text style={{fontSize:16, fontWeight:"bold", marginLeft:3}}>Diskon hari ini!</Text>
-          <HomeCharts products={discountProducts} loading={loadingProductDiscount} onConfirm={setSelectedDiscount}/>
+          <ListProduct loadingSave={loadingSave} products={discountProducts} loading={loadingProductDiscount} onConfirm={setSelectedDiscount}/>
         </View>
         <View style={{marginTop:10}}>
-        <HomeCategory onEnableScrollTrue={trueEnableScroll} onEnableScrollFalse={falseEnableScroll}/>
+        <HomeCategory categories={categories} loadingCategory={loadingCategory}/>
         </View>
       <View style={{marginTop:10}}>
-      {/* <ProductCards/> */}
       <HomeArticle/>
       </View>
-     
       </ScrollView>
     </View>
   );
@@ -452,7 +496,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
     paddingLeft: 13,
-    width:300
+    width:"70%"
     
   },
   title: {
@@ -467,7 +511,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderWidth: 1,
     borderRadius: 10,
-    width:290,
+    width:"70%",
     alignItems: 'center',
   },
   icon: {

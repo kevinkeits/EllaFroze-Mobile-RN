@@ -43,6 +43,7 @@ const Search = ({route}: SearchScreenProps) => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [tokenID, setToken] = useState<string>('')
+    const [loadingSave, setLoadingSave] = useState(false)
 
     
     
@@ -104,14 +105,19 @@ const Search = ({route}: SearchScreenProps) => {
        const response = await axios.post(apiUrl, cartInput);
        if (!response.data.status){
         alert(response.data.message);
-       }
+        setLoadingSave(false)
+      } else {
+       setLoadingSave(false)
+      }
     } catch (error) {
       console.error(error);
+      setLoadingSave(false)
       throw error;
     }
   }
   const onConfirm = async (values?: Product) => {
     try {
+      setLoadingSave(true)
       //alert(JSON.stringify(values))
       const newList = products.map((item) => {
         if (item.ProductID === values?.ProductID) {
@@ -140,7 +146,7 @@ const Search = ({route}: SearchScreenProps) => {
   //   // alert(`Button clicked for item ${itemId}`);
   // };
 
-  const handleButtonPress = async (values: Product, type: string) => {
+  const handleButtonPress = (values: Product, type: string) => {
     const postData: Product = {
       ...values,
       Qty: type == '+' ? (values.Qty == null ? '1' : (parseInt(values.Qty) + 1).toString()) : (values.Qty == null ? '0' : (parseInt(values.Qty) - 1).toString())
@@ -148,8 +154,7 @@ const Search = ({route}: SearchScreenProps) => {
       // merchantID: merchant.map((x) => x.id),
       // isActive: isActive?.id
     }
-    await onConfirm(postData)
-    
+    onConfirm?.(postData)
   };
 
   const handleNavigate = (itemId: string) => {
@@ -277,7 +282,7 @@ const Search = ({route}: SearchScreenProps) => {
             
        
    
-    {loading ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'85%', marginTop:6, alignSelf:"center"}}/>):(
+    {(loading || loadingSave) ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'85%', marginTop:6, alignSelf:"center"}}/>):(
                <View>
                   {(item.Qty != null && item.Qty != '0')  ? (
             <View style={{flexDirection:"row", justifyContent:"center", alignItems:"center", marginHorizontal:20}}>
