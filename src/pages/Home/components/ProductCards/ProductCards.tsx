@@ -22,6 +22,14 @@ interface Product {
 
   }
 
+  interface SaveCart {
+    ProductID: string;
+    Qty: number;
+    Notes?: string;
+    Source: string;
+    _s:string
+  }
+
  
 
 const ProductCards = () => {
@@ -79,10 +87,61 @@ const ProductCards = () => {
     setCount(newCount);
   };
 
-  const handleButtonPress = (itemId: any) => {
-    setSelected(itemId);
-    // alert(`Button clicked for item ${itemId}`);
+  async function saveCart(cartInput: SaveCart): Promise<void> {
+    const apiUrl = 'https://ellafroze.com/api/external/doSaveCart';
+  
+    try {
+      //alert(JSON.stringify(cartInput))
+       const response = await axios.post(apiUrl, cartInput);
+       if (!response.data.status){
+        alert(response.data.message);
+       }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+  const onConfirm = async (values?: Product) => {
+    try {
+      //alert(JSON.stringify(values))
+      const newList = products.map((item) => {
+        if (item.ProductID === values?.ProductID) {
+          const updatedItem = {
+            ...item,
+            Qty: values.Qty,
+          };
+  
+          return updatedItem;
+        }
+  
+        return item;
+      });
+      setProducts(newList)
+
+      if (values) await saveCart({  ProductID: values.ProductID, Qty: parseInt(values.Qty ?? '0'), Notes:'', Source:'cart', _s:tokenID });
+
+      //setProducts(newList);
+    } catch (err) {
+      
+    }
+  }
+
+  const handleButtonPress = async (values: Product, type: string) => {
+    const postData: Product = {
+      ...values,
+      Qty: type == '+' ? (values.Qty == null ? '1' : (parseInt(values.Qty) + 1).toString()) : (values.Qty == null ? '0' : (parseInt(values.Qty) - 1).toString())
+      // groupRoleID: role?.id,
+      // merchantID: merchant.map((x) => x.id),
+      // isActive: isActive?.id
+    }
+    await onConfirm(postData)
+    
   };
+
+  // const handleButtonPress = (itemId: any) => {
+  //   setSelected(itemId);
+  //   // alert(`Button clicked for item ${itemId}`);
+  // };
 
   const handleNavigate = (itemId: string) => {
     navigation.navigate('ProductDetail', {itemId})
@@ -210,20 +269,20 @@ const ProductCards = () => {
 
 {loading ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'85%', marginTop:6, alignSelf:"center"}}/>):(
                <View>
-                  {isSelected  ? (
+                  {(item.Qty != null && item.Qty != '0')  ? (
             <View style={{flexDirection:"row", justifyContent:"center", alignItems:"center", marginHorizontal:20}}>
                     <View style={{backgroundColor:"#background: rgba(20, 141, 46, 0.1);", flexDirection:"row", padding:5, borderRadius:6}}>
-                    <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={decrementCount}>
+                    <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={()=>handleButtonPress(item,'-')}>
                         <Text style={{color:"#148D2E"}}>-</Text>
                     </TouchableOpacity>
-                    <Text style={{paddingVertical:5, alignItems:"center", textAlign:"center", width:30}}>{count}</Text>
-                    <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={incrementCount}>
+                    <Text style={{paddingVertical:5, alignItems:"center", textAlign:"center", width:30}}>{item.Qty}</Text>
+                    <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={()=>handleButtonPress(item,'+')}>
                         <Text style={{color:"#148D2E"}}>+</Text>
                     </TouchableOpacity>
                     </View>
             </View>):(
                       <View style={{justifyContent:"center", alignItems:"center"}}>
-                      <TouchableOpacity onPress={()=>handleButtonPress(item.id)} style={{backgroundColor: '#148D2E', width:'85%', marginTop:6, alignItems:"center", paddingVertical:3, borderRadius:6}}>
+                      <TouchableOpacity onPress={()=>handleButtonPress(item,'+')} style={{backgroundColor: '#148D2E', width:'85%', marginTop:6, alignItems:"center", paddingVertical:3, borderRadius:6}}>
                           <Text style={{color:"white", fontWeight:"bold"}}>BELI</Text>
                       </TouchableOpacity>
                       

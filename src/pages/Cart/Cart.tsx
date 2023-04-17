@@ -191,7 +191,7 @@ async function doSaveCheckout(payload: Checkout): Promise<void> {
       alert(response.data.message);
      } else {
       setIsDrawerOpen(false)
-      alert(JSON.stringify(response.data.data))
+      //alert(JSON.stringify(response.data.data))
       await AsyncStorage.setItem('payExpDate',response.data.data.ExpiredDate)
       await AsyncStorage.setItem('payDL',response.data.data.GoPayDeepLink)
       await AsyncStorage.setItem('payAmount',response.data.data.GrossAmount.toString())
