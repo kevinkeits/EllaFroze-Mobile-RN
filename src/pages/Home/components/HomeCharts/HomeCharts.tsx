@@ -122,7 +122,7 @@ const HomeCharts = ({products, loading, onConfirm}:Props) => {
   return (
     
     <View style={{ flexDirection:"row" }} >
-      <ScrollView horizontal={true}>
+      <ScrollView horizontal={true} style={{width: '100%', height: '100%'}}>
            {products.map((product, index)=>(
               <TouchableOpacity
               key={product.ProductID} 

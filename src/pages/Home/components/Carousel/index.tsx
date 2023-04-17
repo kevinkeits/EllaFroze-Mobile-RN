@@ -64,7 +64,7 @@ useEffect(() => {
         <View>
           
           <ScrollView
-        horizontal
+        horizontal={true}
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         onScroll={handleScroll}

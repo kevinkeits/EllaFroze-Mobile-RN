@@ -15,7 +15,6 @@ interface Category {
   interface Props {
     onEnableScrollTrue : any
     onEnableScrollFalse : any
-
   }
 
 const HomeCategory = ({onEnableScrollTrue, onEnableScrollFalse}: Props) => {
@@ -62,12 +61,7 @@ const HomeCategory = ({onEnableScrollTrue, onEnableScrollFalse}: Props) => {
     
     <View style={{backgroundColor:"white", flexDirection:"row" }} >
          <FlatList
-          onTouchStart={() => {
-            onEnableScrollFalse
-         }}
-         onMomentumScrollEnd={() => {
-            onEnableScrollTrue
-         }}
+         scrollEnabled={false}
         data={categories}
         renderItem={({item}) => 
         <TouchableOpacity style={{width:80, height:80, alignItems:"center",  margin:8}} onPress={()=>handleNavigate(item.ID, item.Name)}>

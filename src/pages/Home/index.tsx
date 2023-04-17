@@ -44,9 +44,9 @@ interface Product {
   Discount: number;
   DiscountType: number;
   ImagePath: string;
-  ItemSold?: number;
+  ItemSold: number;
   Price: number;
-  Stock?: number;
+  Stock: number;
   Qty?: string;
   selected?:string
 }
@@ -396,7 +396,7 @@ useEffect(() => {
       </View>
       {/* HEADER */}
 
-      <ScrollView scrollEnabled={enableScrollView} horizontal={false}>
+      <ScrollView horizontal={false} style={{width: '100%', height: '100%'}}>
       <View style={{marginTop:10}}>
          <Carousel />
         </View>
