@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+// import {Dimensions} from 'react-native';
 
 
 interface Category {
@@ -21,10 +21,13 @@ const HomeCategory = ({categories, loadingCategory}: Props) => {
     const navigation = useNavigation();
     const [loading, setLoading] = useState(true);
 
+    // const [sHeight, setSHeight] = useState(0);
+    // const [sWidth, setSWidth] = useState(0);
+
    
 
     const handleNavigate = async (itemId: string, categoryName: string) => {
-      alert('clicked')
+      // alert('clicked')
       await AsyncStorage.setItem('categoryId', itemId)
       await AsyncStorage.setItem('categoryName', categoryName)
       navigation.navigate('Category', {itemId, categoryName})
@@ -32,6 +35,13 @@ const HomeCategory = ({categories, loadingCategory}: Props) => {
     }
   
     const numColumns = 4;
+
+    // useEffect(() => {  
+    //   const windowWidth = Dimensions.get('window').width;
+    //   const windowHeight = Dimensions.get('window').height;
+    //   setSWidth(windowWidth)
+    //   setSHeight(windowHeight)      
+    // }, []);
 
   return (
     

@@ -332,9 +332,9 @@ useEffect(() => {
     fetchToken()
   })
 
-  const windowWidth = Dimensions.get('window').width;
-  const windowHeight = Dimensions.get('window').height;
-  alert("W:" + windowWidth + " x H:" + windowHeight)
+  // const windowWidth = Dimensions.get('window').width;
+  // const windowHeight = Dimensions.get('window').height;
+  // alert("W:" + windowWidth + " x H:" + windowHeight)
 
   fetchLimitedContent()
   

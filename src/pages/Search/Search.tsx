@@ -175,7 +175,7 @@ const Search = ({route}: SearchScreenProps) => {
         return (
             <TouchableOpacity 
             style={{
-                width:180, 
+                width:160, 
                 // height:250,
                 paddingBottom:10, 
                 backgroundColor: '#fff',
@@ -206,7 +206,7 @@ const Search = ({route}: SearchScreenProps) => {
             )}
         </View>
         {loading? (<View style={{backgroundColor:"#EAEAEA", width:150, height:20, marginTop:5, marginLeft:8}}/>):(
-            <Text style={{fontSize:15, marginTop:5, marginLeft:8}}>{item.Product}</Text>
+            <Text style={{fontSize:13, marginTop:5, marginLeft:8, fontWeight:"bold"}}>{item.Product}</Text>
               )}
   {/* {item.DiscountType == 1 && <Text style={{fontSize:11, marginTop:3, marginLeft:8, textDecorationLine:"line-through"}}>
     {formattedPrice}</Text> 
@@ -313,7 +313,7 @@ const Search = ({route}: SearchScreenProps) => {
 
   return (
     
-    <View style={{}} >
+    <View style={{alignSelf:"center"}} >
           <Text style={{margin:4, fontWeight:"bold", fontSize:15}}>Produk dengan keyword "{searchText}"</Text>
          <FlatList
         data={products}

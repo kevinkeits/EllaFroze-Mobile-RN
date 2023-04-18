@@ -4,9 +4,9 @@ import { Logo } from '../../assets'
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import * as Google from 'expo-google-app-auth';
-//import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -14,6 +14,13 @@ WebBrowser.maybeCompleteAuthSession();
 interface LoginCredentials {
   txtUsername: string;
   txtPassword: string;
+}
+
+interface LoginGoogle {
+  ID: string;
+  Name: string;
+  Email: string;
+  TokenID: string;
 }
 
 
@@ -24,15 +31,29 @@ interface Props {
 const Login: React.FC<Props> = ({ navigation }) => {
     const [txtUsername, setTxtUsername] = useState('');
     const [txtPassword, setTxtPassword] = useState('');
-    const [accessToken, setAccessToken] = React.useState<any | null>(null);
-    const [user, setUser] = React.useState(null);
-    // const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    //   clientId: "208326548212-g9brb9uhdlgldsq8ij2dha9k7lkt19pv.apps.googleusercontent.com",
-    //   // iosClientId: "your cliend id goes here!",
-    //   androidClientId: "208326548212-854bfkduu8g4dim685gci717e4fclhbl.apps.googleusercontent.com"
-    // });
+    const [token, setToken] = useState("");
+    //const [userInfo, setUserInfo] = useState(null);
+    const [request, response, promptAsync] = Google.useAuthRequest({
+      androidClientId: '208326548212-pr78pe9v2r64mdd7849jdf644imtqdbs.apps.googleusercontent.com',
+      //iosClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+    });
+
+    async function loginGoogle(loginInput: LoginGoogle): Promise<void> {
+      const apiUrl = 'https://ellafroze.com/api/external/doAuthGoogle';
     
-    //const dispatch = useDispatch();
+      try {
+         const response = await axios.post(apiUrl, loginInput);
+         if (!response.data.status){
+          alert(response.data.message);
+         } else {
+          navigation.navigate("MainApp")
+          await AsyncStorage.setItem('tokenID', response.data.data.Token)
+         }   
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    }
 
     async function loginUser(loginInput: LoginCredentials): Promise<void> {
       const apiUrl = 'https://ellafroze.com/api/external/doLogin';
@@ -59,95 +80,36 @@ const Login: React.FC<Props> = ({ navigation }) => {
       }
     };
 
-    // async function signInWithGoogleAsync() {
-    //   try {
-    //     const result = await Google.logInAsync({
-    //       androidClientId: 'YOUR_ANDROID_CLIENT_ID',
-    //       iosClientId: 'YOUR_IOS_CLIENT_ID',
-    //       scopes: ['profile', 'email'],
-    //     });
-    
-    //     if (result.type === 'success') {
-    //       // user signed in
-    //       console.log(result.user);
-    //     } else {
-    //       console.log('Google sign-in cancelled');
-    //     }
-    //   } catch (e) {
-    //     console.log('Google sign-in error', e);
-    //   }
-    // }
-
-    // React.useEffect(() => {
-    //   if(response?.type === "success") {
-    //     setAccessToken(response?.authentication?.accessToken);
-    //     accessToken && fetchUserInfo();
-    //   }
-    // }, [response, accessToken])
+    const getUserInfo = async () => {
+      try {
+        const response = await fetch(
+          "https://www.googleapis.com/userinfo/v2/me",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
   
-    async function fetchUserInfo() {
-      let response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
-        headers: { Authorization: `Bearer ${accessToken}` }
-      });
-      const useInfo = await response.json();
-      setUser(useInfo);
-    }
-  
-    // const ShowUserInfo = () => {
-    //   if(user) {
-    //     return(
-    //       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-    //         <Text style={{fontSize: 35, fontWeight: 'bold', marginBottom: 20}}>Welcome</Text>
-    //         <Image source={{uri: user.picture}} style={{width: 100, height: 100, borderRadius: 50}} />
-    //         <Text style={{fontSize: 20, fontWeight: 'bold'}}>{user.name}</Text>
-    //       </View>
-    //     )
-    //   }
-    // }
-  
+        const user = await response.json();
 
-  
-    
-    
-    // const handleLogin = async () => {
-    //   try {
-    //     const userData = await login(txtUsername, txtPassword);
-    //     // do something with userData, e.g. store it in AsyncStorage
-    //     if (userData.success) {
-    //       navigation.navigate('MainApp');
-    //     } else {
-    //       // handle invalid username or password
-    //       alert("Account not Found")
-    //     }
-    //   } catch (error) {
-    //     // handle login error
-    //   }
-    // };
+        await loginGoogle({  ID:user.id, Name:user.name, Email:user.email, TokenID:token })
 
-    // async function login(loginCredentials: LoginCredentials): Promise<void> {
-    //   const apiUrl = 'https://ellafroze.com/api/external/doLogin';
-    
-    //   try {
-    //     const response = await axios.post(apiUrl, loginCredentials);
-    //     alert('Login successful!');
-    //     navigation.navigate('MainApp')
-    //     console.log('User data:', response.data);
-    //   } catch (error) {
-    //     console.error(error);
-    //     throw error;
-    //   }
-    // }
-    
+        //setUserInfo(user);
 
-
-      // const handleLogin = async () => {
-      //   try {
-      //     await login({ txtUsername, txtPassword });
-      //   } catch (error) {
-      //     console.error(error);
-      //   }
-      // };
-
+        
+        //alert(JSON.stringify(user))
+      } catch (error) {
+        // Add your own error handler here
+      }
+    };
+    useEffect(() => {
+      if (response?.type === "success") {
+        if (response.authentication != null) {
+          setToken(response.authentication.accessToken);
+          getUserInfo();
+        }
+        
+      }
+    }, [response, token]);
       
   return (
     <View style={{flex: 1, backgroundColor:"#FA0000", margin: 0, justifyContent:'center'}}>
@@ -196,7 +158,10 @@ const Login: React.FC<Props> = ({ navigation }) => {
         >
           <Text>Login Google</Text>
         </TouchableOpacity> */}
-        <TouchableOpacity style={styles.button} >
+        <TouchableOpacity style={styles.button} disabled={!request}
+  onPress={() => {
+    promptAsync();
+  }}>
   <View style={styles.buttonContainer}>
     <View style={{backgroundColor:"white"}}>
     <Image source={require('../../assets/images/google-logo.png')} style={{width:30, height:30}} />
