@@ -82,7 +82,7 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
       const url = `https://ellafroze.com/api/external/getProductDetail?_i=${itemId}&_cb=onCompleteFetchProduct&_p=&_s=${token}`;
       const response = await axios.get(url);
       //alert(JSON.stringify(response.data.data))
-      setCount(response.data.data.Qty == 0 ? 1 : response.data.data.Qty)
+      setCount(response.data.data.Qty == 0 ? (response.data.data.Stock == 0 ? 0 : 1) : response.data.data.Qty)
       setQty(response.data.data.Qty)
       setDetail(response.data.data);
       setLoading(false)
@@ -117,7 +117,13 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
 
     const handleSaveCart = async () => {
       try {
-        await saveCart({  ProductID, Qty, Notes, Source, _s });
+
+        if (Qty == 0) {
+          alert("Maaf, untuk saat ini produk sedang tidak tersedia")
+        } else {
+          await saveCart({  ProductID, Qty, Notes, Source, _s });
+        }
+        
       } catch (error) {
         console.error(error);
       }
@@ -137,13 +143,17 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
 
   const incrementCount = () => {
     const newCount = parseInt(count.toString())
-      setCount(newCount + 1);
-      setQty(newCount + 1)
-    };
+    const stock = detail?.Stock ?? 0
+
+    if (newCount >= 0 && (newCount + 1 <= stock)) {
+        setCount(newCount + 1);
+        setQty(newCount + 1)
+      }
+  };
 
   const decrementCount = () => {
     const newCount = parseInt(count.toString())
-    if (newCount > 0) {
+    if (newCount > 0 && (newCount - 1 >= 0)) {
       setCount(newCount - 1)
       setQty(newCount - 1)
     }

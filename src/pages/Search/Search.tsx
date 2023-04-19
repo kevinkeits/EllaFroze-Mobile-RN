@@ -147,14 +147,22 @@ const Search = ({route}: SearchScreenProps) => {
   // };
 
   const handleButtonPress = (values: Product, type: string) => {
-    const postData: Product = {
-      ...values,
-      Qty: type == '+' ? (values.Qty == null ? '1' : (parseInt(values.Qty) + 1).toString()) : (values.Qty == null ? '0' : (parseInt(values.Qty) - 1).toString())
-      // groupRoleID: role?.id,
-      // merchantID: merchant.map((x) => x.id),
-      // isActive: isActive?.id
+    const currentQty = parseInt(values.Qty == null ? '0' : values.Qty)
+    if (type == '+' && ((currentQty + 1) <= parseInt(values.Stock))) {
+      const postData: Product = {
+        ...values,
+        Qty: (currentQty + 1).toString(),
+      }
+      onConfirm?.(postData)
     }
-    onConfirm?.(postData)
+    if (type == '-' && ((currentQty -1) >= 0)) {
+      const postData: Product = {
+        ...values,
+        Qty: (currentQty - 1).toString()
+      }
+      onConfirm?.(postData)
+    }
+    
   };
 
   const handleNavigate = (itemId: string) => {
@@ -297,9 +305,12 @@ const Search = ({route}: SearchScreenProps) => {
                     </View>
             </View>):(
                       <View style={{justifyContent:"center", alignItems:"center"}}>
-                      <TouchableOpacity onPress={()=>handleButtonPress(item,'+')} style={{backgroundColor: '#148D2E', width:'85%', marginTop:6, alignItems:"center", paddingVertical:3, borderRadius:6}}>
-                          <Text style={{color:"white", fontWeight:"bold"}}>BELI</Text>
-                      </TouchableOpacity>
+                      {(parseInt(item.Stock) > 0) && (
+                        <TouchableOpacity onPress={()=>handleButtonPress(item,'+')} style={{backgroundColor: '#148D2E', width:'85%', marginTop:6, alignItems:"center", paddingVertical:3, borderRadius:6}}>
+                            <Text style={{color:"white", fontWeight:"bold"}}>BELI</Text>
+                        </TouchableOpacity>
+                         )}
+                        
                       
                   </View>
                 )}

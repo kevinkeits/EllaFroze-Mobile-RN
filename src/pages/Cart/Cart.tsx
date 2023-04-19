@@ -24,6 +24,7 @@ interface Cart {
   Price: number;
   Qty: number;
   Selected?: boolean
+  Stock: number
 }
 
 interface Address {
@@ -324,17 +325,34 @@ const doCheckout = async () => {
       
     }
   }
-  const handleButtonPress =  (values: Cart, type: string) => {
-    const postData: Cart = {
-      ...values,
-      Qty: type == '+' ? parseInt(values.Qty == null ? '1' : (parseInt(values.Qty.toString()) + 1).toString()) : parseInt(values.Qty == null ? '0' : (parseInt(values.Qty.toString()) - 1).toString())
-      // groupRoleID: role?.id,
-      // merchantID: merchant.map((x) => x.id),
-      // isActive: isActive?.id
+  // const handleButtonPress =  (values: Cart, type: string) => {
+  //   const postData: Cart = {
+  //     ...values,
+  //     Qty: type == '+' ? parseInt(values.Qty == null ? '1' : (parseInt(values.Qty.toString()) + 1).toString()) : parseInt(values.Qty == null ? '0' : (parseInt(values.Qty.toString()) - 1).toString())
+  //   }
+  //    onConfirm('product',postData)
+    
+  // };
+
+  const handleButtonPress = (values: Cart, type: string) => {
+    const currentQty = parseInt(values.Qty == null ? '0' : values.Qty.toString())
+    if (type == '+' && ((currentQty + 1) <= values.Stock)) {
+      const postData: Cart = {
+        ...values,
+        Qty: (currentQty + 1),
+      }
+      onConfirm?.('product',postData)
     }
-     onConfirm('product',postData)
+    if (type == '-' && ((currentQty -1) >= 0)) {
+      const postData: Cart = {
+        ...values,
+        Qty: (currentQty - 1)
+      }
+      onConfirm?.('product',postData)
+    }
     
   };
+  
 
   const handleSelect =  (values: Cart) => {
     const postData: Cart = {

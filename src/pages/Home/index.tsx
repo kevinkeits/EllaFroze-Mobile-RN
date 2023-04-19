@@ -387,6 +387,7 @@ useEffect(() => {
           value={searchText}
           onChangeText={setSearchText}
           placeholder="Search"
+          onSubmitEditing={handleSearch}
         />
         <TouchableOpacity onPress={handleSearch} style={{alignItems:"center", marginRight:8}}>
         <Icon
