@@ -151,7 +151,7 @@ useEffect(() => {
       <View style={styles.tabBar}>
   
         {tabs.map((tab, index) => (
-          <ScrollView>
+          <ScrollView key={index}>
           <TouchableOpacity
             key={tab.id}
             style={[
@@ -203,7 +203,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#ccc',
   },
   tabButtonText: {
-    fontSize: 12,
+    fontSize: 10,
+    textAlign:"center",
     fontWeight: 'bold',
   },
   activeTabButtonText: {

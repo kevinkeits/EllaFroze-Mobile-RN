@@ -35,6 +35,7 @@ const TransactionCard = ({unpaidTransactions, statusLabel}: Props) => {
           {unpaidTransactions?.map((item, index)=>(
             <TouchableOpacity
             onPress={()=>handleNavigate(item.ID)}
+            key={item.ID}
             style={{
                margin:10, 
                // borderWidth:1, 

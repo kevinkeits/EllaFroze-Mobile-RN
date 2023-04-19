@@ -1,4 +1,4 @@
-import { Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {Picker} from '@react-native-picker/picker';
 import Drawer  from 'react-native-modal';
@@ -350,6 +350,7 @@ const fetchData = async () => {
 
 
   return (
+    <ScrollView>
     <View>
       <View style={{}}>
       <Text style={{marginTop:20, marginLeft:8, fontWeight:"bold", fontSize:16}}>Detail Alamat</Text>
@@ -382,7 +383,7 @@ const fetchData = async () => {
           <Text style={{fontWeight:"bold", marginBottom:6}}>Label Alamat</Text>
         <TextInput 
         style={{paddingVertical:3, borderBottomWidth:1}}
-        value={txtAddressName !== '' ? txtAddressName : detail?.Name}
+        value={txtAddressName}
         onChangeText={setTxtAddressName}
         />
         </View>
@@ -390,7 +391,7 @@ const fetchData = async () => {
           <Text style={{fontWeight:"bold", marginBottom:6}}>No. Telepon</Text>
         <TextInput 
         style={{paddingVertical:3, borderBottomWidth:1}}
-        value={txtFrmPhone !== '' ? txtFrmPhone : detail?.Phone}
+        value={txtFrmPhone}
         onChangeText={setTxtFrmPhone}
         />
         </View>
@@ -420,7 +421,7 @@ const fetchData = async () => {
           <Text style={{fontWeight:"bold", marginBottom:6}}>Kode Pos</Text>
         <TextInput 
         style={{paddingVertical:3, borderBottomWidth:1}}
-        value={txtPostalCode !== '' ? txtPostalCode : detail?.PostalCode}
+        value={txtPostalCode}
         onChangeText={setTxtPostalCode}
         />
         </View>
@@ -428,7 +429,7 @@ const fetchData = async () => {
           <Text style={{fontWeight:"bold", marginBottom:6}}>Alamat Lengkap</Text>
         <TextInput 
         style={{paddingVertical:3, borderBottomWidth:1}}
-        value={txtAddressDetail !== '' ? txtAddressDetail : detail?.Address}
+        value={txtAddressDetail}
         onChangeText={setTxtAddressDetail}
         />
         </View>
@@ -555,6 +556,7 @@ const fetchData = async () => {
 
      
     </View>
+    </ScrollView>
   )
 }
 

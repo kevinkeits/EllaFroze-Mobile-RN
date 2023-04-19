@@ -45,12 +45,12 @@ const HomeCategory = ({categories, loadingCategory}: Props) => {
 
   return (
     
-    <View style={{backgroundColor:"white", flexDirection:"row" }} >
+    <View style={{backgroundColor:"white"}} >
          <FlatList
          scrollEnabled={false}
         data={categories}
         renderItem={({item}) => 
-        <TouchableOpacity style={{width:80, height:80, alignItems:"center",  margin:8}} onPress={()=>handleNavigate(item.ID, item.Name)}>
+        <TouchableOpacity style={{width:80, height:80, alignItems:"center", marginLeft:7, marginTop:5}} onPress={()=>handleNavigate(item.ID, item.Name)}>
           {loadingCategory ? (<View style={{backgroundColor:"#EAEAEA", width:50, height:50}}/>): (
               <Image source={{ uri: `https://ellafroze.com/api/uploaded/category/${item.ImagePath}`}} style={{width:50, height:50}}/>
           )}

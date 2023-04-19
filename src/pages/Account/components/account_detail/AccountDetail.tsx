@@ -2,6 +2,7 @@ import { Button, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, Vi
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 interface User {
   Name: string;
@@ -18,6 +19,7 @@ interface UserInput {
 
 
 const AccountDetail = () => {
+  const navigation = useNavigation()
   const [users, setUsers] = useState<User>();
   const [formData, setFormData] = useState<UserInput>();
   const [loading, setLoading] = useState(true);
@@ -41,7 +43,7 @@ const AccountDetail = () => {
          if (!response.data.status){
           alert(response.data.message);
          } else {
-          //navigation.navigate("Login")
+          navigation.goBack()
           alert(response.data.message)
          }   
       } catch (error) {
@@ -108,7 +110,7 @@ const AccountDetail = () => {
       <Text style={{fontWeight:"bold"}}>Nama Lengkap</Text>
       {loading ? (<View style={{backgroundColor:"#EAEAEA", width:370, height:34, alignSelf:"center"}}/>): (
       <TextInput 
-      value={txtFrmName !== '' ? txtFrmName : users?.Name}
+      value={txtFrmName}
       onChangeText={handleChangeName}
       style={{borderColor:"black", borderBottomWidth:1, alignItems: "center", justifyContent:"center", padding:8, marginVertical:5, borderRadius:6}}
       />
@@ -118,7 +120,7 @@ const AccountDetail = () => {
       <Text style={{fontWeight:"bold"}}>No Handphone</Text>
       {loading ? (<View style={{backgroundColor:"#EAEAEA", width:370, height:34, alignSelf:"center"}}/>): (
       <TextInput 
-      value={txtFrmPhone !== '' ? txtFrmPhone : users?.Phone}
+      value={txtFrmPhone}
       onChangeText={handleChangePhone}
       style={{borderColor:"black", borderBottomWidth:1, alignItems: "center", justifyContent:"center", padding:8, marginVertical:5, borderRadius:6}}
       />
@@ -128,7 +130,7 @@ const AccountDetail = () => {
       <Text style={{fontWeight:"bold"}}>Email</Text>
       {loading ? (<View style={{backgroundColor:"#EAEAEA", width:370, height:34, alignSelf:"center"}}/>): (
        <TextInput 
-       value={txtFrmEmail !== '' ? txtFrmEmail : users?.Email}
+       value={txtFrmEmail}
        onChangeText={handleChangeEmail}
        style={{borderColor:"black", borderBottomWidth:1, alignItems: "center", justifyContent:"center", padding:8, marginVertical:5, borderRadius:6}}
        />

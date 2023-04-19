@@ -33,10 +33,10 @@ const Login: React.FC<Props> = ({ navigation }) => {
     const [txtPassword, setTxtPassword] = useState('');
     const [token, setToken] = useState("");
     //const [userInfo, setUserInfo] = useState(null);
-    const [request, response, promptAsync] = Google.useAuthRequest({
-      androidClientId: '208326548212-pr78pe9v2r64mdd7849jdf644imtqdbs.apps.googleusercontent.com',
-      //iosClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
-    });
+    // const [request, response, promptAsync] = Google.useAuthRequest({
+    //   androidClientId: '208326548212-pr78pe9v2r64mdd7849jdf644imtqdbs.apps.googleusercontent.com',
+    //   //iosClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+    // });
 
     async function loginGoogle(loginInput: LoginGoogle): Promise<void> {
       const apiUrl = 'https://ellafroze.com/api/external/doAuthGoogle';
@@ -101,15 +101,15 @@ const Login: React.FC<Props> = ({ navigation }) => {
         // Add your own error handler here
       }
     };
-    useEffect(() => {
-      if (response?.type === "success") {
-        if (response.authentication != null) {
-          setToken(response.authentication.accessToken);
-          getUserInfo();
-        }
+    // useEffect(() => {
+    //   if (response?.type === "success") {
+    //     if (response.authentication != null) {
+    //       setToken(response.authentication.accessToken);
+    //       getUserInfo();
+    //     }
         
-      }
-    }, [response, token]);
+    //   }
+    // }, [response, token]);
       
   return (
     <View style={{flex: 1, backgroundColor:"#FA0000", margin: 0, justifyContent:'center'}}>
@@ -158,10 +158,12 @@ const Login: React.FC<Props> = ({ navigation }) => {
         >
           <Text>Login Google</Text>
         </TouchableOpacity> */}
-        <TouchableOpacity style={styles.button} disabled={!request}
-  onPress={() => {
-    promptAsync();
-  }}>
+        <TouchableOpacity style={styles.button} 
+  //     disabled={!request}
+  // onPress={() => {
+  //   promptAsync();
+  // }}
+  >
   <View style={styles.buttonContainer}>
     <View style={{backgroundColor:"white"}}>
     <Image source={require('../../assets/images/google-logo.png')} style={{width:30, height:30}} />

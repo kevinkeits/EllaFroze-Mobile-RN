@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {Picker} from '@react-native-picker/picker';
 import Drawer  from 'react-native-modal';
@@ -199,7 +199,7 @@ const NewAddress = () => {
 
 
   return (
-    <View>
+    <ScrollView>
       <Text style={{marginTop:20, marginLeft:8, fontWeight:"bold", fontSize:16}}>Buat Alamat</Text>
       <View style={{
         padding:10, 
@@ -381,7 +381,7 @@ const NewAddress = () => {
 
 
      
-    </View>
+    </ScrollView>
   )
 }
 
