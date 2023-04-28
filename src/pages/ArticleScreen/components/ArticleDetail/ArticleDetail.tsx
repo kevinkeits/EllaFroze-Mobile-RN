@@ -2,14 +2,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView, FlatList } from 'react-native';
-import * as WebBrowser from 'expo-web-browser';
+import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView, FlatList, useWindowDimensions } from 'react-native';
+import RenderHtml from 'react-native-render-html';
 
+import IframeRenderer, { iframeModel } from '@native-html/iframe-plugin';
+import WebView from 'react-native-webview';
 
 
 
 interface ArticleDetail {
     ID: string;
+    Title: string;
     Type: string;
     ImageUrl: string;
     Contents: string;
@@ -40,7 +43,13 @@ const ArticleDetail = ({ route }: DetailScreenProps) => {
     };
 
 
-
+    const { width } = useWindowDimensions();
+    const renderers = {
+      iframe: IframeRenderer
+    };
+    const customHTMLElementModels = {
+      iframe: iframeModel
+    };
 
 
   useEffect(() => {
@@ -58,7 +67,7 @@ const ArticleDetail = ({ route }: DetailScreenProps) => {
         <ScrollView>
     <View style={styles.container}>
     <View style={{width:"100%", height:300, backgroundColor:"grey"}}>
-      {/* <Image source={{ uri: `${detail?.ImageUrl}`}} style={{width:"100%", height:300}}/> */}
+      <Image source={{ uri: `https://ellafroze.com/api/uploaded/article/${detail?.ImageUrl}`}} style={{width:"100%", height:300}}/>
     </View>
     <View style={{
          width:"95%",
@@ -78,8 +87,32 @@ const ArticleDetail = ({ route }: DetailScreenProps) => {
         }} >
       
       <View style={{marginHorizontal:10}}>
-        <Text>{detail?.Contents.replace(/<\/?b>/g, "").replace(/<br\s*\/?>/g, "")}</Text>
+        {/* <Text>{detail?.Contents.replace(/<\/?b>/g, "").replace(/<br\s*\/?>/g, "")}</Text> */}
+        
+        { detail ? (
+          <RenderHtml
+          contentWidth={width}
+          renderers={renderers}
+          WebView={WebView}
+          source={{html: detail?.Contents}}
+          customHTMLElementModels={customHTMLElementModels}
+          //enableExperimentalBRCollapsing={true}
+          // defaultWebViewProps={
+          //   {
+          //   }
+          // }
+          renderersProps={{
+            iframe: {
+              scalesPageToFit: true,
+              webViewProps: {
+              }
+            }
+          }}
+        />
+        ) : ( <Text>Loading...</Text>) }
+        
       </View>
+
 
     </View> 
                 

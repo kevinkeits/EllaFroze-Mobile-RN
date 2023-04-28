@@ -6,7 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 interface Article {
     ID: string;
     Type: string;
-    ImageUrl: string;
+    Title: string;
+    ImageUrl: string; 
     Contents: string;
 
   }
@@ -44,9 +45,9 @@ const ArticleCard = ({data, loading}:Props) => {
   
     <View style={{flexDirection:"row", gap:4}}>
     <View style={{marginVertical:10, alignItems:"center", width:"40%"}}>
-    {loading ? (<View style={{backgroundColor:"#EAEAEA", width:80, height:80}}/>) : (
- <View style={{backgroundColor:"grey", width:80, height:80}}>
- <Image source={{ uri: `https://ellafroze.com/api/uploaded/${item.ImageUrl}`}} style={{width:55, height:55}}/>
+    {loading ? (<View style={{backgroundColor:"#EAEAEA", width:50, height:50}}/>) : (
+ <View style={{backgroundColor:"grey", width:50, height:50}}>
+ <Image source={{ uri: `https://ellafroze.com/api/uploaded/article/${item.ImageUrl}`}} style={{width:55, height:55}}/>
  </View>           
   )}
      
@@ -55,7 +56,8 @@ const ArticleCard = ({data, loading}:Props) => {
     <View style={{marginVertical:10}}>
     {loading ? (<View style={{backgroundColor:"#EAEAEA", width:120, height:30}}/>) : (
       <Text style={{fontWeight:"bold", fontSize:16, marginBottom:4}}>
-    {item.Contents.replace(/<\/?b>/g, "").replace(/<br\s*\/?>/g, "")}
+    {/* {item.Contents.replace(/<\/?b>/g, "").replace(/<br\s*\/?>/g, "")} */}
+    {item.Title}
     </Text>          
   )}
     
