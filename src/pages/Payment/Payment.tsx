@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button, StyleSheet, Text, TouchableOpacity, View, Image, } from 'react-native';
+import { Button, StyleSheet, Text, TouchableOpacity, View, Image, Linking, } from 'react-native';
 // import Clipboard from '@react-native-clipboard/clipboard';
 import { RootStackParams } from '../../../App';
 import { BCALogo, SuccessImage } from '../../assets';
@@ -67,6 +67,19 @@ const handleCopyToClipboard = () => {
   alert("Copied")
 };
 
+const handleOpenGojek = async () => {
+  const url = stPayDL
+  const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      await Linking.openURL(url);
+    } else {
+      alert(`Url not suppported`);
+    }
+};
+
 useEffect(() => {
       
   fetchToken()
@@ -104,6 +117,17 @@ useEffect(() => {
                   <Text style={{fontWeight:"bold"}}>{stPayRefID}</Text>
                   <TouchableOpacity onPress={handleCopyToClipboard}>
                 <Text style={{color:"green"}}>Copy</Text>
+              </TouchableOpacity>
+              </View>
+          </View>
+        )  }
+
+        { stPayMethodCat == 'gopay' && (
+          <View style={{marginLeft:15}}>
+              <View style={{flexDirection:"row"}}>
+                  <Text style={{fontWeight:"bold"}}>{stPayRefID}</Text>
+                  <TouchableOpacity onPress={handleOpenGojek}>
+                <Text style={{color:"green"}}>[Buka Aplikasi Gojek]</Text>
               </TouchableOpacity>
               </View>
           </View>

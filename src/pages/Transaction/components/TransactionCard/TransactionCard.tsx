@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, Linking } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 import * as Clipboard from 'expo-clipboard';
@@ -22,6 +22,19 @@ interface Props{
     statusLabel: string
 
 }
+
+const handleOpenGojek = async (url: string) => {
+  const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      await Linking.openURL(url);
+    } else {
+      alert(`Url not suppported`);
+    }
+};
+
 const TransactionCard = ({unpaidTransactions, statusLabel}: Props) => {
     const navigation = useNavigation();
 
@@ -96,6 +109,9 @@ const TransactionCard = ({unpaidTransactions, statusLabel}: Props) => {
 )}
 { item.PaymentMethodCategory == 'gopay' && (
   <View style={{marginVertical:10, alignItems:"center"}}>
+    <TouchableOpacity onPress={() => handleOpenGojek(item.GopayDeepLink)}>
+      <Text style={{textDecorationLine:"underline", color:"green"}}>[Buka aplikasi Gojek]</Text>
+    </TouchableOpacity>
     <View style={{marginTop:22}}>
           <Text >
             Bayar Sebelum

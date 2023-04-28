@@ -1,6 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
+import * as WebBrowser from 'expo-web-browser';
+
 
 
 interface Article {
@@ -18,9 +20,12 @@ interface Article {
   }
 const ArticleCard = ({data, loading}:Props) => {
     const navigation = useNavigation();
-    const handleNavigate = (itemId: string) => {
-        navigation.navigate('ArticleDetail', {itemId})
+    const handleNavigate = async (itemId: string) => {
+        //navigation.navigate('ArticleDetail', {itemId})
         // alert(`Button clicked for item ${itemId}`);
+
+        const url = `https://ellafroze.com/api/article?i=${itemId}`;
+        let result = await WebBrowser.openBrowserAsync(url);
       };
   return (
     <View>

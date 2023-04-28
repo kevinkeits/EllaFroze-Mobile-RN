@@ -6,6 +6,8 @@ import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, Scr
 import Clipboard from '@react-native-community/clipboard';
 
 import * as WebBrowser from 'expo-web-browser';
+import { WebView } from 'react-native-webview';
+
 
 
 
@@ -83,6 +85,9 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
     const [_s, setToken] = useState('');
     const [loading, setLoading] = useState(true);
 
+    const [openInvoice, setOpenInvoice] = useState(false);
+
+
 
     const total = (parseInt((detail?.orderData[0]?.SubTotal ?? 0).toString()) + parseInt((detail?.orderData[0]?.DeliveryFee ?? 0).toString()) - parseInt((detail?.orderData[0]?.SubDiscount ?? 0).toString()));
 
@@ -111,7 +116,9 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
 
     const openWebBrowserAsync = async () => {
       let result = await WebBrowser.openBrowserAsync(url);
-      console.log(result);
+      // console.log(result);
+
+      //setOpenInvoice(true)
     };
 
 
@@ -151,6 +158,14 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
 
   return (
         <ScrollView>
+          {openInvoice && (
+            <WebView
+              style={styles.container}
+              source={{ uri: 'https://ellafroze.com/api/invoice?i=' + itemId }}
+            />
+          )}
+          
+
     <View style={styles.container}>
     <View style={{
          width:"95%",
@@ -230,7 +245,9 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
           </View> 
      
       {detail?.orderData?.map((order)=>(
-        <View style={{
+        <View 
+        key={order.ID + order.Product}
+        style={{
             width:"95%",
             marginBottom:5, 
             // borderWidth:1, 
