@@ -412,10 +412,12 @@ const doCheckout = async () => {
     const tempDeliveryFee = deliveryFee?.Fee ?? 0
     
       if (selectedAddress){
-        if (tempDeliveryFee == 0)
-        {
-          alert("Maaf, tidak bisa menghitung Biaya kirim ke tempatmu")
-        } else setIsDrawerOpen(true)}
+        // if (tempDeliveryFee == 0)
+        // {
+        //   alert("Maaf, tidak bisa menghitung Biaya kirim ke tempatmu")
+        // } else setIsDrawerOpen(true)}
+        setIsDrawerOpen(true)
+      }
       else {
         alert("Alamat belum dipilih")
       }

@@ -187,7 +187,7 @@ const fetchData = async () => {
     const apiUrl = 'https://ellafroze.com/api/external/doSaveAddress';
   
     try {
-      alert(JSON.stringify(addressInput))
+      // alert(JSON.stringify(addressInput))
        const response = await axios.post(apiUrl, addressInput);
        await AsyncStorage.getItem('tokenID')
        //alert(JSON.stringify(response.data.status))
@@ -392,6 +392,7 @@ const fetchData = async () => {
         <TextInput 
         style={{paddingVertical:3, borderBottomWidth:1}}
         value={txtFrmPhone}
+        keyboardType="numeric"
         onChangeText={setTxtFrmPhone}
         />
         </View>

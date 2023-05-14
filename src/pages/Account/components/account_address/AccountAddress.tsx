@@ -1,8 +1,9 @@
-import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
+import { Icon } from 'react-native-elements'
 
 
 interface AddressProps {
@@ -62,6 +63,7 @@ useEffect(() => {
 
   return (
     <View style={{ justifyContent:"center"}}>
+      <ScrollView>
       {address?.map((item, index) => (
         <TouchableOpacity key={index} style={{
           marginTop:10, 
@@ -92,11 +94,21 @@ useEffect(() => {
         {loading ? (<View style={{backgroundColor:"#EAEAEA", marginVertical:15, width:200, height:20}}/>):(
         <Text style={{marginBottom:20}}>{item.CityName}, {item.DistrictName}, {item.PostalCode}</Text>
         )}
+        {item.IsDefault == 1 && (
+          <View style={{width:120, alignSelf:"flex-end"}}>
+         <Text style={{fontSize:14, fontWeight:"bold", color:"green"}}>
+          [ Alamat Utama ]
+         </Text>
+          </View>
+        )}
+          
       </TouchableOpacity>
       ))}
+       </ScrollView>
+
       
       {loading ? (<View style={{backgroundColor:"#EAEAEA", alignSelf:'center', marginTop:25,  width:"80%", height:50}}/>):(
-      <TouchableOpacity onPress={()=>navigation.navigate("NewAddress")} style={{backgroundColor:"#148D2E", justifyContent:"center", alignItems:"center", alignSelf:'center', marginTop:25, paddingVertical:10, width:"95%", borderRadius:6}}>
+      <TouchableOpacity onPress={()=>navigation.navigate("NewAddress")} style={{backgroundColor:"#148D2E", justifyContent:"center", alignItems:"center", alignSelf:'center', bottom:10, paddingVertical:15, width:"95%", borderRadius:6, position:"absolute"}}>
       <Text style={{fontWeight:"bold", color:"white"}}>BUAT ALAMAT</Text>
       </TouchableOpacity>       
  )}
