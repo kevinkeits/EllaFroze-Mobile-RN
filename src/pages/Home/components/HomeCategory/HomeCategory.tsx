@@ -45,7 +45,7 @@ const HomeCategory = ({categories, loadingCategory}: Props) => {
 
   return (
     
-    <View style={{backgroundColor:"white"}} >
+    <View style={{backgroundColor:"white", justifyContent:"center", alignItems:"center"}} >
          <FlatList
          scrollEnabled={false}
         data={categories}

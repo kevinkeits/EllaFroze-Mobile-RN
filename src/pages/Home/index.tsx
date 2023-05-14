@@ -352,14 +352,30 @@ useEffect(() => {
     <View style={styles.container}>
       {/* HEADER */}
        <View style={styles.header}>
-        <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
-        <View style={{width:'100%'}}>
-          <View style={{flexDirection:'row', marginVertical:2, justifyContent:'space-between', width:"70%"}}>
-          <TouchableOpacity onPress={handlePickerCity} style={{flexDirection:"row", gap:8}}>           
-           <LocationIcon  />
-            <Text style={{color:"white"}}>{selectedBranchName ? selectedBranchName : 'Pilih Cabang'}</Text>
-           </TouchableOpacity>         
-           <View style={{flexDirection:'row', gap:20}}>
+       
+        {/* <Image source={require('../../assets/images/logo.png')} style={styles.logo} /> */}
+      <View style={{width:"100%", justifyContent:"center", alignItems:"center", flexDirection:"row", paddingTop:30, gap:10}}>
+        
+        <View style={styles.containerInput}>
+        <TextInput
+        
+          style={styles.input}
+          value={searchText}
+          onChangeText={setSearchText}
+          placeholder="Search"
+          onSubmitEditing={handleSearch}
+        />
+        <TouchableOpacity onPress={handleSearch} style={{alignItems:"center", marginRight:8}}>
+        <Icon
+                  name="search"
+                  type="material"
+                  size={25}
+                  color="gray"
+                />
+      </TouchableOpacity>
+      
+      </View>
+      <View style={{flexDirection:'row', gap:10, marginRight:10, alignItems:"center", justifyContent:"center"}}>
               <TouchableOpacity onPress={()=>navigation.navigate("Contact")}>
                 {/* <MessageIcon/> */}
                 <NotificationIcon
@@ -379,27 +395,19 @@ useEffect(() => {
                 />
 
               </TouchableOpacity>
-            </View>
-          </View>
-        <View style={styles.containerInput}>
-        <TextInput
-          style={styles.input}
-          value={searchText}
-          onChangeText={setSearchText}
-          placeholder="Search"
-          onSubmitEditing={handleSearch}
-        />
-        <TouchableOpacity onPress={handleSearch} style={{alignItems:"center", marginRight:8}}>
-        <Icon
-                  name="search"
-                  type="material"
-                  size={25}
-                  color="gray"
-                />
-      </TouchableOpacity>
-      </View>
         </View>
-  <Drawer
+     
+        </View>
+        <View style={{flexDirection:'row', marginVertical:5, width:"70%", marginLeft:15}}>
+          <TouchableOpacity onPress={handlePickerCity} style={{flexDirection:"row", gap:8}}>           
+           <LocationIcon  />
+            <Text style={{color:"white"}}>{selectedBranchName ? selectedBranchName : 'Pilih Cabang'}</Text>
+           </TouchableOpacity>         
+           
+        </View>
+        
+
+        <Drawer
   isVisible={pickerCity}
   swipeDirection="left"
   onSwipeComplete={() => setPickerCity(false)}
@@ -439,7 +447,6 @@ useEffect(() => {
     </View>
 </Drawer>
 
-
       </View>
       {/* HEADER */}
 
@@ -448,14 +455,15 @@ useEffect(() => {
          <Carousel />
         </View>
         <View style={{marginTop:10}}>
-          <Text style={{fontSize:16, fontWeight:"bold", marginLeft:3}}>Produk Terlaris</Text>
+          <Text style={{fontSize:18, fontWeight:"bold", marginLeft:3}}>Produk Terlaris</Text>
           <ListProduct loadingSave={loadingSave} products={products} loading={loadingProduct} onConfirm={setSelected} />
         </View>
         <View style={{marginTop:10}}>
-          <Text style={{fontSize:16, fontWeight:"bold", marginLeft:3}}>Diskon hari ini!</Text>
+          <Text style={{fontSize:18, fontWeight:"bold", marginLeft:3}}>Diskon hari ini!</Text>
           <ListProduct loadingSave={loadingSave} products={discountProducts} loading={loadingProductDiscount} onConfirm={setSelectedDiscount}/>
         </View>
         <View style={{marginTop:10}}>
+        <Text style={{fontSize:18, fontWeight:"bold", marginLeft:3, marginBottom:10}}>Kategori Untuk Anda</Text>
         <HomeCategory categories={categories} loadingCategory={loadingCategory}/>
         </View>
       <View style={{marginTop:10}}>
@@ -473,15 +481,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
+    // marginVertical:'auto',
     // paddingTop: 40,
   },
   header: {
-    flexDirection: 'row',
+    // flexDirection: 'row-reverse',
     backgroundColor:"#FA0000",
     height:120,
     paddingTop:20,
     // backgroundColor: 'rgba(255, 203, 0, 0.2);',
-    alignItems: 'center',
+    // alignItems: 'center',
     width:'100%',
     // marginBottom: 20,
   },
@@ -526,6 +535,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: 'black',
     paddingLeft: 10,
+    width:300
   },
 });
 

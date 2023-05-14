@@ -50,17 +50,17 @@ const ArticleCard = ({data, loading}:Props) => {
   
     <View style={{flexDirection:"row", gap:4}}>
     <View style={{marginVertical:10, alignItems:"center", width:"40%"}}>
-    {loading ? (<View style={{backgroundColor:"#EAEAEA", width:50, height:50}}/>) : (
- <View style={{backgroundColor:"grey", width:50, height:50}}>
- <Image source={{ uri: `https://ellafroze.com/api/uploaded/article/${item.ImageUrl}`}} style={{width:55, height:55}}/>
+    {loading ? (<View style={{backgroundColor:"#EAEAEA", width:85, height:55}}/>) : (
+ <View style={{ width:60, height:50}}>
+ <Image source={{ uri: `https://ellafroze.com/api/uploaded/article/${item.ImageUrl}`}} style={{width:85, height:55}}/>
  </View>           
   )}
      
     </View>
 
-    <View style={{marginVertical:10}}>
+    <View style={{marginVertical:10, width:"60%"}}>
     {loading ? (<View style={{backgroundColor:"#EAEAEA", width:120, height:30}}/>) : (
-      <Text style={{fontWeight:"bold", fontSize:16, marginBottom:4}}>
+      <Text style={{fontWeight:"bold", fontSize:14, marginBottom:4}}>
     {/* {item.Contents.replace(/<\/?b>/g, "").replace(/<br\s*\/?>/g, "")} */}
     {item.Title}
     </Text>          

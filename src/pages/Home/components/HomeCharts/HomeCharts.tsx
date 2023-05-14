@@ -158,18 +158,18 @@ const HomeCharts = ({item, loadingSave, loading, onConfirm}:cardProps) => {
                   >
 
   {item.Stock == 0 && (
-            <View style={{backgroundColor:"black", padding:10, zIndex:2, width:"50%", alignItems:"center", alignSelf:"center", position:"absolute", marginTop:40, opacity:0.7, borderRadius:8}}>
+            <View style={{backgroundColor:"black", padding:10, zIndex:2, width:"50%", alignItems:"center", alignSelf:"center", position:"absolute", marginTop:60, opacity:0.7, borderRadius:8}}>
               <Text style={{color:"white", fontWeight:"bold"}}>HABIS</Text>
             </View>
           )}
           <View style={{alignItems:"center"}}>
-            {loading ? (<View style={{backgroundColor:"#EAEAEA", width:100, height:120}}/>) : (
-              <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:100, height:120}}/>
+            {loading ? (<View style={{backgroundColor:"#EAEAEA", width:120, height:200}}/>) : (
+              <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:120, height:200}}/>
             )}
           </View>
 
               {loading? (<View style={{backgroundColor:"#EAEAEA", width:150, height:20, marginTop:5, marginLeft:8}}/>):(
-               <Text style={{fontSize:15, marginTop:5, marginLeft:8}}>{item.Product}</Text>
+               <Text style={{fontSize:13, marginTop:5, marginHorizontal:8}}>{item.Product}</Text>
 
               )}
           
@@ -177,7 +177,7 @@ const HomeCharts = ({item, loadingSave, loading, onConfirm}:cardProps) => {
               <View>
                  {item.DiscountType == 0 &&
               <View> 
-                <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. 
+                <Text style={{fontSize:15, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp. 
                  {
                  new Intl.NumberFormat('id-ID', {
                // style: 'currency',
@@ -195,7 +195,7 @@ const HomeCharts = ({item, loadingSave, loading, onConfirm}:cardProps) => {
                currency: 'IDR'
              }).format(item.Price)
              }</Text>
-              <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp.  {
+              <Text style={{fontSize:15, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp.  {
               new Intl.NumberFormat('id-ID', {
             // style: 'currency',
             currency: 'IDR'
@@ -212,7 +212,7 @@ const HomeCharts = ({item, loadingSave, loading, onConfirm}:cardProps) => {
                currency: 'IDR'
              }).format(item.Price)
              }</Text>
-          <Text style={{fontSize:12, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp.  {
+          <Text style={{fontSize:15, marginTop:3, marginLeft:8, fontWeight:"bold"}}>Rp.  {
               new Intl.NumberFormat('id-ID', {
             // style: 'currency',
             currency: 'IDR'

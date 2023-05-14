@@ -3,12 +3,14 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import ArticleCard from '../../../ArticleScreen/components/ArticleCard/ArticleCard';
+import { Icon } from 'react-native-elements';
 
 
 type Tab = {
   id: string;
-  label: string;
+  label: any;
   content: JSX.Element;
+  iconName?: any;
 }
 
 interface Article {
@@ -59,6 +61,7 @@ useEffect(() => {
   const tabs: Tab[] = [
     {
       id: '1',
+      iconName:'menu-book',
       label: 'Resep',
       content: (
        <ArticleCard data={Recipe} loading={loading}/>
@@ -66,6 +69,7 @@ useEffect(() => {
     },
     {
       id: '2',
+      iconName:'article',
       label: 'Artikel',
       content: (
         <ArticleCard data={Article} loading={loading}/>
@@ -80,7 +84,7 @@ useEffect(() => {
   return (
     <View style={styles.container}>
       <View style={styles.tabBar1}>
-        <Text>Artikel dan Resep</Text>
+      <Text style={{fontSize:18, fontWeight:"bold"}}>Resep dan Artikel</Text>
         <TouchableOpacity onPress={()=> navigation.navigate("ArticleScreen")}>
           <Text style={{color:"blue"}}>Lihat semua</Text>
         </TouchableOpacity>
@@ -95,6 +99,13 @@ useEffect(() => {
             ]}
             onPress={() => handleTabPress(index)}
           >
+            <View style={{flexDirection:"row", gap:3, alignItems:"center"}}>
+            <Icon
+            name={tab.iconName}
+            type="material"
+            size={25}
+            color={index === activeTab ? '#fff' : 'grey'}
+          />
             <Text
               style={[
                 styles.tabButtonText,
@@ -103,6 +114,7 @@ useEffect(() => {
             >
               {tab.label}
             </Text>
+            </View>
           </TouchableOpacity>
         ))}
       </View>
@@ -150,13 +162,19 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   activeTabButton: {
-    backgroundColor: '#ccc',
+    backgroundColor: 'green',
   },
   tabButtonText: {
     fontSize: 12,
-    fontWeight: 'bold',
+   
   },
   activeTabButtonText: {
     color: '#fff',
+  },
+  activeTabButtonIcon: {
+    color: '#fff',
+  },
+  tabButtonIcon: {
+    color: "black"
   },
 });

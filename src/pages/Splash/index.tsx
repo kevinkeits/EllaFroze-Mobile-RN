@@ -51,7 +51,7 @@ const Splash = () => {
     }, []);
 
   return (
-    <View style={{flex: 1, backgroundColor:"#FA0000", margin: 0, alignItems:'center', justifyContent:'center'}}>
+    <View style={{flex: 1, backgroundColor:"white", margin: 0, alignItems:'center', justifyContent:'center'}}>
       <Image source={Logo} style={styles.logo}/>
     </View>
   )

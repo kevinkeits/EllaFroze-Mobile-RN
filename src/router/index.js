@@ -65,7 +65,7 @@ const MainApp = () => {
         activeTintColor: 'black',
         inactiveTintColor: 'white',
         tabBarStyle: {
-                backgroundColor: '#FA0000',
+                backgroundColor: '',
               },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -85,7 +85,7 @@ const MainApp = () => {
               name={iconName}
               type="material"
               size={size}
-              color={focused ? 'green' : 'white'}
+              color={focused ? 'green' : '#9BA4B5'}
             />
           );
         },
@@ -95,15 +95,15 @@ const MainApp = () => {
           if (route.name === 'Home') {
             labelName = 'Home';
           }  if (route.name === 'AccountApp') {
-            labelName = 'Profile';
+            labelName = 'Akun';
           }  if (route.name === 'Transaction') {
-            labelName = 'Transaction';
+            labelName = 'Transaksi';
           }  else if (route.name === 'Help') {
-            labelName = 'Help';
+            labelName = 'Bantuan';
           }
 
           return (
-            <Text style={{ color: focused ? 'yellow' : color }}>
+            <Text style={{ color: focused ? 'green' : color }}>
               {labelName}
             </Text>
           );

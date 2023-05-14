@@ -100,6 +100,8 @@ const styles = StyleSheet.create({
   container: {
     height: 200,
     backgroundColor: '#fff',
+    justifyContent:"center",
+    alignItems:"center"
   },
   slide: {
     width,
