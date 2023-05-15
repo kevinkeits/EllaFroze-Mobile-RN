@@ -55,8 +55,13 @@ const AccountAddress = () => {
   };
 
 useEffect(() => {
-    
-  fetchToken()
+    navigation.addListener(
+      'focus',
+      payload => {
+        fetchToken()
+      }
+    )
+  
   
   
 }, []);

@@ -90,8 +90,12 @@ export default function Account() {
 
   useEffect(() => {
     
-    fetchToken()
-    
+    navigation.addListener(
+      'focus',
+      payload => {
+        fetchToken()
+      }
+    )
     
   }, []);
 

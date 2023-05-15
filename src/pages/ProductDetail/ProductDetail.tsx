@@ -40,7 +40,8 @@ interface Product {
 
 interface SaveCart {
   ProductID: string;
-  Qty: number;
+  Qty?: number;
+  count?:number
   Notes?: string;
   Source: string;
   _s:string
@@ -121,7 +122,7 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
         if (Qty == 0) {
           alert("Maaf, untuk saat ini produk sedang tidak tersedia")
         } else {
-          await saveCart({  ProductID, Qty, Notes, Source, _s });
+          await saveCart({  ProductID, count, Notes, Source, _s });
         }
         
       } catch (error) {
@@ -147,7 +148,7 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
 
     if (newCount >= 0 && (newCount + 1 <= stock)) {
         setCount(newCount + 1);
-        setQty(newCount + 1)
+        // setQty(newCount + 1)
       }
   };
 
@@ -155,7 +156,7 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
     const newCount = parseInt(count.toString())
     if (newCount > 0 && (newCount - 1 >= 0)) {
       setCount(newCount - 1)
-      setQty(newCount - 1)
+      // setQty(newCount - 1)
     }
     
   };

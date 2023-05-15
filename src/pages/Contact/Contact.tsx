@@ -51,7 +51,12 @@ export default function Contact() {
   
   useEffect(() => {
       
-    fetchToken()
+    navigation.addListener(
+      'focus',
+      payload => {
+        fetchToken()
+      }
+    )
     
     
   }, []);

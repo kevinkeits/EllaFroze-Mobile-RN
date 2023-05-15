@@ -101,7 +101,7 @@ const NewAddress = ({ route }: DetailScreenProps) => {
   const [hdnFrmID, setHdnFrmID] = useState('');
   const [hdnAction, setHdnAction] = useState('');
   const [txtAddressDetail, setTxtAddressDetail] = useState('');
-
+  const [chkDefaultAddress, setChkDefaultAddress] = useState('');
   const [selFrmStateName, setSelFrmStateName] = useState('');
   const [selFrmCityName, setSelFrmCityName] = useState('');
   const [selFrmDistictName, setSelFrmDistrictName] = useState('');
@@ -140,6 +140,8 @@ const fetchData = async () => {
   setTxtAddressDetail(filteredData[0].Address)
   setTxtFrmPhone(filteredData[0].Phone)
   setTxtPostalCode(filteredData[0].PostalCode)
+  setChkDefaultAddress(filteredData[0].IsDefault)
+
   setHdnFrmID(itemId)
   setHdnAction("edit")
 
@@ -226,7 +228,7 @@ const fetchData = async () => {
 
   const handleCreateAddress = async () => {
     try {
-      await saveAddress({ txtAddressName, txtFrmPhone, SelFrmState, SelFrmCity, SelFrmDistrict, txtPostalCode, txtAddressDetail, hdnFrmID, hdnAction, _s });
+      await saveAddress({ txtAddressName, txtFrmPhone, SelFrmState, SelFrmCity, SelFrmDistrict, txtPostalCode, txtAddressDetail, hdnFrmID, hdnAction, _s, chkDefaultAddress });
     } catch (error) {
       console.error(error);
     }
@@ -336,7 +338,8 @@ const fetchData = async () => {
   const [toggleValue, setToggleValue] = useState(0);
 
   const handleToggle = () => {
-    setToggleValue(toggleValue === 0 ? 1 : 0);
+    // setToggleValue(toggleValue === 0 ? 1 : 0);
+    setChkDefaultAddress(chkDefaultAddress === '0' ? '1' : '0');
   };
 
 
@@ -455,7 +458,7 @@ const fetchData = async () => {
       <Text>Jadikan Alamat Utama</Text>
       <TouchableOpacity activeOpacity={1} onPress={handleToggle}>
       <View style={{}}>
-      {toggleValue === 1 ? (
+      {chkDefaultAddress == '1' ? (
         <Icon
         name='toggle-switch-outline'
           type="material-community"

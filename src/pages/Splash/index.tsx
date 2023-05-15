@@ -22,6 +22,14 @@ const Splash = () => {
     const fetchToken = async () => {
       const tokenData = await AsyncStorage.getItem('tokenID')
       setToken(tokenData == null ? "" : tokenData);
+
+      if (tokenData == "") {
+        setTimeout(()=>{
+            navigation.navigate('Login');
+        }, 3000)
+      } else {
+        navigation.navigate("MainApp")
+      }
     };
 
     useEffect (() => {
@@ -29,13 +37,13 @@ const Splash = () => {
 
       fetchToken()
 
-      if (token == "") {
-        setTimeout(()=>{
-            navigation.navigate('Login');
-        }, 3000)
-      } else {
-        navigation.navigate("MainApp")
-      }
+      // if (token == "") {
+      //   setTimeout(()=>{
+      //       navigation.navigate('Login');
+      //   }, 3000)
+      // } else {
+      //   navigation.navigate("MainApp")
+      // }
       
 
       // setToken(await AsyncStorage.getItem('tokenID'))
