@@ -391,7 +391,7 @@ const fetchData = async () => {
           <Text style={{fontWeight:"bold", marginBottom:6}}>No. Telepon</Text>
         <TextInput 
         style={{paddingVertical:3, borderBottomWidth:1}}
-        value={txtFrmPhone}
+        value={txtFrmPhone} 
         keyboardType="numeric"
         onChangeText={setTxtFrmPhone}
         />
