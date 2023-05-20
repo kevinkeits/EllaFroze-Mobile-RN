@@ -229,6 +229,7 @@ const fetchData = async () => {
   const handleCreateAddress = async () => {
     try {
       await saveAddress({ txtAddressName, txtFrmPhone, SelFrmState, SelFrmCity, SelFrmDistrict, txtPostalCode, txtAddressDetail, hdnFrmID, hdnAction, _s, chkDefaultAddress });
+      navigation.goBack();
     } catch (error) {
       console.error(error);
     }
@@ -276,7 +277,7 @@ const fetchData = async () => {
     const filteredData = state.filter((data:State)=>(
       data.ID == value
     ))
-    setSelFrmStateName(filteredData[0].Name)
+    //setSelFrmStateName(filteredData[0].Name)
 
     setSelFrmCity('')
     setSelFrmCityName('')
@@ -296,7 +297,9 @@ const fetchData = async () => {
     const filteredData = city.filter((data:State)=>(
       data.ID == value
     ))
-    setSelFrmCityName(filteredData[0].Name)
+    //alert(JSON.stringify(filteredData[0]))
+    
+    //setSelFrmCityName(filteredData[0].Name)
 
     setSelFrmDistrict('')
     setSelFrmDistrictName('')
@@ -310,7 +313,7 @@ const fetchData = async () => {
     const filteredData = district.filter((data:State)=>(
       data.ID == value
     ))
-    setSelFrmDistrictName(filteredData[0].Name)
+    //setSelFrmDistrictName(filteredData[0].Name)
   };
 
   const selectedStateLabel = state.find(item => item.ID === SelFrmState);
@@ -341,6 +344,25 @@ const fetchData = async () => {
     // setToggleValue(toggleValue === 0 ? 1 : 0);
     setChkDefaultAddress(chkDefaultAddress === '0' ? '1' : '0');
   };
+
+  const stateOptions = state.map((item, index) => (
+    <Picker.Item key={index} label={item.Name} value={item.ID} />
+))
+
+stateOptions.unshift(<Picker.Item key="" label="Please Select" value="" />);
+
+const cityOptions = city.map((item, index) => (
+  <Picker.Item key={index} label={item.Name} value={item.ID} />
+))
+
+cityOptions.unshift(<Picker.Item key="" label="Please Select" value="" />);
+
+const districtOptions = district.map((item, index) => (
+  <Picker.Item key={index} label={item.Name} value={item.ID} />
+))
+
+districtOptions.unshift(<Picker.Item key="" label="Please Select" value="" />);
+
 
 
 
@@ -406,10 +428,10 @@ const fetchData = async () => {
             selectedValue={SelFrmState}
             onValueChange={handleStateChange}
         >
-            {state.map((item, index) => (
+            {/* {state.map((item, index) => (
                  <Picker.Item key={index} label={item.Name} value={item.ID} />
-            ))}
-         
+            ))} */}
+            {stateOptions}
         </Picker>
         </View>
 
@@ -418,23 +440,28 @@ const fetchData = async () => {
         <Picker
             selectedValue={SelFrmCity}
             onValueChange={handleCityChange}
+           
         >
-            {city.map((item, index) => (
+            {/* {city.map((item, index) => (
                  <Picker.Item key={index} label={item.Name} value={item.ID} />
-            ))}
+            ))} */}
+            {cityOptions}
          
         </Picker>
         </View>
+       
 
         <View style={{margin:15, borderBottomWidth:1}}>
         <Text style={{fontWeight:"bold"}}>Kecamatan :</Text>  
         <Picker
             selectedValue={SelFrmDistrict}
             onValueChange={handleDistrictChange}
+      
         >
-            {district.map((item, index) => (
+            {/* {district.map((item, index) => (
                  <Picker.Item key={index} label={item.Name} value={item.ID} />
-            ))}
+            ))} */}
+            {districtOptions}
          
         </Picker>
         </View>
@@ -507,7 +534,7 @@ const fetchData = async () => {
 
 
 {/* POPUPS */}
-  <Drawer
+  {/* <Drawer
   isVisible={pickerProvince}
   swipeDirection="left"
   onSwipeComplete={() => setPickerProvince(false)}
@@ -529,7 +556,7 @@ const fetchData = async () => {
         </Picker>
       )}
   </View>
-</Drawer>
+</Drawer> */}
 <Drawer
   isVisible={pickerCity}
   swipeDirection="left"
@@ -545,9 +572,10 @@ const fetchData = async () => {
           selectedValue={SelFrmCity}
           onValueChange={handleCityChange}
         >
-          {city.map((item, index) => (
+          {/* {city.map((item, index) => (
                  <Picker.Item key={index} label={item.Name} value={item.ID} />
-            ))}
+            ))} */}
+            {cityOptions}
         </Picker>
       )}
   </View>

@@ -192,6 +192,24 @@ const NewAddress = () => {
     setToggleValue(!toggleValue);
   };
 
+  const stateOptions = state.map((item, index) => (
+    <Picker.Item key={index} label={item.Name} value={item.ID} />
+))
+
+stateOptions.unshift(<Picker.Item key="" label="Please Select" value="" />);
+
+const cityOptions = city.map((item, index) => (
+  <Picker.Item key={index} label={item.Name} value={item.ID} />
+))
+
+cityOptions.unshift(<Picker.Item key="" label="Please Select" value="" />);
+
+const districtOptions = district.map((item, index) => (
+  <Picker.Item key={index} label={item.Name} value={item.ID} />
+))
+
+districtOptions.unshift(<Picker.Item key="" label="Please Select" value="" />);
+
   useEffect(() => {
     
     fetchToken()
@@ -244,9 +262,10 @@ const NewAddress = () => {
             selectedValue={SelFrmState}
             onValueChange={handleStateChange}
         >
-            {state.map((item, index) => (
+            {/* {state.map((item, index) => (
                  <Picker.Item key={index} label={item.Name} value={item.ID} />
-            ))}
+            ))} */}
+            {stateOptions}
          
         </Picker>
         </View>
@@ -258,9 +277,10 @@ const NewAddress = () => {
             selectedValue={SelFrmCity}
             onValueChange={handleCityChange}
         >
-            {city.map((item, index) => (
+            {/* {city.map((item, index) => (
                  <Picker.Item key={index} label={item.Name} value={item.ID} />
-            ))}
+            ))} */}
+            {cityOptions}
          
         </Picker>
         </View>
@@ -271,9 +291,10 @@ const NewAddress = () => {
             selectedValue={SelFrmDistrict}
             onValueChange={handleDistrictChange}
         >
-            {district.map((item, index) => (
+            {/* {district.map((item, index) => (
                  <Picker.Item key={index} label={item.Name} value={item.ID} />
-            ))}
+            ))} */}
+            {districtOptions}
          
         </Picker>
         </View>
@@ -328,15 +349,6 @@ const NewAddress = () => {
       </View>
     </TouchableOpacity>
       </View>
-      <Picker
-    selectedValue={selectedValue}
-    onValueChange={(itemValue, itemIndex) =>
-      setSelectedValue(itemValue)
-    }>
-    <Picker.Item label="Option 1" value="option1" />
-    <Picker.Item label="Option 2" value="option2" />
-    <Picker.Item label="Option 3" value="option3" />
-  </Picker>
 
       <TouchableOpacity  onPress={handleCreateAddress} style={{ backgroundColor:"#FA0000", padding:10, alignItems:"center", width:"95%", alignSelf:"center", marginTop:20, borderRadius:6}}>
         <Text style={{fontWeight:"bold", color:"white"}}>SIMPAN</Text>
