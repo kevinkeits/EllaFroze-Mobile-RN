@@ -90,6 +90,7 @@ const [selectedPayment, setSelectedPayment] = useState(false);
 const [selectedBCA, setSelectedBCA] = useState(false);
 const [cart, setCart] = useState<Cart[]>([]);
 const [deliveryFee, setDeliveryFee] = useState<Deliveryfee>();
+const [validDeliveryFee, setValidDeliveryFee] = useState(false);
 
 const [address, setAddress] = useState<Address[]>([]);
 const [paymentMethod, setPaymentMethod] = useState<PaymentMethod[]>([]);
@@ -143,7 +144,8 @@ const fetchCalculateDelivery = async (tokenData: string) => {
   const url = `https://ellafroze.com/api/external/doCalculateDelivery?_cb=onCompleteFetchCartCalculateDelivery&_p=23400&_s=${tokenData}`;
   const response = await axios.get(url);
   setDeliveryFee(response.data.data[0]);
-  setLoading(false)
+  setValidDeliveryFee(response.data.data[0].IsFound == 0 ? false : true)
+  setLoading(false)  
 }
 
 const fetchPaymentMethod = async (token: string) => {
@@ -411,12 +413,12 @@ const doCheckout = async () => {
 
     const tempDeliveryFee = deliveryFee?.Fee ?? 0
     
+    
       if (selectedAddress){
-        // if (tempDeliveryFee == 0)
-        // {
-        //   alert("Maaf, tidak bisa menghitung Biaya kirim ke tempatmu")
-        // } else setIsDrawerOpen(true)}
-        setIsDrawerOpen(true)
+        if (!validDeliveryFee)
+        {
+          alert("Maaf, tidak bisa menghitung Biaya kirim ke tempatmu")
+        } else setIsDrawerOpen(true)
       }
       else {
         alert("Alamat belum dipilih")
@@ -657,7 +659,7 @@ const doCheckout = async () => {
   </View>
 
 
-  <View style={{backgroundColor:"rgba(20, 141, 46, 0.1);", paddingVertical:12, paddingHorizontal:10, marginTop:8, width:370, borderRadius:7}}>{loading ? (<View style={{backgroundColor:"#EAEAEA", width:340, height:30, marginTop:4}}/>):(
+  <View style={{backgroundColor:"rgba(20, 141, 46, 0.1);", paddingVertical:12, paddingHorizontal:2, marginTop:8, justifyContent:"center",  borderRadius:7}}>{loading ? (<View style={{backgroundColor:"#EAEAEA", width:340, height:30, marginTop:4}}/>):(
     <View style={{flexDirection:"row", justifyContent:"space-between", width:340, marginHorizontal:10}}>
     <Text style={{fontSize:16}}> <Text style={{fontWeight:"bold"}}>Total Harga </Text> :  </Text>
     <Text style={{fontSize:14, color:"black"}}>Rp. { new Intl.NumberFormat('id-ID', {currency: 'IDR'}).format(totalPrice)}</Text>

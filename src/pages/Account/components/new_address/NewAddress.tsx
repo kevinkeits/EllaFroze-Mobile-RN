@@ -67,6 +67,8 @@ const NewAddress = () => {
   const [hdnFrmID, setHdnFrmID] = useState('');
   const [hdnAction, setHdnAction] = useState('');
   const [txtAddressDetail, setTxtAddressDetail] = useState('');
+  const [selectedValue, setSelectedValue] = useState('');
+
 
   const [_s, setToken] = useState('');
 //   const [addressData, setAddressData] = useState<AddressInput>({
@@ -229,31 +231,52 @@ const NewAddress = () => {
         <TextInput 
         placeholder='Tulis disini ...' 
         style={{paddingVertical:3, borderBottomWidth:1}}
+        keyboardType="numeric"
         value={txtFrmPhone}
         onChangeText={setTxtFrmPhone}
         />
         </View>
 
-        <TouchableOpacity onPress={handlePickerProvince} style={{margin:15, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
-        <Text>
-        <Text style={{fontWeight:"bold"}}>Provinsi :</Text> {selectedStateLabel?.Name}
-        </Text>
-        <DropdownIcon/>
-        </TouchableOpacity>
+        {/* <TouchableOpacity onPress={handlePickerProvince} style={{margin:15, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}> */}
+        <View style={{margin:15, borderBottomWidth:1}}>
+        <Text style={{fontWeight:"bold"}}>Provinsi :</Text>  
+        <Picker
+            selectedValue={SelFrmState}
+            onValueChange={handleStateChange}
+        >
+            {state.map((item, index) => (
+                 <Picker.Item key={index} label={item.Name} value={item.ID} />
+            ))}
+         
+        </Picker>
+        </View>
+        {/* </TouchableOpacity> */}
 
-        <TouchableOpacity onPress={handlePickerCity} style={{margin:15, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
-        <Text>
-        <Text style={{fontWeight:"bold"}}>Kota/Kabupaten :</Text> {selectedCityLabel?.Name}
-        </Text>
-        <DropdownIcon/>
-        </TouchableOpacity>
+        <View style={{margin:15, borderBottomWidth:1}}>
+        <Text style={{fontWeight:"bold"}}>Kota/Kabupaten :</Text>  
+        <Picker
+            selectedValue={SelFrmCity}
+            onValueChange={handleCityChange}
+        >
+            {city.map((item, index) => (
+                 <Picker.Item key={index} label={item.Name} value={item.ID} />
+            ))}
+         
+        </Picker>
+        </View>
 
-        <TouchableOpacity onPress={handlePickerDistrict} style={{margin:15, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
-        <Text>
-        <Text style={{fontWeight:"bold"}}>Kecamatan :</Text> {selectedDistrictLabel?.Name}
-        </Text>
-        <DropdownIcon/>
-        </TouchableOpacity>
+        <View style={{margin:15, borderBottomWidth:1}}>
+        <Text style={{fontWeight:"bold"}}>Kecamatan :</Text>  
+        <Picker
+            selectedValue={SelFrmDistrict}
+            onValueChange={handleDistrictChange}
+        >
+            {district.map((item, index) => (
+                 <Picker.Item key={index} label={item.Name} value={item.ID} />
+            ))}
+         
+        </Picker>
+        </View>
 
 
         <View style={{margin:15}}>
@@ -305,13 +328,23 @@ const NewAddress = () => {
       </View>
     </TouchableOpacity>
       </View>
+      <Picker
+    selectedValue={selectedValue}
+    onValueChange={(itemValue, itemIndex) =>
+      setSelectedValue(itemValue)
+    }>
+    <Picker.Item label="Option 1" value="option1" />
+    <Picker.Item label="Option 2" value="option2" />
+    <Picker.Item label="Option 3" value="option3" />
+  </Picker>
+
       <TouchableOpacity  onPress={handleCreateAddress} style={{ backgroundColor:"#FA0000", padding:10, alignItems:"center", width:"95%", alignSelf:"center", marginTop:20, borderRadius:6}}>
         <Text style={{fontWeight:"bold", color:"white"}}>SIMPAN</Text>
       </TouchableOpacity>
 
 
 {/* POPUPS */}
-  <Drawer
+  {/* <Drawer
   isVisible={pickerProvince}
   swipeDirection="left"
   onSwipeComplete={() => setPickerProvince(false)}
@@ -333,7 +366,7 @@ const NewAddress = () => {
         </Picker>
       )}
   </View>
-</Drawer>
+</Drawer> */}
 <Drawer
   isVisible={pickerCity}
   swipeDirection="left"
@@ -348,6 +381,7 @@ const NewAddress = () => {
         <Picker
           selectedValue={SelFrmCity}
           onValueChange={handleCityChange}
+          
         >
           {city.map((item, index) => (
                  <Picker.Item key={index} label={item.Name} value={item.ID} />

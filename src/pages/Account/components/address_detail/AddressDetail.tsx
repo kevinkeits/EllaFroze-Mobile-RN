@@ -400,26 +400,44 @@ const fetchData = async () => {
         />
         </View>
 
-        <TouchableOpacity onPress={handlePickerProvince} style={{margin:15, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
-        <Text>
-          <Text style={{fontWeight:"bold"}}>Provinsi :</Text> {selFrmStateName}
-        </Text>
-        <DropdownIcon/>
-        </TouchableOpacity>
+        <View style={{margin:15, borderBottomWidth:1}}>
+        <Text style={{fontWeight:"bold"}}>Province :</Text>  
+        <Picker
+            selectedValue={SelFrmState}
+            onValueChange={handleStateChange}
+        >
+            {state.map((item, index) => (
+                 <Picker.Item key={index} label={item.Name} value={item.ID} />
+            ))}
+         
+        </Picker>
+        </View>
 
-        <TouchableOpacity onPress={handlePickerCity} style={{margin:15, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
-        <Text>
-        <Text style={{fontWeight:"bold"}}>Kota/Kabupaten :</Text> {selFrmCityName}
-        </Text>
-        <DropdownIcon/>
-        </TouchableOpacity>
+        <View style={{margin:15, borderBottomWidth:1}}>
+        <Text style={{fontWeight:"bold"}}>Kota/Kabupaten :</Text>  
+        <Picker
+            selectedValue={SelFrmCity}
+            onValueChange={handleCityChange}
+        >
+            {city.map((item, index) => (
+                 <Picker.Item key={index} label={item.Name} value={item.ID} />
+            ))}
+         
+        </Picker>
+        </View>
 
-        <TouchableOpacity onPress={handlePickerDistrict} style={{margin:15, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}>
-        <Text>
-        <Text style={{fontWeight:"bold"}}>Kecamatan :</Text> {selFrmDistictName}
-        </Text>
-        <DropdownIcon/>
-        </TouchableOpacity>
+        <View style={{margin:15, borderBottomWidth:1}}>
+        <Text style={{fontWeight:"bold"}}>Kecamatan :</Text>  
+        <Picker
+            selectedValue={SelFrmDistrict}
+            onValueChange={handleDistrictChange}
+        >
+            {district.map((item, index) => (
+                 <Picker.Item key={index} label={item.Name} value={item.ID} />
+            ))}
+         
+        </Picker>
+        </View>
 
         <View style={{margin:15,}}>
           <Text style={{fontWeight:"bold", marginBottom:6}}>Kode Pos</Text>
