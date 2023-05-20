@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView, FlatList, BackHandler } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { CartIcon, LocationIcon, MessageIcon } from '../../assets/icons';
 import Carousel from './components/Carousel';
@@ -325,12 +325,31 @@ const falseEnableScroll= () => {
   setEnableScrollView(false)
 };
 
+useFocusEffect(
+  React.useCallback(() => {
+    const onBackPress = () => {
+      return true;
+    };
+
+    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+    return () =>
+
+      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+      alert("back prevented")
+
+  }, []),
+);
+
 
 useEffect(() => {
     
   const unsubscribe = navigation.addListener('focus', () => {
     fetchToken()
   })
+  // const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
+
+
 
   // const windowWidth = Dimensions.get('window').width;
   // const windowHeight = Dimensions.get('window').height;
@@ -343,6 +362,7 @@ useEffect(() => {
   
   return () => {
     unsubscribe
+    // backHandler.remove()
   }
   
 }, []);

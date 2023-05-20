@@ -1,8 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { BackHandler, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import ArticleCard from './components/ArticleCard/ArticleCard';
 import { Icon } from 'react-native-elements';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 type Tab = {
@@ -47,6 +48,8 @@ const ArticleScreen = () => {
   };
 
 
+
+  
 
 useEffect(() => {
     

@@ -41,7 +41,6 @@ interface Product {
 interface SaveCart {
   ProductID: string;
   Qty?: number;
-  count?:number
   Notes?: string;
   Source: string;
   _s:string
@@ -65,7 +64,8 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
     const [image, setImage] = useState<ImagePath[]>([]);
     const [detail, setDetail] = useState<ProductDetail>();
     const [ProductID, setProductID] = useState('');
-    const [Qty, setQty] = useState(0);
+    const [Stock, setStock] = useState(0);
+
     const [Notes, setNotes] = useState('');
     const [Source, setSource] = useState('');
     const [_s, setToken] = useState('');
@@ -84,10 +84,10 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
       const response = await axios.get(url);
       //alert(JSON.stringify(response.data.data))
       setCount(response.data.data.Qty == 0 ? (response.data.data.Stock == 0 ? 0 : 1) : response.data.data.Qty)
-      setQty(response.data.data.Qty)
+      setStock(response.data.data.Stock)
       setDetail(response.data.data);
       setLoading(false)
-      //setQty(response.data.data.Qty)
+      
     }
 
     const fetchImage = async (token: string) => {
@@ -101,9 +101,10 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
       const apiUrl = 'https://ellafroze.com/api/external/doSaveCart';
     
       try {
-        //(JSON.stringify(cartInput))
+        // alert(JSON.stringify(cartInput))
          const response = await axios.post(apiUrl, cartInput);
          
+        //  alert(JSON.stringify(response))
          if (!response.data.status){
           alert(response.data.message);
          } else {
@@ -119,10 +120,10 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
     const handleSaveCart = async () => {
       try {
 
-        if (Qty == 0) {
+        if (Stock == 0) {
           alert("Maaf, untuk saat ini produk sedang tidak tersedia")
         } else {
-          await saveCart({  ProductID, count, Notes, Source, _s });
+          await saveCart({  ProductID, Qty:count, Notes, Source, _s });
         }
         
       } catch (error) {
@@ -134,7 +135,6 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
       const tokenData = await AsyncStorage.getItem('tokenID')
       setToken(tokenData == null ? "" : tokenData);
       setNotes("")
-      //setQty(count)
       setSource("cart")
       setProductID(itemId)
       //fetchData(tokenData == null ? "" : tokenData);
@@ -148,7 +148,6 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
 
     if (newCount >= 0 && (newCount + 1 <= stock)) {
         setCount(newCount + 1);
-        // setQty(newCount + 1)
       }
   };
 
@@ -156,7 +155,6 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
     const newCount = parseInt(count.toString())
     if (newCount > 0 && (newCount - 1 >= 0)) {
       setCount(newCount - 1)
-      // setQty(newCount - 1)
     }
     
   };

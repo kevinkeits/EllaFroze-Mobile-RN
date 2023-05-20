@@ -67,11 +67,12 @@ useEffect(() => {
 }, []);
 
   return (
-    <View style={{ justifyContent:"center"}}>
-      <ScrollView>
+    <View style={{ justifyContent:"center", flexDirection:"column"}}>
+      <ScrollView style={{marginBottom:25}}>
       {address?.map((item, index) => (
         <TouchableOpacity key={index} style={{
-          marginTop:10, 
+          marginTop:5,
+          marginBottom:10, 
           marginHorizontal:8, 
           padding:8, 
           borderRadius:8,
@@ -113,7 +114,7 @@ useEffect(() => {
 
       
       {loading ? (<View style={{backgroundColor:"#EAEAEA", alignSelf:'center', marginTop:25,  width:"80%", height:50}}/>):(
-      <TouchableOpacity onPress={()=>navigation.navigate("NewAddress")} style={{backgroundColor:"#148D2E", justifyContent:"center", alignItems:"center", alignSelf:'center', bottom:10, paddingVertical:15, width:"95%", borderRadius:6, position:"absolute"}}>
+      <TouchableOpacity onPress={()=>navigation.navigate("NewAddress")} style={{backgroundColor:"#148D2E", justifyContent:"center", alignItems:"center", alignSelf:'center', bottom:30, paddingVertical:15, width:"95%", borderRadius:6, position:"relative", marginTop:4}}>
       <Text style={{fontWeight:"bold", color:"white"}}>BUAT ALAMAT</Text>
       </TouchableOpacity>       
  )}

@@ -65,7 +65,7 @@ const MainApp = () => {
         activeTintColor: 'black',
         inactiveTintColor: 'white',
         tabBarStyle: {
-                backgroundColor: '',
+                backgroundColor: 'white',
               },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -330,7 +330,7 @@ const Router = () => {
   }}}
   />
   <RootStack.Screen name='ArticleScreen' component={ArticleScreen} 
-  options={{title: "Artikel dan Resep",
+  options={{title: "Resep dan Artikel",
   headerTitleStyle:{
     color:"white"
   },
