@@ -99,7 +99,12 @@ const Transaction = () => {
 
 useEffect(() => {
     
-  fetchToken()
+  navigation.addListener(
+    'focus',
+    payload => {
+      fetchToken()
+    }
+  )
   
   
 }, []);
