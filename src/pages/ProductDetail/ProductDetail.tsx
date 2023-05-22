@@ -178,7 +178,7 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
               <Text style={{color:"white", fontWeight:"bold"}}>HABIS</Text>
             </View>
           )}
-        <View style={{height:500}}>
+        <View style={{}}>
             {/* <Image source={DetailProduct1}/> */}
             {/* <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${image?.ImagePath}`}} style={{width:200, height:250}}/> */}
             {loading ? (<View style={{backgroundColor:"#EAEAEA", height:500, width:300}}/>) : (

@@ -52,7 +52,7 @@ const HomeCategory = ({categories, loadingCategory}: Props) => {
         renderItem={({item}) => 
         <TouchableOpacity style={{width:80, height:80, alignItems:"center", marginLeft:7, marginTop:5}} onPress={()=>handleNavigate(item.ID, item.Name)}>
           {loadingCategory ? (<View style={{backgroundColor:"#EAEAEA", width:50, height:50}}/>): (
-              <Image source={{ uri: `https://ellafroze.com/api/uploaded/category/${item.ImagePath}`}} style={{width:50, height:50}}/>
+              <Image source={{ uri: `https://ellafroze.com/api/uploaded/category/${item.ImagePath}`}} style={{width:70, height:50}} resizeMode="contain"/>
           )}
           {loadingCategory ? (<View style={{backgroundColor:"#EAEAEA", width:50, height:10, marginTop:4}}/>):(
            <Text style={{fontSize:10, marginTop:4}}>{item.Name}</Text>

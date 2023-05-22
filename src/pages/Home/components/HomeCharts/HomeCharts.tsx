@@ -151,7 +151,7 @@ const HomeCharts = ({item, loadingSave, loading, onConfirm}:cardProps) => {
               shadowRadius: 2.22, 
                   // borderWidth:5, 
                   // borderColor:"background: rgba(255, 203, 0, 0.2)",  
-                  margin:8,
+                  margin:5,
                   borderRadius:8
               }} 
                   onPress={()=>handleNavigate(item.ProductID)}
@@ -163,13 +163,13 @@ const HomeCharts = ({item, loadingSave, loading, onConfirm}:cardProps) => {
             </View>
           )}
           <View style={{alignItems:"center"}}>
-            {loading ? (<View style={{backgroundColor:"#EAEAEA", width:120, height:200}}/>) : (
-              <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:120, height:200}}/>
+            {loading ? (<View style={{backgroundColor:"#EAEAEA", width:120, height:155}}/>) : (
+              <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:120, height:155}} resizeMode="contain" />
             )}
           </View>
 
               {loading? (<View style={{backgroundColor:"#EAEAEA", width:150, height:20, marginTop:5, marginLeft:8}}/>):(
-               <Text style={{fontSize:13, marginTop:5, marginHorizontal:8}}>{item.Product}</Text>
+               <Text style={{fontSize:13,  marginHorizontal:8}}>{item.Product}</Text>
 
               )}
           

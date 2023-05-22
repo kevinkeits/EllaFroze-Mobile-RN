@@ -79,7 +79,7 @@ useEffect(() => {
       >
         {image.map((item) => (
           <View key={item.ID} style={[styles.slide]} >
-            <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:300, height:500, alignSelf:"center"}}  />
+            <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:350, height:500, alignSelf:"center"}} resizeMode="contain"  />
           </View>
         //   <View key={banner.ID} style={[styles.slide, { backgroundColor: slide.backgroundColor }]} >
         //   <Image source={{uri:slide.imgUrl}} style={{width:300, height:200}}  />
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   },
   slide: {
     width,
-    height: 500,
+    // height: 500,
   },
   dotsContainer: {
     flexDirection: 'row',
