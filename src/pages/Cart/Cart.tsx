@@ -138,6 +138,10 @@ const fetchAddresses = async (tokenData: string) => {
   const url = `https://ellafroze.com/api/external/getUserAddress?_cb=onCompleteFetchUserAddress&_p=profile-address-wrapper&_s=${tokenData}`;
   const response = await axios.get(url);
   setAddress(response.data.data);
+  if (response.data.data.length > 0) {
+    setSelectedAddress(response.data.data[0])
+    fetchCalculateDelivery(tokenData)
+  }
   setLoading(false)
 }
 const fetchCalculateDelivery = async (tokenData: string) => {
