@@ -94,9 +94,9 @@ export default function Contact() {
                 <Image source={require('../../assets/images/logo.png')} style={{width:50, height:50, marginHorizontal:20}} />
                 <Text style={{fontSize:16, alignItems:"center"}}>Admin {item.Name}</Text>
                 </View>
-                <Text
+                {/* <Text
                 numberOfLines={1} 
-                style={{fontSize:12, color:"grey", alignItems:"center", marginHorizontal:20}}>{item.LastMessage}</Text>
+                style={{fontSize:12, color:"grey", alignItems:"center", marginHorizontal:20}}>{item.LastMessage}</Text> */}
              </TouchableOpacity>
       ))}
     </View>

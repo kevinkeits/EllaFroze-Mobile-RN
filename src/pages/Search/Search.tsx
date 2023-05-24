@@ -324,7 +324,7 @@ const Search = ({route}: SearchScreenProps) => {
 
   return (
     
-    <View style={{alignSelf:"center"}} >
+    <View style={{ alignSelf:"flex-start", marginHorizontal:5}} >
           <Text style={{margin:4, fontWeight:"bold", fontSize:15}}>Produk dengan keyword "{searchText}"</Text>
          <FlatList
         data={products}

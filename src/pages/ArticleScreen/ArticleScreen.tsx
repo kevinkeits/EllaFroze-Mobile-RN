@@ -1,4 +1,4 @@
-import { BackHandler, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { BackHandler, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import ArticleCard from './components/ArticleCard/ArticleCard';
@@ -116,7 +116,10 @@ useEffect(() => {
           </TouchableOpacity>
         ))}
       </View>
+      <ScrollView>
       {tabs[activeTab].content}
+
+      </ScrollView>
     </View>
   )
 }
@@ -163,7 +166,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
   },
   tabButtonText: {
-    fontSize: 12,
+    fontSize: 14,
     // fontWeight: 'bold',
   },
   activeTabButtonText: {

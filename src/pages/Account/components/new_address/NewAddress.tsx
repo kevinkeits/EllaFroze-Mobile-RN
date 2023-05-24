@@ -68,6 +68,17 @@ const NewAddress = () => {
   const [hdnAction, setHdnAction] = useState('');
   const [txtAddressDetail, setTxtAddressDetail] = useState('');
   const [selectedValue, setSelectedValue] = useState('');
+  const [errorAddressName, setErrorAddressName] = useState('');
+  const [errorPhone, setErrorPhone] = useState('');
+  const [errorPostalCode, setErrorPostalCode] = useState('');
+  const [errorAddressDetail, setErrorAddressDetail] = useState('');
+  const [errorState, setErrorState] = useState('');
+  const [errorCity, setErrorCity] = useState('');
+  const [errorDistrict, setErrorDistrict] = useState('');
+
+
+
+
 
 
   const [_s, setToken] = useState('');
@@ -139,8 +150,38 @@ const NewAddress = () => {
 
   const handleCreateAddress = async () => {
     try {
-      await saveAddress({ txtAddressName, txtFrmPhone, SelFrmState, SelFrmCity, SelFrmDistrict, txtPostalCode, txtAddressDetail, hdnFrmID, hdnAction, _s });
-      navigation.goBack()
+      if (txtAddressName == ""){
+        setErrorAddressName("* Label alamat tidak boleh kosong")
+      }
+      else if (txtFrmPhone == ""){
+        setErrorPhone("* No. Telepon tidak boleh kosong")
+      }
+      else if (SelFrmState == ""){
+        setErrorState("* Provinsi tidak boleh kosong")
+      }
+      else if (SelFrmCity == ""){
+        setErrorCity("* Kota/Kabupaten tidak boleh kosong")
+      }
+      else if (SelFrmDistrict == ""){
+        setErrorDistrict("* Kecamatan tidak boleh kosong")
+      }
+      else if (txtFrmPhone == ""){
+        setErrorPhone("* No. Telepon tidak boleh kosong")
+      }
+      else if (txtPostalCode == ""){
+        setErrorPostalCode("* Kode pos tidak boleh kosong")
+      }
+      else if (txtAddressDetail== ""){
+        setErrorAddressDetail("* Alamat lengkap tidak boleh kosong")
+      }
+      else{
+        setErrorAddressName("")
+        setErrorPhone("")
+        setErrorPostalCode("")
+        setErrorAddressDetail("")
+        await saveAddress({ txtAddressName, txtFrmPhone, SelFrmState, SelFrmCity, SelFrmDistrict, txtPostalCode, txtAddressDetail, hdnFrmID, hdnAction, _s });
+        navigation.goBack()
+      }  
     } catch (error) {
       console.error(error);
     }
@@ -243,6 +284,7 @@ districtOptions.unshift(<Picker.Item key="" label="Please Select" value="" />);
         value={txtAddressName}
         onChangeText={setTxtAddressName}
         />
+        {errorAddressName !== '' && <Text style={{fontSize:11, color:"gray"}}>{errorAddressName}</Text>}
         </View>
         <View style={{margin:15}}>
           <Text style={{fontWeight:"bold", marginBottom:6}}>No. Telepon</Text>
@@ -253,10 +295,11 @@ districtOptions.unshift(<Picker.Item key="" label="Please Select" value="" />);
         value={txtFrmPhone}
         onChangeText={setTxtFrmPhone}
         />
+            {errorPhone !== '' && <Text style={{fontSize:11, color:"gray"}}>{errorPhone}</Text>}
         </View>
 
         {/* <TouchableOpacity onPress={handlePickerProvince} style={{margin:15, flexDirection:"row", justifyContent:"space-between", alignItems:"center", borderBottomWidth:1, padding:8}}> */}
-        <View style={{margin:15, borderBottomWidth:1}}>
+        <View style={{marginHorizontal:15, marginTop:15, borderBottomWidth:1}}>
         <Text style={{fontWeight:"bold"}}>Provinsi :</Text>  
         <Picker
             selectedValue={SelFrmState}
@@ -269,9 +312,11 @@ districtOptions.unshift(<Picker.Item key="" label="Please Select" value="" />);
          
         </Picker>
         </View>
+        {errorState !== '' && <Text style={{fontSize:11, color:"gray", marginHorizontal:15}}>{errorState}</Text>}
+
         {/* </TouchableOpacity> */}
 
-        <View style={{margin:15, borderBottomWidth:1}}>
+        <View style={{marginHorizontal:15, marginTop:15, borderBottomWidth:1}}>
         <Text style={{fontWeight:"bold"}}>Kota/Kabupaten :</Text>  
         <Picker
             selectedValue={SelFrmCity}
@@ -284,8 +329,10 @@ districtOptions.unshift(<Picker.Item key="" label="Please Select" value="" />);
          
         </Picker>
         </View>
+        {errorCity !== '' && <Text style={{fontSize:11, color:"gray", marginHorizontal:15}}>{errorCity}</Text>}
 
-        <View style={{margin:15, borderBottomWidth:1}}>
+
+        <View style={{marginHorizontal:15, marginTop:15, borderBottomWidth:1}}>
         <Text style={{fontWeight:"bold"}}>Kecamatan :</Text>  
         <Picker
             selectedValue={SelFrmDistrict}
@@ -298,6 +345,7 @@ districtOptions.unshift(<Picker.Item key="" label="Please Select" value="" />);
          
         </Picker>
         </View>
+        {errorDistrict !== '' && <Text style={{fontSize:11, color:"gray", marginHorizontal:15}}>{errorDistrict}</Text>}
 
 
         <View style={{margin:15}}>
@@ -306,8 +354,10 @@ districtOptions.unshift(<Picker.Item key="" label="Please Select" value="" />);
         placeholder='Tulis disini ...' 
         style={{paddingVertical:3, borderBottomWidth:1}}
         value={txtPostalCode}
+        keyboardType="numeric"
         onChangeText={setTxtPostalCode}
         />
+            {errorPostalCode !== '' && <Text style={{fontSize:11, color:"gray"}}>{errorPostalCode}</Text>}
         </View>
         <View style={{margin:15}}>
           <Text style={{fontWeight:"bold", marginBottom:6}}>Alamat Lengkap</Text>
@@ -317,6 +367,7 @@ districtOptions.unshift(<Picker.Item key="" label="Please Select" value="" />);
         value={txtAddressDetail}
         onChangeText={setTxtAddressDetail}
         />
+            {errorAddressDetail !== '' && <Text style={{fontSize:11, color:"gray"}}>{errorAddressDetail}</Text>}
         </View>
       </View>
       <View style={{

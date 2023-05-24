@@ -64,7 +64,7 @@ useEffect(() => {
       iconName:'menu-book',
       label: 'Resep',
       content: (
-       <ArticleCard data={Recipe} loading={loading}/>
+       <ArticleCard data={Recipe.slice(0, 5)} loading={loading}/>
       ),
     },
     {
@@ -72,7 +72,7 @@ useEffect(() => {
       iconName:'article',
       label: 'Artikel',
       content: (
-        <ArticleCard data={Article} loading={loading}/>
+        <ArticleCard data={Article.slice(0, 5)} loading={loading}/>
       ),
     },
   ];
@@ -84,7 +84,7 @@ useEffect(() => {
   return (
     <View style={styles.container}>
       <View style={styles.tabBar1}>
-      <Text style={{fontSize:18, fontWeight:"bold"}}>Resep dan Artikel</Text>
+      <Text style={{fontSize:19, fontWeight:"bold"}}>Resep dan Artikel</Text>
         <TouchableOpacity onPress={()=> navigation.navigate("ArticleScreen")}>
           <Text style={{color:"blue"}}>Lihat semua</Text>
         </TouchableOpacity>
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
   },
   tabButtonText: {
-    fontSize: 12,
+    fontSize: 14,
    
   },
   activeTabButtonText: {

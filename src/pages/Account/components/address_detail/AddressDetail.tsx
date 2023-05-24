@@ -105,6 +105,11 @@ const NewAddress = ({ route }: DetailScreenProps) => {
   const [selFrmStateName, setSelFrmStateName] = useState('');
   const [selFrmCityName, setSelFrmCityName] = useState('');
   const [selFrmDistictName, setSelFrmDistrictName] = useState('');
+  const [errorAddressName, setErrorAddressName] = useState('');
+  const [errorPhone, setErrorPhone] = useState('');
+  const [errorPostalCode, setErrorPostalCode] = useState('');
+  const [errorAddressDetail, setErrorAddressDetail] = useState('');
+
 
   const [_s, setToken] = useState('');
   const [_p, set_p] = useState('');
@@ -228,8 +233,26 @@ const fetchData = async () => {
 
   const handleCreateAddress = async () => {
     try {
-      await saveAddress({ txtAddressName, txtFrmPhone, SelFrmState, SelFrmCity, SelFrmDistrict, txtPostalCode, txtAddressDetail, hdnFrmID, hdnAction, _s, chkDefaultAddress });
-      navigation.goBack();
+      if (txtAddressName == ""){
+        setErrorAddressName("* Label alamat tidak boleh kosong")
+      }
+      else if (txtFrmPhone == ""){
+        setErrorPhone("* No. Telepon tidak boleh kosong")
+      }
+      else if (txtPostalCode == ""){
+        setErrorPostalCode("* Kode pos tidak boleh kosong")
+      }
+      else if (txtAddressDetail== ""){
+        setErrorAddressDetail("* Alamat lengkap tidak boleh kosong")
+      }
+      else{
+        setErrorAddressName("")
+        setErrorPhone("")
+        setErrorPostalCode("")
+        setErrorAddressDetail("")
+        await saveAddress({ txtAddressName, txtFrmPhone, SelFrmState, SelFrmCity, SelFrmDistrict, txtPostalCode, txtAddressDetail, hdnFrmID, hdnAction, _s, chkDefaultAddress });
+        navigation.goBack();
+      } 
     } catch (error) {
       console.error(error);
     }
@@ -411,6 +434,8 @@ districtOptions.unshift(<Picker.Item key="" label="Please Select" value="" />);
         value={txtAddressName}
         onChangeText={setTxtAddressName}
         />
+          {errorAddressName !== '' && <Text style={{fontSize:11, color:"gray"}}>{errorAddressName}</Text>}
+
         </View>
         <View style={{margin:15,}}>
           <Text style={{fontWeight:"bold", marginBottom:6}}>No. Telepon</Text>
@@ -420,6 +445,8 @@ districtOptions.unshift(<Picker.Item key="" label="Please Select" value="" />);
         keyboardType="numeric"
         onChangeText={setTxtFrmPhone}
         />
+             {errorPhone !== '' && <Text style={{fontSize:11, color:"gray"}}>{errorPhone}</Text>}
+
         </View>
 
         <View style={{margin:15, borderBottomWidth:1}}>
@@ -471,8 +498,11 @@ districtOptions.unshift(<Picker.Item key="" label="Please Select" value="" />);
         <TextInput 
         style={{paddingVertical:3, borderBottomWidth:1}}
         value={txtPostalCode}
+        keyboardType="numeric"
         onChangeText={setTxtPostalCode}
         />
+            {errorPostalCode !== '' && <Text style={{fontSize:11, color:"gray"}}>{errorPostalCode}</Text>}
+
         </View>
         <View style={{margin:15,}}>
           <Text style={{fontWeight:"bold", marginBottom:6}}>Alamat Lengkap</Text>
@@ -481,6 +511,8 @@ districtOptions.unshift(<Picker.Item key="" label="Please Select" value="" />);
         value={txtAddressDetail}
         onChangeText={setTxtAddressDetail}
         />
+            {errorAddressDetail !== '' && <Text style={{fontSize:11, color:"gray"}}>{errorAddressDetail}</Text>}
+
         </View>
       </View>
       <View style={{

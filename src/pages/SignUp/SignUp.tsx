@@ -21,6 +21,16 @@ const SignUp = () => {
     const [txtName, setTxtName] = useState('');
   const [txtUsername, setTxtUsername] = useState('');
     const [txtPassword, setTxtPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
+    const [errorName, setErrorName] = useState('');
+    const [errorEmail, setErrorEmail] = useState('');
+    const [errorPassword, setErrorPassword] = useState('');
+
+
+
+
+
 
 
 
@@ -44,10 +54,32 @@ const SignUp = () => {
 
     const handleCreateUser = async () => {
       try {
-        await createUser({ txtName, txtUsername, txtPassword });
+        if (txtName == '') {
+          setErrorName('* Nama tidak boleh kosong');
+        } else if (txtUsername == '') {
+          setErrorEmail('* Email/No.Handphone tidak boleh kosong');
+        } else if (txtPassword == '') {
+          setErrorPassword('* Password tidak boleh kosong');
+        }else if (txtPassword !== confirmPassword) {
+          setError('* Passwords do not match');
+        } 
+        else {
+          setError('');
+          setErrorName('');
+          setErrorEmail('');
+          setErrorPassword('');
+          alert("berhasil")
+          await createUser({ txtName, txtUsername, txtPassword });
+          navigation.goBack();
+
+        }
       } catch (error) {
         console.error(error);
       }
+    };
+
+    const handleConfirmPasswordChange = (text:string) => {
+      setConfirmPassword(text);
     };
 
    
@@ -68,6 +100,8 @@ const SignUp = () => {
       autoCapitalize="none" 
       style={{borderColor:"white", fontWeight:'bold', borderWidth:1, alignItems: "center", justifyContent:"center", padding:10,backgroundColor:'white', marginVertical:5, borderRadius:6}}
       />
+            {errorName !== '' && <Text>{errorName}</Text>}
+
       {/* <View style={{borderColor:"black", borderWidth: 1, alignItems: "center", justifyContent:"center", paddingVertical:8, marginVertical:5, backgroundColor:"white", borderRadius:6}}>
         <Text style={{fontWeight:"500"}}>Rifqi Raihan Lazuardi</Text>
       </View> */}
@@ -80,6 +114,8 @@ const SignUp = () => {
       autoCapitalize="none" 
       style={{borderColor:"white", fontWeight:'bold', borderWidth:1, alignItems: "center", justifyContent:"center", padding:10,backgroundColor:'white', marginVertical:5, borderRadius:6}}
       />
+            {errorEmail !== '' && <Text>{errorEmail}</Text>}
+
       {/* <View style={{borderColor:"black", borderWidth: 1, alignItems: "center", justifyContent:"center", paddingVertical:8, marginVertical:5, backgroundColor:"white", borderRadius:6}}>
         <Text style={{fontWeight:"500"}}>Rifqi Raihan Lazuardi</Text>
       </View> */}
@@ -93,16 +129,19 @@ const SignUp = () => {
       secureTextEntry={true} 
       style={{borderColor:"white", fontWeight:'bold', borderWidth:1, alignItems: "center", justifyContent:"center", padding:10, backgroundColor:'white', marginVertical:5, borderRadius:6}}
       />
+            {errorPassword !== '' && <Text>{errorPassword}</Text>}
+
     </View>
     <View style={{ marginHorizontal: 10, marginTop: 10}}>
       <Text style={{fontWeight:"500", color:'white'}}>Konfirmasi Password</Text>
       <TextInput
-      value={txtPassword}
-      onChangeText={setTxtPassword}
+      value={confirmPassword}
+      onChangeText={handleConfirmPasswordChange}
       autoCapitalize="none"  
       secureTextEntry={true} 
       style={{borderColor:"white", fontWeight:'bold', borderWidth:1, alignItems: "center", justifyContent:"center", padding:10, backgroundColor:'white', marginVertical:5, borderRadius:6}}
       />
+      {error !== '' && <Text>{error}</Text>}
     </View>
     <View style={{ marginHorizontal: 10, marginTop: 40}}>
       {/* <Button title='SIMPAN' onPress={()=> alert("TERSIMPAN")}/> */}

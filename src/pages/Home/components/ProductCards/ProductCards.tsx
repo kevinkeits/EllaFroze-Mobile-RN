@@ -47,6 +47,7 @@ const ProductCards = () => {
     const [tokenID, setToken] = useState<string>('')
 
 
+
     
     
 
@@ -195,6 +196,7 @@ const ProductCards = () => {
     const navigation = useNavigation();
     
     const numColumns = 2;
+   
 
     const renderItem = ({item}:any) => {
         // const isSelected = item.ProductID === selected;
@@ -343,10 +345,17 @@ const ProductCards = () => {
             </View>
         )
     }
+    // useEffect(() => {
+    //   if (products.length > 1) {
+    //     setNumColumns(2);
+    //   } else {
+    //     setNumColumns(1);
+    //   }
+    // }, [products]);
 
   return (
     
-    <View style={{}} >
+    <View style={{ alignSelf:"flex-start", marginHorizontal:5}} >
        <Text style={{fontWeight:"bold", fontSize:15, margin:4}}>Produk dalam kategori "{currentCategoryName}"</Text>
          <FlatList
         data={products}

@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView, FlatList, BackHandler } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView, FlatList, BackHandler, ToastAndroid } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { CartIcon, LocationIcon, MessageIcon } from '../../assets/icons';
 import Carousel from './components/Carousel';
@@ -78,6 +78,8 @@ interface Category {
 }
 
 const HomePage = () => {
+  const backHandlerRef = useRef<number | null>(null);
+
   const navigation = useNavigation()
   const [searchText, setSearchText] = useState('');
   //const [selectedCity, setSelectedCity] = useState<string>("");
@@ -325,28 +327,45 @@ const falseEnableScroll= () => {
   setEnableScrollView(false)
 };
 
-useFocusEffect(
-  React.useCallback(() => {
-    const onBackPress = () => {
-      return true;
-    };
+// useFocusEffect(
+//   React.useCallback(() => {
+//     const onBackPress = () => {
+//       return true;
+//     };
 
-    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+//     BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
-    return () =>
+//     return () =>
 
-      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-      alert("back prevented")
+//       BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+//       alert("back prevented")
 
-  }, []),
-);
+//   }, []),
+// );
 
 
 useEffect(() => {
+
+  const backAction = () => {
+    if (navigation.isFocused()) {
+      if (backHandlerRef.current && backHandlerRef.current + 2000 >= Date.now()) {
+        BackHandler.exitApp(); // Close the app
+        return true; // Prevent default back button behavior
+      } else {
+        backHandlerRef.current = Date.now();
+        ToastAndroid.show('Press back again to exit', ToastAndroid.SHORT);
+        return true; // Prevent default back button behavior
+      }
+    }
+    return false; // Allow default back button behavior for other screens
+  };
     
   const unsubscribe = navigation.addListener('focus', () => {
     fetchToken()
   })
+
+  const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
   // const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
 
 
@@ -362,7 +381,7 @@ useEffect(() => {
   
   return () => {
     unsubscribe
-    // backHandler.remove()
+    backHandler.remove();
   }
   
 }, []);
@@ -475,15 +494,21 @@ useEffect(() => {
          <Carousel />
         </View>
         <View style={{marginTop:10}}>
-          <Text style={{fontSize:18, fontWeight:"bold", marginLeft:3}}>Produk Terlaris</Text>
+          {loadingProduct ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'45%', marginTop:6, alignSelf:"flex-start", marginLeft:23}}/>): (
+          <Text style={{fontSize:19, fontWeight:"bold", marginLeft:23}}>Produk Terlaris</Text>
+          )}
           <ListProduct loadingSave={loadingSave} products={products} loading={loadingProduct} onConfirm={setSelected} />
         </View>
         <View style={{marginTop:10}}>
-          <Text style={{fontSize:18, fontWeight:"bold", marginLeft:3}}>Diskon hari ini!</Text>
+          {loadingProductDiscount ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'45%', marginTop:6, alignSelf:"flex-start", marginLeft:23}}/>):(
+          <Text style={{fontSize:19, fontWeight:"bold", marginLeft:23}}>Diskon hari ini!</Text>
+          )}
           <ListProduct loadingSave={loadingSave} products={discountProducts} loading={loadingProductDiscount} onConfirm={setSelectedDiscount}/>
         </View>
         <View style={{marginTop:10}}>
-        <Text style={{fontSize:18, fontWeight:"bold", marginLeft:3, marginBottom:10}}>Kategori Untuk Anda</Text>
+          {loadingCategory ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'45%', marginTop:6, alignSelf:"flex-start", marginLeft:23}}/>):(
+        <Text style={{fontSize:19, fontWeight:"bold", marginLeft:23, marginBottom:10}}>Kategori Untuk Anda</Text>
+          )}
         <HomeCategory categories={categories} loadingCategory={loadingCategory}/>
         </View>
       <View style={{marginTop:10}}>
