@@ -140,12 +140,12 @@ const fetchAddresses = async (tokenData: string) => {
   setAddress(response.data.data);
   if (response.data.data.length > 0) {
     setSelectedAddress(response.data.data[0])
-    fetchCalculateDelivery(tokenData)
+    fetchCalculateDelivery(tokenData, address[0].ID)
   }
   setLoading(false)
 }
-const fetchCalculateDelivery = async (tokenData: string) => {
-  const url = `https://ellafroze.com/api/external/doCalculateDelivery?_cb=onCompleteFetchCartCalculateDelivery&_p=23400&_s=${tokenData}`;
+const fetchCalculateDelivery = async (tokenData: string, ID:string) => {
+  const url = `https://ellafroze.com/api/external/doCalculateDelivery?_cb=onCompleteFetchCartCalculateDelivery&_p=23400&_s=${tokenData}&addressId=${ID}`;
   const response = await axios.get(url);
   setDeliveryFee(response.data.data[0]);
   setValidDeliveryFee(response.data.data[0].IsFound == 0 ? false : true)
@@ -250,11 +250,11 @@ const fetchToken = async () => {
 };
 
 const handleSelectAddress = async (address: Address) => {
-  await savePrimaryAddress({  hdnFrmID: address.ID, _cb: 'cart', _s }); 
+  // await savePrimaryAddress({  hdnFrmID: address.ID, _cb: 'cart', _s }); 
   const tokenData = await AsyncStorage.getItem('tokenID')
   setSelectedAddress(address);
   setShowAddressPopup(false);
-  fetchCalculateDelivery(tokenData == null ? "" : tokenData);
+  fetchCalculateDelivery(tokenData == null ? "" : tokenData, address.ID);
 };
 
 const openAddressPopup = async () => {

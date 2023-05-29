@@ -36,7 +36,7 @@ const ArticleCard = ({data, loading}:Props) => {
  style={{
     margin:7, 
     // borderWidth:1, 
-    paddingVertical:15,
+    paddingVertical:5,
     backgroundColor: '#fff',
     elevation:3,
     shadowColor: '#000',
