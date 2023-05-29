@@ -38,8 +38,8 @@ const Accordion = ({data}:Props) => {
       {data.map((item, index)=>(
         <View
         key={index}
-        style={{ borderBottomWidth:1, borderBottomColor:"gray", marginBottom:5, paddingHorizontal:10, width:"100%"}}>
-          <TouchableOpacity onPress={() => toggleSection(index)} style={{paddingVertical:15, flexDirection:"row", justifyContent:"space-between"}}>
+        style={{ borderBottomWidth:1, borderBottomColor:"gray", marginBottom:5, paddingHorizontal:10,paddingVertical:15, width:"100%"}}>
+          <TouchableOpacity onPress={() => toggleSection(index)} style={{ flexDirection:"row", justifyContent:"space-between"}}>
             <Text style={{width:"90%"}}>{item.Title}</Text>
             <Icon
                   name={activeSection == index ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
@@ -49,8 +49,8 @@ const Accordion = ({data}:Props) => {
                 />
           </TouchableOpacity>
           {activeSection === index && (
-            <View style={{marginVertical:20}}>
-              <Text style={{width:"90%"}}>
+            <View style={{backgroundColor:"#B2B2B2", borderRadius:15, paddingHorizontal:10, marginTop:10}}>
+              <Text style={{width:"100%"}}>
                 {item.Content.replace(/<\/?p>|<\/?P>/g, '\n')}
               </Text>
 

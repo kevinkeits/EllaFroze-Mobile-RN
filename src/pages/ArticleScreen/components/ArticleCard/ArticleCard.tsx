@@ -49,10 +49,10 @@ const ArticleCard = ({data, loading}:Props) => {
     }} >
   
     <View style={{flexDirection:"row", gap:4}}>
-    <View style={{marginVertical:10, alignItems:"center", width:"37%"}}>
+    <View style={{marginVertical:10, alignItems:"center", width:"40%"}}>
     {loading ? (<View style={{backgroundColor:"#EAEAEA", width:85, height:55}}/>) : (
- <View style={{ width:60, height:50}}>
- <Image source={{ uri: `https://ellafroze.com/api/uploaded/article/${item.ImageUrl}`}} style={{width:85, height:55}}/>
+ <View style={{ width:130, height:80}}>
+ <Image source={{ uri: `https://ellafroze.com/api/uploaded/article/${item.ImageUrl}`}} style={{width:130, height:80}} resizeMode="contain"/>
  </View>           
   )}
      

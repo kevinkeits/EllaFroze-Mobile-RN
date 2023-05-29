@@ -210,7 +210,7 @@ const Search = ({route}: SearchScreenProps) => {
 
         <View style={{alignItems:"center"}}>
         {loading ? (<View style={{backgroundColor:"#EAEAEA", width:120, height:155}}/>) : (
-            <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:120, height:155}} resizeMode="contain" />
+            <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:150, height:155}} resizeMode="contain" />
             )}
         </View>
         {loading? (<View style={{backgroundColor:"#EAEAEA", width:150, height:20, marginTop:5, marginLeft:8}}/>):(

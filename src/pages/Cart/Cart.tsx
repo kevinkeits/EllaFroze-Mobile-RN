@@ -349,7 +349,7 @@ const doCheckout = async () => {
       }
       onConfirm?.('product',postData)
     }
-    if (type == '-' && ((currentQty -1) >= 0)) {
+    if (type == '-' && ((currentQty -1) > 0)) {
       const postData: Cart = {
         ...values,
         Qty: (currentQty - 1)

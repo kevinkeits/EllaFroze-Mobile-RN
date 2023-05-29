@@ -1,11 +1,14 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, ScrollView, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
 
 
 const { width } = Dimensions.get('window');
+const SLIDE_WIDTH = width;
+const SLIDE_HEIGHT = 200;
 
 interface Slide {
   id: number;
@@ -24,9 +27,19 @@ interface Banner {
 
 
 const Carousel = () => {
+  const navigation = useNavigation();
+
   const [activeSlide, setActiveSlide] = useState(0);
   const [banners, setBanners] = useState<Banner[]>([]);
+  const [tokenFetched, setTokenFetched] = useState(false);
   const [loading, setLoading] = useState(true);
+  const scrollViewRef = useRef<ScrollView>(null);  
+  // const timerRef = useRef(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const autoSlideTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  let timerSlide:any;
 
   const fetchData = async (token: string) => {
     const url = `https://ellafroze.com/api/external/getBanner?_cb=onCompleteFetchBanner&_p=main-banner-slider-wrapper&_s=${token}`;
@@ -38,15 +51,36 @@ const Carousel = () => {
   const fetchToken = async () => {
     const tokenData = await AsyncStorage.getItem('tokenID')
     fetchData(tokenData == null ? "" : tokenData);
-    
+    setTokenFetched(true);
   };
 
 useEffect(() => {
     
   fetchToken()
-  
-  
-}, []);
+  const timerSlide = setTimeout(() => {
+    let nextSlide = activeSlide + 1;
+    if (nextSlide >= banners?.length) {
+      nextSlide = 0;
+    }
+    setActiveSlide(nextSlide);
+    scrollViewRef.current?.scrollTo({
+      x: nextSlide * SLIDE_WIDTH,
+      animated: true,
+    });
+  }, 3000); 
+
+  return () => 
+    clearTimeout(timerSlide)
+}, [activeSlide]);
+
+
+
+
+
+
+
+
+
   
 
   // if (loading) {
@@ -64,11 +98,21 @@ useEffect(() => {
         <View>
           
           <ScrollView
+           ref={scrollViewRef}
         horizontal={true}
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         onScroll={handleScroll}
         scrollEventThrottle={16}
+        onMomentumScrollEnd={(event) => {
+          const slide = Math.floor(
+            event.nativeEvent.contentOffset.x / SLIDE_WIDTH
+          );
+          setActiveSlide(slide);
+        }}
+       
+        onScrollBeginDrag={() => clearTimeout(timerSlide)}
+
       >
         {banners.map((banner) => (
           <View key={banner.ID} style={[styles.slide]} >

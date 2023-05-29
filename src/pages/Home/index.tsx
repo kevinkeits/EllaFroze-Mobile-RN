@@ -121,7 +121,6 @@ const HomePage = () => {
       const url = `https://ellafroze.com/api/external/getHighestSold?CatID=&BranchID=${selectedBranch}&Keyword=&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
       const response = await axios.get(url)
       setProducts(response.data.data);
-      //alert('welcome back')
       setLoadingProduct(false)
     } else {
       handlePickerCity()
@@ -495,17 +494,21 @@ useEffect(() => {
         </View>
         <View style={{marginTop:10}}>
           {loadingProduct ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'45%', marginTop:6, alignSelf:"flex-start", marginLeft:23}}/>): (
-          <Text style={{fontSize:19, fontWeight:"bold", marginLeft:23}}>Produk Terlaris</Text>
+            products.length > 0 &&(
+              <Text style={{fontSize:19, fontWeight:"bold", marginLeft:23}}>Produk Terlaris</Text>
+            )
           )}
           <ListProduct loadingSave={loadingSave} products={products} loading={loadingProduct} onConfirm={setSelected} />
         </View>
         <View style={{marginTop:10}}>
           {loadingProductDiscount ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'45%', marginTop:6, alignSelf:"flex-start", marginLeft:23}}/>):(
-          <Text style={{fontSize:19, fontWeight:"bold", marginLeft:23}}>Diskon hari ini!</Text>
+            discountProducts.length > 0 &&(
+              <Text style={{fontSize:19, fontWeight:"bold", marginLeft:23}}>Diskon hari ini!</Text>
+            )
           )}
           <ListProduct loadingSave={loadingSave} products={discountProducts} loading={loadingProductDiscount} onConfirm={setSelectedDiscount}/>
         </View>
-        <View style={{marginTop:10}}>
+        <View style={{marginTop:5}}>
           {loadingCategory ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'45%', marginTop:6, alignSelf:"flex-start", marginLeft:23}}/>):(
         <Text style={{fontSize:19, fontWeight:"bold", marginLeft:23, marginBottom:10}}>Kategori Untuk Anda</Text>
           )}
@@ -532,8 +535,8 @@ const styles = StyleSheet.create({
   header: {
     // flexDirection: 'row-reverse',
     backgroundColor:"#FA0000",
-    height:120,
-    paddingTop:20,
+    height:110,
+    paddingVertical:10,
     // backgroundColor: 'rgba(255, 203, 0, 0.2);',
     // alignItems: 'center',
     width:'100%',
