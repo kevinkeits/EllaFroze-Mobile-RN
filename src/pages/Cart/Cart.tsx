@@ -283,6 +283,7 @@ const doCheckout = async () => {
   };
 
 
+
   const handlePress = () => {
     setSelection(!isSelected);
   };
@@ -290,10 +291,6 @@ const doCheckout = async () => {
   const handleSelectBCA = () =>{
     setSelectedBCA(!selectedBCA);
   }
-
-  // const handleSelectPayment = (id:string) =>{
-  //   setSelectedPayment(true)
-  // }
 
   const onConfirm = async(referer: string, values?: Cart) => {
     try {
@@ -331,14 +328,6 @@ const doCheckout = async () => {
       
     }
   }
-  // const handleButtonPress =  (values: Cart, type: string) => {
-  //   const postData: Cart = {
-  //     ...values,
-  //     Qty: type == '+' ? parseInt(values.Qty == null ? '1' : (parseInt(values.Qty.toString()) + 1).toString()) : parseInt(values.Qty == null ? '0' : (parseInt(values.Qty.toString()) - 1).toString())
-  //   }
-  //    onConfirm('product',postData)
-    
-  // };
 
   const handleButtonPress = (values: Cart, type: string) => {
     const currentQty = parseInt(values.Qty == null ? '0' : values.Qty.toString())

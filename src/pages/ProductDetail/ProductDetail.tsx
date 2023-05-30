@@ -162,28 +162,11 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
   };
 
 
-  const handleIncrement = () => {
-    setInputValue((prevValue) => {
-      const parsedValue = parseInt(prevValue, 10);
-      if (!isNaN(parsedValue)) {
-        return String(parsedValue + 1);
-      }
-      return prevValue;
-    });
-  };
-
-  const handleDecrement = () => {
-    setInputValue((prevValue) => {
-      const parsedValue = parseInt(prevValue, 10);
-      if (!isNaN(parsedValue) && parsedValue > 0) {
-        return String(parsedValue - 1);
-      }
-      return prevValue;
-    });
-  };
-
-  const handleInputChange = (value:any) => {
-    setInputValue(value);
+  const handleCountChange = (text:any) => {
+    const parsedValue = parseInt(text);
+    if (!isNaN(parsedValue)) {
+      setCount(parsedValue);
+    }
   };
 
 
@@ -275,7 +258,14 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
                 <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={decrementCount}>
                     <Text style={{color:"#148D2E"}}>-</Text>
                 </TouchableOpacity>
-                <Text style={{paddingVertical:5, alignItems:"center", textAlign:"center", width:30}}>{count}</Text>
+                {/* <Text style={{paddingVertical:5, alignItems:"center", textAlign:"center", width:30}}>{count}</Text> */}
+                <TextInput
+        style={{width:70, alignContent:"center", justifyContent:"center", alignSelf:"center", textAlign:"center"}}
+        value={count.toString()}
+        keyboardType="numeric"
+        onChangeText={handleCountChange}
+      />
+          
         
                 <TouchableOpacity style={{backgroundColor:"white", padding:5, borderRadius:5}} onPress={incrementCount}>
                     <Text style={{color:"#148D2E"}}>+</Text>

@@ -42,10 +42,17 @@ const Carousel = () => {
   let timerSlide:any;
 
   const fetchData = async (token: string) => {
-    const url = `https://ellafroze.com/api/external/getBanner?_cb=onCompleteFetchBanner&_p=main-banner-slider-wrapper&_s=${token}`;
-    const response = await axios.get(url);
-    setBanners(response.data.data);
-    setLoading(false)
+    if (banners.length == 0)
+    {
+      const url = `https://ellafroze.com/api/external/getBanner?_cb=onCompleteFetchBanner&_p=main-banner-slider-wrapper&_s=${token}`;
+      const response = await axios.get(url);
+      setBanners(response.data.data)
+      setLoading(false)
+      if (response.data.data.length > 0)
+      {
+        setActiveSlide(1)
+      }
+    }
   }
 
   const fetchToken = async () => {
@@ -55,19 +62,21 @@ const Carousel = () => {
   };
 
 useEffect(() => {
-    
-  fetchToken()
-  const timerSlide = setTimeout(() => {
-    let nextSlide = activeSlide + 1;
-    if (nextSlide >= banners?.length) {
-      nextSlide = 0;
-    }
-    setActiveSlide(nextSlide);
-    scrollViewRef.current?.scrollTo({
-      x: nextSlide * SLIDE_WIDTH,
-      animated: true,
-    });
-  }, 3000); 
+
+fetchToken()
+
+const timerSlide = setTimeout(() => {
+  let nextSlide = activeSlide + 1;
+  if (nextSlide >= banners.length) {
+    nextSlide = 0;
+  }
+  
+  setActiveSlide(nextSlide);
+  scrollViewRef.current?.scrollTo({
+    x: nextSlide * SLIDE_WIDTH,
+    animated: true,
+  });
+}, 3000);
 
   return () => 
     clearTimeout(timerSlide)
