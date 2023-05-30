@@ -162,12 +162,24 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
   };
 
 
+  // const handleCountChange = (text:any) => {
+  //   const parsedValue = parseInt(text);
+  //   if (!isNaN(parsedValue)) {
+  //     setCount(parsedValue);
+  //   }
+  // };
+
   const handleCountChange = (text:any) => {
-    const parsedValue = parseInt(text);
-    if (!isNaN(parsedValue)) {
-      setCount(parsedValue);
+    if (text === '') {
+      setCount(0);
+    } else {
+      const parsedValue = parseInt(text);
+      if (!isNaN(parsedValue)) {
+        setCount(parsedValue);
+      }
     }
   };
+
 
 
 

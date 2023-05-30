@@ -97,9 +97,19 @@ const ProductCards = () => {
 
 
 
+   
     useEffect(() => {
       
-      fetchToken()
+      const unsubscribe = navigation.addListener('focus', () => {
+        fetchToken()
+      })
+      
+      
+      // storedBranch()
+      
+      return () => {
+        unsubscribe
+      }
       
       
     }, []);

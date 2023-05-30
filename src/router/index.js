@@ -171,7 +171,7 @@ const Router = () => {
                 height: 120,
                 }}}/>
           <RootStack.Screen name='Category' component={Category} options={{
-              title: "Pencarian",
+              title: "Kategori",
               headerTitleStyle:{
                 color:"white"
               },
