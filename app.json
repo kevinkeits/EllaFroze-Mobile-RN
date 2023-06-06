@@ -2,7 +2,7 @@
   "expo": {
     "name": "EllaFroze",
     "slug": "ellafroze",
-    "version": "1.0.0",
+    "version": "1.5.0",
     "orientation": "portrait",
     "icon": "./src/assets/images/logo.png",
     "userInterfaceStyle": "light",
@@ -18,11 +18,12 @@
     ],
     "ios": {
       "bundleIdentifier": "com.ellafroze.app",
-      "buildNumber": "1.0.0"
+      "buildNumber": "15000"
     },
     "android": {
       "package": "com.ellafroze.app",
-      "versionCode": 1
+      "versionCode": 15000,
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"

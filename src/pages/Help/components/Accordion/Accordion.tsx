@@ -49,7 +49,7 @@ const Accordion = ({data}:Props) => {
                 />
           </TouchableOpacity>
           {activeSection === index && (
-            <View style={{backgroundColor:"#B2B2B2", borderRadius:15, paddingHorizontal:10, marginTop:10}}>
+            <View style={{backgroundColor:"#DDE6ED", borderRadius:15, paddingHorizontal:10, marginTop:10}}>
               <Text style={{width:"100%"}}>
                 {item.Content.replace(/<\/?p>|<\/?P>/g, '\n')}
               </Text>

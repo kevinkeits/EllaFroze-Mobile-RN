@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "236369225591",
+    "project_id": "ellafrozev2",
+    "storage_bucket": "ellafrozev2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:236369225591:android:f9b90825c06c4973a62372",
+        "android_client_info": {
+          "package_name": "com.ellafroze.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqEG-2gTYcrax2On338gwJiISaUajhf8M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
