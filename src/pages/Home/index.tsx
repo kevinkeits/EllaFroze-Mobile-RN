@@ -77,6 +77,10 @@ interface Category {
   Name: string;
 }
 
+interface arrDeviceID {
+  deviceID: string;
+}
+
 const HomePage = () => {
   const backHandlerRef = useRef<number | null>(null);
 
@@ -261,18 +265,26 @@ const HomePage = () => {
   }
 
   const fetchToken = async () => {
-    setLoadingProduct(true)
-    setLoadingProductDiscount(true)
-
     const tokenData = await AsyncStorage.getItem('tokenID')
-
-    const selectedBranchData = await AsyncStorage.getItem('selectedBranch')
-    setToken(tokenData == null ? "" : tokenData)
+    if (tokenData == "" || tokenData == null) {
+      navigation.navigate('Login');
       
-    fetchData(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
-    fetchDiscount(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
-    fetchNotification(tokenData == null ? "" : tokenData);
+    } else {
+      const deviceID = await AsyncStorage.getItem('pushDeviceID')
+
+      setLoadingProduct(true)
+      setLoadingProductDiscount(true)
+
+      doUpdateDeviceID({deviceID: deviceID == null ? ""})
+      
+      const selectedBranchData = await AsyncStorage.getItem('selectedBranch')
+      setToken(tokenData == null ? "" : tokenData)
+        
+      fetchData(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
+      fetchDiscount(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
+      fetchNotification(tokenData == null ? "" : tokenData);
     
+    }
   };
 
   const fetchLimitedContent = async () => {
@@ -290,6 +302,20 @@ const HomePage = () => {
 
     
   };
+
+  async function doUpdateDeviceID(id: arrDeviceID): Promise<void> {
+    const apiUrl = 'https://ellafroze.com/api/external/doLogin';
+  
+    try {
+       const response = await axios.post(apiUrl, id);
+       if (!response.data.status){
+        alert(response.data.message);
+       }  
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
 
   const handleSearch = () => {
     navigation.navigate('Search', { searchText });

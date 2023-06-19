@@ -23,10 +23,10 @@ const Splash = () => {
       const tokenData = await AsyncStorage.getItem('tokenID')
       setToken(tokenData == null ? "" : tokenData);
 
-      if (tokenData == "") {
-        setTimeout(()=>{
+      if (tokenData == "" || tokenData == null) {
+        //setTimeout(()=>{
             navigation.navigate('Login');
-        }, 3000)
+        //}, 3000)
       } else {
         navigation.navigate("MainApp")
       }

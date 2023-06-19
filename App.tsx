@@ -54,12 +54,13 @@ export default function App() {
     }
     if (finalStatus !== 'granted') {
       alert('Permission not granted to receive notifications');
-      return;
+      return '';
+    } else {
+      const token = (await Notifications.getExpoPushTokenAsync()).data;
+      await AsyncStorage.setItem('pushDeviceID', token)
+      setExpoPushToken(token)
+      return token;
     }
-
-    const token = (await Notifications.getExpoPushTokenAsync()).data;
-    setExpoPushToken(token)
-    return token;
   };
 
   useEffect(() => {
