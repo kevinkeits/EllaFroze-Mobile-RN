@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView, FlatList, BackHandler, ToastAndroid } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Button, ScrollView, FlatList, BackHandler, ToastAndroid } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { CartIcon, LocationIcon, MessageIcon } from '../../assets/icons';
 import Carousel from './components/Carousel';
@@ -14,6 +14,9 @@ import ProductCards from './components/ProductCards/ProductCards';
 import Drawer  from 'react-native-modal';
 import {Dimensions} from 'react-native';
 import ListProduct from './components/ListProduct/ListProduct';
+import * as Notifications from 'expo-notifications';
+import md5 from 'md5'
+
 
 
 
@@ -79,6 +82,7 @@ interface Category {
 
 interface arrDeviceID {
   deviceID: string;
+  _s: string
 }
 
 const HomePage = () => {
@@ -120,11 +124,20 @@ const HomePage = () => {
   // }
 
   const fetchData = async (token: string, selectedBranch: string) => {
-    setLoadingProduct(true)
-    if (selectedBranch != "") {
+    if (products.length == 0) setLoadingProduct(true)
+    if (selectedBranch != "" && selectedBranch != null) {
       const url = `https://ellafroze.com/api/external/getHighestSold?CatID=&BranchID=${selectedBranch}&Keyword=&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
       const response = await axios.get(url)
-      setProducts(response.data.data);
+      if (products.length > 0) {
+        if (response.data.data.length > 0) {
+          const prevObject = md5(JSON.stringify(products))
+          const newObject = md5(JSON.stringify(response.data.data))
+          if (prevObject != newObject) {
+            setLoadingProductDiscount(true)
+            setProducts(response.data.data); 
+          }
+        }
+      } else setProducts(response.data.data); 
       setLoadingProduct(false)
     } else {
       handlePickerCity()
@@ -134,14 +147,11 @@ const HomePage = () => {
 
   const fetchCategory = async (token: string) => {
     setLoadingCategory(true)
- 
       const url = `https://ellafroze.com/api/external/getCategory?_cb=onCompleteFetchCategory&_p=main-category-slider&_s=${token}`;
       const response = await axios.get(url)
       setCategories(response.data.data);
-      //alert('welcome back')
       setLoadingCategory(false)
   }
-
 
 
   async function saveCart(cartInput: SaveCart): Promise<void> {
@@ -149,6 +159,7 @@ const HomePage = () => {
   
     try {
        const response = await axios.post(apiUrl, cartInput);
+       //alert(JSON.stringify(cartInput));
        if (!response.data.status){
         alert(response.data.message);
         setLoadingSave(false)
@@ -164,8 +175,9 @@ const HomePage = () => {
 
   const setSelected = async (values?: Product) => {
     try {
+      const tokenData = await AsyncStorage.getItem('tokenID')
+
       setLoadingSave(true)
-      //alert(JSON.stringify(values))
       const newListProduct = products.map((item) => {
         if (item.ProductID === values?.ProductID) {
           const updatedItem = {
@@ -192,7 +204,7 @@ const HomePage = () => {
       });
       setDiscountProducts(newListProductDiscount)
 
-      if (values) saveCart({  ProductID: values.ProductID, Qty: parseInt(values.Qty ?? '0'), Notes:'', Source:'cart', _s:tokenID });
+      if (values) saveCart({  ProductID: values.ProductID, Qty: parseInt(values.Qty ?? '0'), Notes:'', Source:'cart', _s:tokenData });
 
       //setProducts(newList);
     } catch (err) {
@@ -202,6 +214,8 @@ const HomePage = () => {
 
   const setSelectedDiscount = async (values?: Product) => {
     try {
+      const tokenData = await AsyncStorage.getItem('tokenID')
+
       setLoadingSave(true)
       const newListProduct = products.map((item) => {
         if (item.ProductID === values?.ProductID) {
@@ -229,24 +243,34 @@ const HomePage = () => {
       });
       setDiscountProducts(newListProductDiscount)
 
-      if (values) saveCart({  ProductID: values.ProductID, Qty: parseInt(values.Qty ?? '0'), Notes:'', Source:'cart', _s:tokenID });
+      if (values) saveCart({  ProductID: values.ProductID, Qty: parseInt(values.Qty ?? '0'), Notes:'', Source:'cart', _s:tokenData });
     } catch (err) {
       
     }
   }
 
   const fetchDiscount = async (token: string, selectedBranch: string) => {
-    setLoadingProductDiscount(true)
-    if (selectedBranch != "") {
+    if (discountProducts.length == 0) setLoadingProductDiscount(true)
+    if (selectedBranch != "" && selectedBranch != null) {
       const url = `https://ellafroze.com/api/external/getDiscount?BranchID=${selectedBranch}&_cb=onCompleteFetchDiscount&_p=main-discount-slider&_s=${token}`;
-      const response = await axios.get(url);
-      setDiscountProducts(response.data.data);
+      const response = await axios.get(url)
+      if (products.length > 0) {
+        if (response.data.data.length > 0) {
+          const prevObject = md5(JSON.stringify(discountProducts))
+          const newObject = md5(JSON.stringify(response.data.data))
+          if (prevObject != newObject) {
+            setLoadingProductDiscount(true)
+            setDiscountProducts(response.data.data); 
+          }
+        }
+      } else setDiscountProducts(response.data.data); 
       setLoadingProductDiscount(false)
     } else {
       handlePickerCity()
       setLoadingProductDiscount(false)
     }
   }
+
 
   const fetchNotification = async (token: string) => {
     setLoadingNotification(true)
@@ -264,47 +288,68 @@ const HomePage = () => {
     setLoadingBranch(false)
   }
 
+  const registerForPushNotifications = async (tokenData: string) => {
+    const deviceID = await AsyncStorage.getItem('pushDeviceID')
+    if (deviceID == "" || deviceID == null)
+    {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Permission not granted to receive notifications');
+      } else {
+        const token = (await Notifications.getExpoPushTokenAsync()).data;
+        await AsyncStorage.setItem('pushDeviceID', token)
+        doUpdateDeviceID({deviceID: (token == null || token == "" ? "" : token), _s: tokenData})
+      }
+    }
+  };
+
   const fetchToken = async () => {
     const tokenData = await AsyncStorage.getItem('tokenID')
     if (tokenData == "" || tokenData == null) {
       navigation.navigate('Login');
-      
     } else {
-      const deviceID = await AsyncStorage.getItem('pushDeviceID')
-
-      setLoadingProduct(true)
-      setLoadingProductDiscount(true)
-
-      doUpdateDeviceID({deviceID: deviceID == null ? ""})
-      
+      //if (categories.length == 0) fetchCategory(tokenData == null ? "" : tokenData)
+      //if (branches.length == 0) fetchBranch(tokenData == null ? "" : tokenData)
       const selectedBranchData = await AsyncStorage.getItem('selectedBranch')
-      setToken(tokenData == null ? "" : tokenData)
-        
-      fetchData(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
-      fetchDiscount(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
-      fetchNotification(tokenData == null ? "" : tokenData);
-    
+      if (selectedBranchData != null && selectedBranchData != "")
+      {
+        fetchData(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
+        fetchDiscount(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
+      } else handlePickerCity()
     }
   };
 
   const fetchLimitedContent = async () => {
 
     const tokenData = await AsyncStorage.getItem('tokenID')
-    const selectedBranchName = await AsyncStorage.getItem('selectedBranchName')
-
-    setToken(tokenData == null ? "" : tokenData)
-    const selectedBranchData = await AsyncStorage.getItem('selectedBranch')
+    if (tokenData == "" || tokenData == null) {
+      navigation.navigate('Login');
+    } else {
+      if (categories.length == 0) fetchCategory(tokenData == null ? "" : tokenData)
+      if (branches.length == 0) fetchBranch(tokenData == null ? "" : tokenData)
       
-    //fetchCartData()
-    fetchBranch(tokenData == null ? "" : tokenData);
-    setSelectedBranchName(selectedBranchName == null ? "" : selectedBranchName)
-    fetchCategory(tokenData == null ? "" : tokenData);
+      const selectedBranchName = await AsyncStorage.getItem('selectedBranchName')
+      const selectedBranchData = await AsyncStorage.getItem('selectedBranch')
 
-    
+      setToken(tokenData == null ? "" : tokenData)
+      fetchNotification(tokenData == null ? "" : tokenData);
+      registerForPushNotifications(tokenData)
+      if (selectedBranchData != null && selectedBranchData != "")
+      {
+        //fetchCartData()
+        setSelectedBranchName(selectedBranchName == null ? "" : selectedBranchName)
+      }
+      else handlePickerCity()
+    }
   };
 
   async function doUpdateDeviceID(id: arrDeviceID): Promise<void> {
-    const apiUrl = 'https://ellafroze.com/api/external/doLogin';
+    const apiUrl = 'https://ellafroze.com/api/external/doUpdateDeviceID';
   
     try {
        const response = await axios.post(apiUrl, id);
@@ -325,7 +370,7 @@ const HomePage = () => {
     //setSelectedCity(cityId);
     setPickerCity(false);
     
-    if (cityId !== "") {
+    if (cityId !== "" && cityId !== null) {
       await AsyncStorage.setItem('selectedBranch', cityId)
       await AsyncStorage.setItem('selectedBranchName', cityName)
       setSelectedBranchName(cityName)

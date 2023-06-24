@@ -1,9 +1,11 @@
-import { View, Text, Image, TouchableOpacity, ScrollView, FlatList, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, FlatList, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import FastImage from 'react-native-fast-image'
+// import { Image } from 'expo-image'
 
 
 
@@ -164,7 +166,15 @@ const HomeCharts = ({item, loadingSave, loading, onConfirm}:cardProps) => {
           )}
           <View style={{alignItems:"center"}}>
             {loading ? (<View style={{backgroundColor:"#EAEAEA", width:120, height:155}}/>) : (
-              <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:150, height:155}} resizeMode="contain" />
+              // <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:150, height:155}} resizeMode="contain" />
+              <FastImage
+                style={{ width: 150, height: 155 }}
+                source={{
+                    uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`,
+                    priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.contain}
+            />
             )}
           </View>
 

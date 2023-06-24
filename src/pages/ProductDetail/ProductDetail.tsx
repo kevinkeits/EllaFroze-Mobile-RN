@@ -111,7 +111,11 @@ const ProductDetail = ({ route }: DetailScreenProps) => {
           alert(response.data.message);
          } else {
           if (response.data.message != '') alert(response.data.message)
-          else navigation.goBack()
+          else {
+            await AsyncStorage.setItem('isUpdated', 'T')
+            await AsyncStorage.setItem('isUpdatedProductID', cartInput.ProductID)
+            navigation.goBack()
+          }
         }   
       } catch (error) {
         console.error(error);

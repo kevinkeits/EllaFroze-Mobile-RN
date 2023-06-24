@@ -79,9 +79,12 @@ const AccountDetail = () => {
 
   const fetchToken = async () => {
     const tokenData = await AsyncStorage.getItem('tokenID')
-    fetchData(tokenData == null ? "" : tokenData);
-    setToken(tokenData == null ? "" : tokenData)
-    
+    if (tokenData == "" || tokenData == null) {
+      navigation.navigate('Login');
+    } else {
+      fetchData(tokenData == null ? "" : tokenData);
+      setToken(tokenData == null ? "" : tokenData)
+    }
   };
 
   const handleChangeName = (value: string) => {

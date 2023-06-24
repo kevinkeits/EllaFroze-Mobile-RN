@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StyleSheet, View, Text, TextInput, Image } from 'react-native';
+import { StyleSheet, View, Text, TextInput } from 'react-native';
 import ProductCards from '../Home/components/ProductCards/ProductCards';
 import TopCategory from './components/TopCategory/TopCategory';
 

@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet, Dimensions, Image } from 'react-native';
+import { View, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import FastImage from 'react-native-fast-image'
+// import { Image } from 'expo-image'
 
 
 const { width } = Dimensions.get('window');
@@ -79,11 +81,16 @@ useEffect(() => {
       >
         {image.map((item) => (
           <View key={item.ID} style={[styles.slide]} >
-            <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:350, height:370, alignSelf:"center"}} resizeMode="contain"  />
+            {/* <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:350, height:370, alignSelf:"center"}} resizeMode="contain"  /> */}
+            <FastImage
+                style={{ width: 350, height: 370, alignSelf:"center" }}
+                source={{
+                    uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`,
+                    priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.contain}
+            />
           </View>
-        //   <View key={banner.ID} style={[styles.slide, { backgroundColor: slide.backgroundColor }]} >
-        //   <Image source={{uri:slide.imgUrl}} style={{width:300, height:200}}  />
-        // </View>
         ))}
       </ScrollView>
       <View style={styles.dotsContainer}>

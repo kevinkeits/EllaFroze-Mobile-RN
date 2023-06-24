@@ -64,7 +64,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    registerForPushNotifications();
+    //registerForPushNotifications();
   }, []);
 
   const AppLoading = () => {
@@ -72,6 +72,7 @@ export default function App() {
       <View style={styles.container}>
         <ActivityIndicator size="large" color="#0000ff" />
         <Text style={styles.text}>Loading...</Text>
+        <StatusBar backgroundColor='#FA0000' />
       </View>
     );
   };

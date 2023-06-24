@@ -36,6 +36,8 @@ const Login: React.FC<Props> = ({ navigation }) => {
     const [request, response, promptAsync] = Google.useAuthRequest({
       androidClientId: '208326548212-pr78pe9v2r64mdd7849jdf644imtqdbs.apps.googleusercontent.com',
       //iosClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+      webClientId: '236369225591-nr7kjeom81qk6a10ciqmsorgfc1b9gqp.apps.googleusercontent.com',
+      expoClientId: '236369225591-nr7kjeom81qk6a10ciqmsorgfc1b9gqp.apps.googleusercontent.com',
     });
 
     async function loginGoogle(loginInput: LoginGoogle): Promise<void> {
@@ -80,7 +82,7 @@ const Login: React.FC<Props> = ({ navigation }) => {
       }
     };
 
-    const getUserInfo = async () => {
+    const getUserInfo = async (token: string) => {
       try {
         const response = await fetch(
           "https://www.googleapis.com/userinfo/v2/me",
@@ -104,8 +106,8 @@ const Login: React.FC<Props> = ({ navigation }) => {
     useEffect(() => {
       if (response?.type === "success") {
         if (response.authentication != null) {
-          setToken(response.authentication.accessToken);
-          getUserInfo();
+          //setToken(response.authentication.accessToken);
+          getUserInfo(response.authentication.accessToken);
         }
         
       }

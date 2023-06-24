@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { StatusBar } from 'expo-status-bar';
+//import { StatusBar } from 'expo-status-bar';
 import { Alert, Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RootStackParams } from '../../../App';
 import { AccountIcon, AddressIcon, ChatIcon, HistoryIcon } from '../../assets/icons';
@@ -45,6 +45,7 @@ export default function Account() {
   const handleLogout= async () => {
     try {
       await AsyncStorage.removeItem('tokenID');
+      await AsyncStorage.removeItem('pushDeviceID');
       //alert('loggedOut')
       navigation.navigate("Login");
     } catch (error) {
@@ -243,7 +244,7 @@ export default function Account() {
       {/* <Button title='Account Detail' onPress={()=>{navigation.navigate('AccountDetail')}}/>
       <Button title='Account Address' onPress={()=>{navigation.navigate('AccountAddress')}}/> */}
       
-      <StatusBar style="auto" />
+      {/* <StatusBar style="auto" /> */}
     </View>
     
   );

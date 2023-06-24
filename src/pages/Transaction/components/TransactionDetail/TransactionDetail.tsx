@@ -2,12 +2,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView, FlatList } from 'react-native';
-import Clipboard from '@react-native-community/clipboard';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Button, ScrollView, FlatList } from 'react-native';
 
 import * as WebBrowser from 'expo-web-browser';
 import { WebView } from 'react-native-webview';
-
+import FastImage from 'react-native-fast-image'
+// import { Image } from 'expo-image'
 
 
 
@@ -265,7 +265,15 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
                 <View style={{marginRight:8, marginLeft:15, marginTop:10}}>
                <View style={{flexDirection:"row", gap:10, marginBottom:20}}>
                 <View>
-                <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${order.ImagePath}`}} style={{width:55, height:55}}/>
+                {/* <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${order.ImagePath}`}} style={{width:55, height:55}}/> */}
+                <FastImage
+                  style={{ width: 55, height: 55 }}
+                  source={{
+                      uri: `https://ellafroze.com/api/uploaded/product/${order.ImagePath}`,
+                      priority: FastImage.priority.normal,
+                  }}
+                  // resizeMode={FastImage.resizeMode.contain}
+              />
                 </View>
                 <View>
                     <Text style={{fontSize:15, fontWeight:"bold", width:"90%", marginBottom:10}}>{order.Product}</Text>

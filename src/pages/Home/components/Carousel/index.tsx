@@ -1,9 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
-import { View, ScrollView, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
+import { View, ScrollView, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
+import FastImage from 'react-native-fast-image'
+// import { Image } from 'expo-image'
 
 
 const { width } = Dimensions.get('window');
@@ -125,11 +127,16 @@ const timerSlide = setTimeout(() => {
       >
         {banners.map((banner) => (
           <View key={banner.ID} style={[styles.slide]} >
-            <Image source={{ uri: `https://ellafroze.com/api/uploaded/banner/${banner.ImagePath}`}} style={{width:390, height:200}}  />
+            {/* <Image source={{ uri: `https://ellafroze.com/api/uploaded/banner/${banner.ImagePath}`}} style={{width:390, height:200}}  /> */}
+            <FastImage
+                style={{ width: 390, height: 200 }}
+                source={{
+                    uri: `https://ellafroze.com/api/uploaded/banner/${banner.ImagePath}`,
+                    priority: FastImage.priority.normal,
+                }}
+                // resizeMode={FastImage.resizeMode.contain}
+            />
           </View>
-        //   <View key={banner.ID} style={[styles.slide, { backgroundColor: slide.backgroundColor }]} >
-        //   <Image source={{uri:slide.imgUrl}} style={{width:300, height:200}}  />
-        // </View>
         ))}
       </ScrollView>
       <View style={styles.dotsContainer}>

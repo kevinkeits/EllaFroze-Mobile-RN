@@ -1,9 +1,13 @@
-import { View, Text, Image, TouchableOpacity, ScrollView, FlatList } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import {Dimensions} from 'react-native';
+import FastImage from 'react-native-fast-image'
+// import { Image } from 'expo-image'
+
+
 
 
 interface Category {
@@ -43,24 +47,42 @@ const HomeCategory = ({categories, loadingCategory}: Props) => {
     //   setSHeight(windowHeight)      
     // }, []);
 
+    const renderItem = ({item}) => 
+        <TouchableOpacity style={{width:80, height:80, alignItems:"center", marginLeft:7, marginTop:5}} onPress={()=>handleNavigate(item.ID, item.Name)}>
+          {loadingCategory ? (<View style={{backgroundColor:"#EAEAEA", width:50, height:10, marginTop:4}}/>):(
+            <View>
+            {/* <Image source={{ uri: `https://ellafroze.com/api/uploaded/category/${item.ImagePath}`}} style={{width:70, height:50}} resizeMode="contain"/> */}
+            <FastImage
+                style={{ width: 70, height: 50 }}
+                source={{
+                    uri: `https://ellafroze.com/api/uploaded/category/${item.ImagePath}`,
+                    priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.contain}
+            />
+            {/* <Image
+              style={{width:70, height:50}}
+              source={{ uri: `https://ellafroze.com/api/uploaded/category/${item.ImagePath}`}}
+              contentFit="cover"
+              transition={1000}
+            /> */}
+            <Text style={{fontSize:10, marginTop:4}}>{item.Name}</Text>
+           </View>
+          )}
+        </TouchableOpacity>
+    const keyExtractor = (item) => item.ID
+
+
   return (
     
     <View style={{backgroundColor:"white", justifyContent:"center", alignItems:"center"}} >
-         <FlatList
-         scrollEnabled={false}
+        <FlatList
+        scrollEnabled={false}
         data={categories}
-        renderItem={({item}) => 
-        <TouchableOpacity style={{width:80, height:80, alignItems:"center", marginLeft:7, marginTop:5}} onPress={()=>handleNavigate(item.ID, item.Name)}>
-          {loadingCategory ? (<View style={{backgroundColor:"#EAEAEA", width:50, height:50}}/>): (
-              <Image source={{ uri: `https://ellafroze.com/api/uploaded/category/${item.ImagePath}`}} style={{width:70, height:50}} resizeMode="contain"/>
-          )}
-          {loadingCategory ? (<View style={{backgroundColor:"#EAEAEA", width:50, height:10, marginTop:4}}/>):(
-           <Text style={{fontSize:10, marginTop:4}}>{item.Name}</Text>
-          )}
-        </TouchableOpacity>}
-        keyExtractor={item => item.ID}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
         numColumns={numColumns}
-      />
+    />
       
     </View>
   )

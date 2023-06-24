@@ -1,7 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 import * as WebBrowser from 'expo-web-browser';
+import FastImage from 'react-native-fast-image'
+// import { Image } from 'expo-image'
+
 
 
 
@@ -52,7 +55,15 @@ const ArticleCard = ({data, loading}:Props) => {
     <View style={{marginVertical:10, alignItems:"center", width:"40%"}}>
     {loading ? (<View style={{backgroundColor:"#EAEAEA", width:85, height:55}}/>) : (
  <View style={{ width:130, height:80}}>
- <Image source={{ uri: `https://ellafroze.com/api/uploaded/article/${item.ImageUrl}`}} style={{width:130, height:80}} resizeMode="contain"/>
+ {/* <Image source={{ uri: `https://ellafroze.com/api/uploaded/article/${item.ImageUrl}`}} style={{width:130, height:80}} resizeMode="contain"/> */}
+ <FastImage
+                style={{ width: 130, height: 80 }}
+                source={{
+                    uri: `https://ellafroze.com/api/uploaded/article/${item.ImageUrl}`,
+                    priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.contain}
+            />
  </View>           
   )}
      
