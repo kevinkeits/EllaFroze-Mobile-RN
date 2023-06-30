@@ -36,7 +36,8 @@ export default function Account() {
   const fetchData = async (tokenData: string) => {
     const url = `https://ellafroze.com/api/external/getUser?_cb=onCompleteFetchUserDetail&_p=&_s=${tokenData}`;
     const response = await axios.get(url);
-    setUsers(response.data.data);
+    if (response.data.status) setUsers(response.data.data);
+    else handleLogout()
     setLoading(false)
   }
 

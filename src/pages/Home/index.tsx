@@ -123,21 +123,34 @@ const HomePage = () => {
   //   setLoading(false)
   // }
 
+  const handleLogout= async () => {
+    try {
+      await AsyncStorage.removeItem('tokenID');
+      await AsyncStorage.removeItem('pushDeviceID');
+      navigation.navigate("Login");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const fetchData = async (token: string, selectedBranch: string) => {
     if (products.length == 0) setLoadingProduct(true)
     if (selectedBranch != "" && selectedBranch != null) {
       const url = `https://ellafroze.com/api/external/getHighestSold?CatID=&BranchID=${selectedBranch}&Keyword=&_cb=onCompleteFetchAllProduct&_p=main-product-list&_s=${token}`;
       const response = await axios.get(url)
       if (products.length > 0) {
-        if (response.data.data.length > 0) {
+        if (response.data.status) {
           const prevObject = md5(JSON.stringify(products))
           const newObject = md5(JSON.stringify(response.data.data))
           if (prevObject != newObject) {
             setLoadingProductDiscount(true)
             setProducts(response.data.data); 
           }
-        }
-      } else setProducts(response.data.data); 
+        } else handleLogout()
+      } else {
+        if (response.data.status) setProducts(response.data.data); 
+        else handleLogout()
+      }
       setLoadingProduct(false)
     } else {
       handlePickerCity()
@@ -255,22 +268,24 @@ const HomePage = () => {
       const url = `https://ellafroze.com/api/external/getDiscount?BranchID=${selectedBranch}&_cb=onCompleteFetchDiscount&_p=main-discount-slider&_s=${token}`;
       const response = await axios.get(url)
       if (products.length > 0) {
-        if (response.data.data.length > 0) {
+        if (response.data.status) {
           const prevObject = md5(JSON.stringify(discountProducts))
           const newObject = md5(JSON.stringify(response.data.data))
           if (prevObject != newObject) {
             setLoadingProductDiscount(true)
             setDiscountProducts(response.data.data); 
           }
-        }
-      } else setDiscountProducts(response.data.data); 
+        } else handleLogout()
+      } else {
+        if (response.data.status) setDiscountProducts(response.data.data); 
+        else handleLogout()
+      }
       setLoadingProductDiscount(false)
     } else {
       handlePickerCity()
       setLoadingProductDiscount(false)
     }
   }
-
 
   const fetchNotification = async (token: string) => {
     setLoadingNotification(true)
@@ -320,6 +335,7 @@ const HomePage = () => {
       {
         fetchData(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
         fetchDiscount(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
+        fetchNotification(tokenData == null ? "" : tokenData);
       } else handlePickerCity()
     }
   };
@@ -564,14 +580,6 @@ useEffect(() => {
          <Carousel />
         </View>
         <View style={{marginTop:10}}>
-          {loadingProduct ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'45%', marginTop:6, alignSelf:"flex-start", marginLeft:23}}/>): (
-            products.length > 0 &&(
-              <Text style={{fontSize:19, fontWeight:"bold", marginLeft:23}}>Produk Terlaris</Text>
-            )
-          )}
-          <ListProduct loadingSave={loadingSave} products={products} loading={loadingProduct} onConfirm={setSelected} />
-        </View>
-        <View style={{marginTop:10}}>
           {loadingProductDiscount ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'45%', marginTop:6, alignSelf:"flex-start", marginLeft:23}}/>):(
             discountProducts.length > 0 &&(
               <Text style={{fontSize:19, fontWeight:"bold", marginLeft:23}}>Diskon hari ini!</Text>
@@ -584,6 +592,14 @@ useEffect(() => {
         <Text style={{fontSize:19, fontWeight:"bold", marginLeft:23, marginBottom:10}}>Kategori Untuk Anda</Text>
           )}
         <HomeCategory categories={categories} loadingCategory={loadingCategory}/>
+        </View>
+        <View style={{marginTop:10}}>
+          {loadingProduct ? (<View style={{backgroundColor:"#EAEAEA", height:25, width:'45%', marginTop:6, alignSelf:"flex-start", marginLeft:23}}/>): (
+            products.length > 0 &&(
+              <Text style={{fontSize:19, fontWeight:"bold", marginLeft:23}}>Produk Terlaris</Text>
+            )
+          )}
+          <ListProduct loadingSave={loadingSave} products={products} loading={loadingProduct} onConfirm={setSelected} />
         </View>
       <View style={{marginTop:10}}>
       <HomeArticle/>
