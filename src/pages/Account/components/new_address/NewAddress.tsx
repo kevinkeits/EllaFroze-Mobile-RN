@@ -67,6 +67,8 @@ const NewAddress = () => {
   const [hdnFrmID, setHdnFrmID] = useState('');
   const [hdnAction, setHdnAction] = useState('');
   const [txtAddressDetail, setTxtAddressDetail] = useState('');
+  const [chkDefaultAddress, setChkDefaultAddress] = useState('0');
+
   const [selectedValue, setSelectedValue] = useState('');
   const [errorAddressName, setErrorAddressName] = useState('');
   const [errorPhone, setErrorPhone] = useState('');
@@ -179,7 +181,8 @@ const NewAddress = () => {
         setErrorPhone("")
         setErrorPostalCode("")
         setErrorAddressDetail("")
-        await saveAddress({ txtAddressName, txtFrmPhone, SelFrmState, SelFrmCity, SelFrmDistrict, txtPostalCode, txtAddressDetail, hdnFrmID, hdnAction, _s });
+        //await saveAddress({ txtAddressName, txtFrmPhone, SelFrmState, SelFrmCity, SelFrmDistrict, txtPostalCode, txtAddressDetail, hdnFrmID, hdnAction, _s });
+        await saveAddress({ txtAddressName, txtFrmPhone, SelFrmState, SelFrmCity, SelFrmDistrict, txtPostalCode, txtAddressDetail, hdnFrmID, hdnAction, _s, chkDefaultAddress });
         navigation.goBack()
       }  
     } catch (error) {
@@ -230,7 +233,9 @@ const NewAddress = () => {
   const [toggleValue, setToggleValue] = useState(false);
 
   const handleToggle = () => {
-    setToggleValue(!toggleValue);
+    //setToggleValue(!toggleValue);
+    // setToggleValue(toggleValue === 0 ? 1 : 0);
+    setChkDefaultAddress(chkDefaultAddress === '0' ? '1' : '0');
   };
 
   const stateOptions = state.map((item, index) => (
@@ -392,10 +397,10 @@ districtOptions.unshift(<Picker.Item key="" label="Please Select" value="" />);
       {/* <View style={[styles.switchContainer, toggleValue ? styles.switchOn : styles.switchOff]}> */}
       <View style={{}}>
         <Icon
-                  name={toggleValue ? 'toggle-switch-outline' : 'toggle-switch-off-outline'}
+                  name={chkDefaultAddress == '1' ? 'toggle-switch-outline' : 'toggle-switch-off-outline'}
                   type="material-community"
                   size={45}
-                  color={toggleValue ? 'green' : 'red'}
+                  color={chkDefaultAddress == '1' ? 'green' : 'red'}
                 />
       </View>
     </TouchableOpacity>

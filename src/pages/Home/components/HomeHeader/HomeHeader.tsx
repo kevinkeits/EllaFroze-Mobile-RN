@@ -1,6 +1,6 @@
 import { Picker } from '@react-native-picker/picker';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Modal } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Modal } from 'react-native';
 import { CartIcon, LocationIcon, MessageIcon } from '../../../../assets/icons';
 import Drawer  from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
@@ -8,6 +8,8 @@ import { Icon } from 'react-native-elements';
 import NotificationIcon from './components/Icon/Icon';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Image } from 'expo-image'
+
 
 
 

@@ -4,9 +4,10 @@ import { View, ScrollView, StyleSheet, Dimensions, TouchableOpacity } from 'reac
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
-import FastImage from 'react-native-fast-image'
-// import { Image } from 'expo-image'
+// import FastImage from 'react-native-fast-image'
+import { Image } from 'expo-image'
 
+const blurhash = '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 const { width } = Dimensions.get('window');
 const SLIDE_WIDTH = width;
@@ -127,15 +128,15 @@ const timerSlide = setTimeout(() => {
       >
         {banners.map((banner) => (
           <View key={banner.ID} style={[styles.slide]} >
-            {/* <Image source={{ uri: `https://ellafroze.com/api/uploaded/banner/${banner.ImagePath}`}} style={{width:390, height:200}}  /> */}
-            <FastImage
+            <Image source={{ uri: `https://ellafroze.com/api/uploaded/banner/${banner.ImagePath}`}} style={{width:390, height:200}} placeholder={blurhash} transition={1000} contentFit="cover" />
+            {/* <FastImage
                 style={{ width: 390, height: 200 }}
                 source={{
                     uri: `https://ellafroze.com/api/uploaded/banner/${banner.ImagePath}`,
                     priority: FastImage.priority.normal,
                 }}
                 // resizeMode={FastImage.resizeMode.contain}
-            />
+            /> */}
           </View>
         ))}
       </ScrollView>

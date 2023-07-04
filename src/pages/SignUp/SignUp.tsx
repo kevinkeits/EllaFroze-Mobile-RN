@@ -1,8 +1,10 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Keyboard, Alert } from 'react-native'
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Keyboard, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { Logo } from '../../assets'
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
+import { Image } from 'expo-image'
+
 
 
 

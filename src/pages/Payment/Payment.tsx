@@ -3,12 +3,14 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button, StyleSheet, Text, TouchableOpacity, View, Image, Linking, } from 'react-native';
+import { Button, StyleSheet, Text, TouchableOpacity, View, Linking, } from 'react-native';
 // import Clipboard from '@react-native-clipboard/clipboard';
 import { RootStackParams } from '../../../App';
 import { BCALogo, SuccessImage } from '../../assets';
 import { AccountIcon, AddressIcon, ChatIcon, HistoryIcon } from '../../assets/icons';
 import * as Clipboard from 'expo-clipboard';
+import { Image } from 'expo-image'
+
 
 
 

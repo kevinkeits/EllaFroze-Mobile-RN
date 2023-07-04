@@ -4,11 +4,14 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import axios from 'axios';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
+import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Badge } from 'react-native-elements';
 import { RootStackParams } from '../../../App';
 import { Logo } from '../../assets';
 import Carousel from '../Home/components/Carousel';
+import { Image } from 'expo-image'
+import React from 'react';
+
 
 
 interface Contact {

@@ -1,6 +1,8 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
+import { Image } from 'expo-image'
+
 
 interface PaidTransaction {
     CreatedDate: string;

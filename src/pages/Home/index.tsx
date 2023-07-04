@@ -172,11 +172,11 @@ const HomePage = () => {
   
     try {
        const response = await axios.post(apiUrl, cartInput);
-       //alert(JSON.stringify(cartInput));
        if (!response.data.status){
         alert(response.data.message);
         setLoadingSave(false)
        } else {
+        fetchNotification()
         setLoadingSave(false)
        }
     } catch (error) {
@@ -187,9 +187,9 @@ const HomePage = () => {
   }
 
   const setSelected = async (values?: Product) => {
-    try {
-      const tokenData = await AsyncStorage.getItem('tokenID')
-
+    const tokenData = await AsyncStorage.getItem('tokenID')
+    if (tokenData != null && tokenData != '')
+    {
       setLoadingSave(true)
       const newListProduct = products.map((item) => {
         if (item.ProductID === values?.ProductID) {
@@ -220,15 +220,13 @@ const HomePage = () => {
       if (values) saveCart({  ProductID: values.ProductID, Qty: parseInt(values.Qty ?? '0'), Notes:'', Source:'cart', _s:tokenData });
 
       //setProducts(newList);
-    } catch (err) {
-      
     }
   }
 
   const setSelectedDiscount = async (values?: Product) => {
-    try {
-      const tokenData = await AsyncStorage.getItem('tokenID')
-
+    const tokenData = await AsyncStorage.getItem('tokenID')
+    if (tokenData != null && tokenData != '')
+    {
       setLoadingSave(true)
       const newListProduct = products.map((item) => {
         if (item.ProductID === values?.ProductID) {
@@ -255,10 +253,7 @@ const HomePage = () => {
         return item;
       });
       setDiscountProducts(newListProductDiscount)
-
       if (values) saveCart({  ProductID: values.ProductID, Qty: parseInt(values.Qty ?? '0'), Notes:'', Source:'cart', _s:tokenData });
-    } catch (err) {
-      
     }
   }
 
@@ -287,12 +282,15 @@ const HomePage = () => {
     }
   }
 
-  const fetchNotification = async (token: string) => {
-    setLoadingNotification(true)
-    const url = `https://ellafroze.com/api/external/getNotification?_cb=onCompleteFetchNotification&_s=${token}`;
-    const response = await axios.get(url);
-    setNotifications(response.data.data);
-    setLoadingNotification(false)
+  const fetchNotification = async () => {
+    const tokenData = await AsyncStorage.getItem('tokenID')
+    if (tokenData != "" && tokenData != null) {
+      setLoadingNotification(true)
+      const url = `https://ellafroze.com/api/external/getNotification?_cb=onCompleteFetchNotification&_s=${tokenData}`;
+      const response = await axios.get(url);
+      setNotifications(response.data.data);
+      setLoadingNotification(false)
+    }
   }
 
   const fetchBranch = async (token: string) => {
@@ -335,7 +333,7 @@ const HomePage = () => {
       {
         fetchData(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
         fetchDiscount(tokenData == null ? "" : tokenData, selectedBranchData == null ? "" : selectedBranchData );
-        fetchNotification(tokenData == null ? "" : tokenData);
+        fetchNotification();
       } else handlePickerCity()
     }
   };
@@ -353,7 +351,7 @@ const HomePage = () => {
       const selectedBranchData = await AsyncStorage.getItem('selectedBranch')
 
       setToken(tokenData == null ? "" : tokenData)
-      fetchNotification(tokenData == null ? "" : tokenData);
+      fetchNotification();
       registerForPushNotifications(tokenData)
       if (selectedBranchData != null && selectedBranchData != "")
       {
@@ -602,7 +600,7 @@ useEffect(() => {
           <ListProduct loadingSave={loadingSave} products={products} loading={loadingProduct} onConfirm={setSelected} />
         </View>
       <View style={{marginTop:10}}>
-      <HomeArticle/>
+      <HomeArticle limitdata={true}/>
       </View>
       </ScrollView>
     </View>

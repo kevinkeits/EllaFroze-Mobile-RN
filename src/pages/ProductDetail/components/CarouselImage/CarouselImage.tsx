@@ -2,8 +2,11 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { View, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import FastImage from 'react-native-fast-image'
-// import { Image } from 'expo-image'
+//import FastImage from 'react-native-fast-image'
+import { Image } from 'expo-image'
+
+const blurhash = '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
 
 
 const { width } = Dimensions.get('window');
@@ -81,15 +84,15 @@ useEffect(() => {
       >
         {image.map((item) => (
           <View key={item.ID} style={[styles.slide]} >
-            {/* <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:350, height:370, alignSelf:"center"}} resizeMode="contain"  /> */}
-            <FastImage
+            <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:370, height:370, alignSelf:"center"}} placeholder={blurhash} transition={1000} contentFit="cover"  />
+            {/* <FastImage
                 style={{ width: 350, height: 370, alignSelf:"center" }}
                 source={{
                     uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`,
                     priority: FastImage.priority.normal,
                 }}
                 resizeMode={FastImage.resizeMode.contain}
-            />
+            /> */}
           </View>
         ))}
       </ScrollView>

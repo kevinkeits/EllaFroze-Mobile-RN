@@ -1,6 +1,8 @@
-import { View, Text, Image, TouchableOpacity, ScrollView, FlatList } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
+import { Image } from 'expo-image'
+
 
 
 

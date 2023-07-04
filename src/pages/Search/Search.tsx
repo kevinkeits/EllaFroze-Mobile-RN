@@ -4,8 +4,11 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import FastImage from 'react-native-fast-image'
-// import { Image } from 'expo-image'
+//import FastImage from 'react-native-fast-image'
+import { Image } from 'expo-image'
+
+const blurhash = '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
 
 
 
@@ -212,15 +215,15 @@ const Search = ({route}: SearchScreenProps) => {
 
         <View style={{alignItems:"center"}}>
         {loading ? (<View style={{backgroundColor:"#EAEAEA", width:120, height:155}}/>) : (
-            // <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:150, height:155}} resizeMode="contain" />
-            <FastImage
-                style={{ width: 150, height: 155 }}
-                source={{
-                    uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`,
-                    priority: FastImage.priority.normal,
-                }}
-                resizeMode={FastImage.resizeMode.contain}
-            />
+            <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:150, height:155}} placeholder={blurhash} transition={1000} contentFit="cover" />
+            // <FastImage
+            //     style={{ width: 150, height: 155 }}
+            //     source={{
+            //         uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`,
+            //         priority: FastImage.priority.normal,
+            //     }}
+            //     resizeMode={FastImage.resizeMode.contain}
+            // />
             )}
         </View>
         {loading? (<View style={{backgroundColor:"#EAEAEA", width:150, height:20, marginTop:5, marginLeft:8}}/>):(

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Keyboard, Alert, Button } from 'react-native'
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Keyboard, Alert, Button } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Logo } from '../../assets'
 import { useNavigation } from '@react-navigation/native'
@@ -6,6 +6,8 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
+import { Image } from 'expo-image'
+
 
 
 WebBrowser.maybeCompleteAuthSession();
@@ -121,7 +123,7 @@ const Login: React.FC<Props> = ({ navigation }) => {
             <Text style={{color:'white', fontSize:20, fontWeight:'bold'}}>Masuk</Text>
         </View>
       <View style={{ marginHorizontal: 10, marginTop: 10}}>
-      <Text style={{fontWeight:"500", color:'white'}}>Email</Text>
+      <Text style={{fontWeight:"500", color:'white'}}>Email / No. HP</Text>
       <TextInput
       value={txtUsername}
       onChangeText={setTxtUsername}

@@ -4,8 +4,10 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import {Dimensions} from 'react-native';
-import FastImage from 'react-native-fast-image'
-// import { Image } from 'expo-image'
+//import FastImage from 'react-native-fast-image'
+import { Image } from 'expo-image'
+
+const blurhash = '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 
 
@@ -52,21 +54,20 @@ const HomeCategory = ({categories, loadingCategory}: Props) => {
           {loadingCategory ? (<View style={{backgroundColor:"#EAEAEA", width:50, height:10, marginTop:4}}/>):(
             <View>
             {/* <Image source={{ uri: `https://ellafroze.com/api/uploaded/category/${item.ImagePath}`}} style={{width:70, height:50}} resizeMode="contain"/> */}
-            <FastImage
+            {/* <FastImage
                 style={{ width: 70, height: 50 }}
                 source={{
                     uri: `https://ellafroze.com/api/uploaded/category/${item.ImagePath}`,
                     priority: FastImage.priority.normal,
                 }}
                 resizeMode={FastImage.resizeMode.contain}
-            />
-            {/* <Image
+            /> */}
+            <Image
               style={{width:70, height:50}}
               source={{ uri: `https://ellafroze.com/api/uploaded/category/${item.ImagePath}`}}
-              contentFit="cover"
-              transition={1000}
-            /> */}
-            <Text style={{fontSize:10, marginTop:4}}>{item.Name}</Text>
+              placeholder={blurhash} transition={1000} contentFit="cover"
+            />
+            <Text style={{fontSize:10, marginTop:4, textAlign: 'center'}}>{item.Name}</Text>
            </View>
           )}
         </TouchableOpacity>

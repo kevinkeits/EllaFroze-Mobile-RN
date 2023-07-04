@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView, Modal, FlatList } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Button, ScrollView, Modal, FlatList } from 'react-native';
 import { BCALogo, DetailProduct1, GopayLogo } from '../../assets';
 import { CartIcon, LocationIcon, MessageIcon } from '../../assets/icons';
 import Drawer  from 'react-native-modal';
@@ -7,6 +7,10 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-elements/dist/icons/Icon';
+import { Image } from 'expo-image'
+
+const blurhash = '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
 
 
 
@@ -503,7 +507,7 @@ const doCheckout = async () => {
     <View style={{flexDirection:"row", gap:2, justifyContent:"center", alignItems:"center"}}>
         <View style={{backgroundColor:"white", padding:4}}>
               {loading ? (<View style={{backgroundColor:"#EAEAEA", width:100, height:120}}/>) : (
-               <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:100, height:120}} />
+               <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:100, height:120}} placeholder={blurhash} transition={1000} contentFit="cover" />
               )}
         </View>
     <View style={{backgroundColor:"white", borderRadius:6, width:"60%", padding:6,  marginTop:8}}>
@@ -782,7 +786,7 @@ const doCheckout = async () => {
           )}
         </View>
       <View style={{marginLeft:15}}>
-        <Image source={{ uri: `https://ellafroze.com/api/uploaded/${item.ImagePath}`}} style={{width:50, height:50}}/>
+        <Image source={{ uri: `https://ellafroze.com/api/uploaded/${item.ImagePath}`}} style={{width:50, height:50}} placeholder={blurhash} transition={1000} contentFit="cover"/>
       </View>
         <Text style={{fontSize:14, marginLeft:8, fontWeight:"bold"}}>{item.ID.split("|")[1]}</Text>
       </View>

@@ -1,10 +1,12 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { StackActions, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParams } from '../../../App';
 import { Logo } from '../../assets';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Image } from 'expo-image'
+
 
 
 

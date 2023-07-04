@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Button, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Button, ScrollView, FlatList } from 'react-native';
 import { DetailProduct1 } from '../../assets';
 import { CartIcon, LocationIcon, MessageIcon } from '../../assets/icons';
 import CarouselImage from './components/CarouselImage/CarouselImage';

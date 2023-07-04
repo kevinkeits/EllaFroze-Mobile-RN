@@ -22,8 +22,11 @@ interface Article {
 }
 
 
+interface Props {
+  limitdata: boolean
+}
 
-const HomeArticle = () => {
+const HomeArticle = ({limitdata = false}:Props) => {
   const navigation = useNavigation()
   const [activeTab, setActiveTab] = useState(0);
   const [Recipe, setRecipe] = useState<Article[]>([]);
@@ -64,7 +67,7 @@ useEffect(() => {
       iconName:'menu-book',
       label: 'Resep',
       content: (
-       <ArticleCard data={Recipe.slice(0, 5)} loading={loading}/>
+       <ArticleCard data={limitdata ? Recipe.slice(0, 3) : Recipe} loading={loading}/>
       ),
     },
     {
@@ -72,7 +75,7 @@ useEffect(() => {
       iconName:'article',
       label: 'Artikel',
       content: (
-        <ArticleCard data={Article.slice(0, 5)} loading={loading}/>
+        <ArticleCard data={limitdata ? Article.slice(0, 3) : Article} loading={loading}/>
       ),
     },
   ];

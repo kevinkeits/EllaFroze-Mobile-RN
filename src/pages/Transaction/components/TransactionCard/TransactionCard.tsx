@@ -1,7 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, Linking } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Linking } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 import * as Clipboard from 'expo-clipboard';
+import { Image } from 'expo-image'
+
 
 
 interface UnpaidTransaction {

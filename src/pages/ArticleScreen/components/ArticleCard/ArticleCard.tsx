@@ -2,8 +2,11 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 import * as WebBrowser from 'expo-web-browser';
-import FastImage from 'react-native-fast-image'
-// import { Image } from 'expo-image'
+//import FastImage from 'react-native-fast-image'
+ import { Image } from 'expo-image'
+
+ const blurhash = '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
 
 
 
@@ -55,15 +58,15 @@ const ArticleCard = ({data, loading}:Props) => {
     <View style={{marginVertical:10, alignItems:"center", width:"40%"}}>
     {loading ? (<View style={{backgroundColor:"#EAEAEA", width:85, height:55}}/>) : (
  <View style={{ width:130, height:80}}>
- {/* <Image source={{ uri: `https://ellafroze.com/api/uploaded/article/${item.ImageUrl}`}} style={{width:130, height:80}} resizeMode="contain"/> */}
- <FastImage
+ <Image source={{ uri: `https://ellafroze.com/api/uploaded/article/${item.ImageUrl}`}} style={{width:130, height:80}} placeholder={blurhash} transition={1000} contentFit="cover"/>
+ {/* <FastImage
                 style={{ width: 130, height: 80 }}
                 source={{
                     uri: `https://ellafroze.com/api/uploaded/article/${item.ImageUrl}`,
                     priority: FastImage.priority.normal,
                 }}
                 resizeMode={FastImage.resizeMode.contain}
-            />
+            /> */}
  </View>           
   )}
      

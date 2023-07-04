@@ -72,7 +72,7 @@ export default function App() {
       <View style={styles.container}>
         <ActivityIndicator size="large" color="#0000ff" />
         <Text style={styles.text}>Loading...</Text>
-        <StatusBar backgroundColor='#FA0000' style='light' translucent={false} />
+        <StatusBar backgroundColor='#FA0000' style='light' translucent={true} />
       </View>
     );
   };
@@ -80,7 +80,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Router/>
-      <StatusBar backgroundColor='#FA0000' style='light' translucent={false} />
+      <StatusBar backgroundColor='#FA0000' style='light' translucent={true} />
     </NavigationContainer>
   );
 }
