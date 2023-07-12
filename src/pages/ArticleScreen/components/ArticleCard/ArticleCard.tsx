@@ -58,7 +58,7 @@ const ArticleCard = ({data, loading}:Props) => {
     <View style={{marginVertical:10, alignItems:"center", width:"40%"}}>
     {loading ? (<View style={{backgroundColor:"#EAEAEA", width:85, height:55}}/>) : (
  <View style={{ width:130, height:80}}>
- <Image source={{ uri: `https://ellafroze.com/api/uploaded/article/${item.ImageUrl}`}} style={{width:130, height:80}} placeholder={blurhash} transition={1000} contentFit="cover"/>
+ <Image source={{ uri: `https://ellafroze.com/api/uploaded/article/${item.ImageUrl}`}} style={{width:130, height:80}} contentFit="cover"/>
  {/* <FastImage
                 style={{ width: 130, height: 80 }}
                 source={{

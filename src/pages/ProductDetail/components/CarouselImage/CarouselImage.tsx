@@ -84,7 +84,7 @@ useEffect(() => {
       >
         {image.map((item) => (
           <View key={item.ID} style={[styles.slide]} >
-            <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:370, height:370, alignSelf:"center"}} placeholder={blurhash} transition={1000} contentFit="cover"  />
+            <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:370, height:370, alignSelf:"center"}} contentFit="cover"  />
             {/* <FastImage
                 style={{ width: 350, height: 370, alignSelf:"center" }}
                 source={{

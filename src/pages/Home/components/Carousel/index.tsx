@@ -6,6 +6,8 @@ import { Button } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 // import FastImage from 'react-native-fast-image'
 import { Image } from 'expo-image'
+import * as WebBrowser from 'expo-web-browser';
+
 
 const blurhash = '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
@@ -62,6 +64,11 @@ const Carousel = () => {
     const tokenData = await AsyncStorage.getItem('tokenID')
     fetchData(tokenData == null ? "" : tokenData);
     setTokenFetched(true);
+  };
+
+  const handleClick = async (searchText: string, url: string) => {
+    if ((url != null && url != '') && (searchText == null || searchText == '')) await WebBrowser.openBrowserAsync(url);
+    if ((searchText != null && searchText != '') && (url == null || url == '')) navigation.navigate('Search', { searchText });
   };
 
 useEffect(() => {
@@ -127,17 +134,19 @@ const timerSlide = setTimeout(() => {
 
       >
         {banners.map((banner) => (
-          <View key={banner.ID} style={[styles.slide]} >
-            <Image source={{ uri: `https://ellafroze.com/api/uploaded/banner/${banner.ImagePath}`}} style={{width:390, height:200}} placeholder={blurhash} transition={1000} contentFit="cover" />
-            {/* <FastImage
-                style={{ width: 390, height: 200 }}
-                source={{
-                    uri: `https://ellafroze.com/api/uploaded/banner/${banner.ImagePath}`,
-                    priority: FastImage.priority.normal,
-                }}
-                // resizeMode={FastImage.resizeMode.contain}
-            /> */}
-          </View>
+          <TouchableOpacity onPress={() => handleClick(banner.Keyword, banner.URL)}>
+            <View key={banner.ID} style={[styles.slide]} >
+              <Image source={{ uri: `https://ellafroze.com/api/uploaded/banner/${banner.ImagePath}`}} style={{width:390, height:200}} contentFit="cover" />
+              {/* <FastImage
+                  style={{ width: 390, height: 200 }}
+                  source={{
+                      uri: `https://ellafroze.com/api/uploaded/banner/${banner.ImagePath}`,
+                      priority: FastImage.priority.normal,
+                  }}
+                  // resizeMode={FastImage.resizeMode.contain}
+              /> */}
+            </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
       <View style={styles.dotsContainer}>

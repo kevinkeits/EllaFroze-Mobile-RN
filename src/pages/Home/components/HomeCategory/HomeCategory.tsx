@@ -65,7 +65,7 @@ const HomeCategory = ({categories, loadingCategory}: Props) => {
             <Image
               style={{width:70, height:50}}
               source={{ uri: `https://ellafroze.com/api/uploaded/category/${item.ImagePath}`}}
-              placeholder={blurhash} transition={1000} contentFit="cover"
+              contentFit="cover"
             />
             <Text style={{fontSize:10, marginTop:4, textAlign: 'center'}}>{item.Name}</Text>
            </View>

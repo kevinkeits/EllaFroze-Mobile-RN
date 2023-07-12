@@ -169,7 +169,7 @@ const HomeCharts = ({item, loadingSave, loading, onConfirm}:cardProps) => {
           )}
           <View style={{alignItems:"center"}}>
             {loading ? (<View style={{backgroundColor:"#EAEAEA", width:120, height:155}}/>) : (
-              <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:150, height:155}} placeholder={blurhash} transition={1000} contentFit="cover"  />
+              <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:150, height:155}} contentFit="cover"  />
             //   <FastImage
             //     style={{ width: 150, height: 155 }}
             //     source={{

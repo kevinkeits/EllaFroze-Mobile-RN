@@ -507,7 +507,7 @@ const doCheckout = async () => {
     <View style={{flexDirection:"row", gap:2, justifyContent:"center", alignItems:"center"}}>
         <View style={{backgroundColor:"white", padding:4}}>
               {loading ? (<View style={{backgroundColor:"#EAEAEA", width:100, height:120}}/>) : (
-               <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:100, height:120}} placeholder={blurhash} transition={1000} contentFit="cover" />
+               <Image source={{ uri: `https://ellafroze.com/api/uploaded/product/${item.ImagePath}`}} style={{width:100, height:120}} contentFit="cover" />
               )}
         </View>
     <View style={{backgroundColor:"white", borderRadius:6, width:"60%", padding:6,  marginTop:8}}>
