@@ -79,6 +79,7 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
 
     const navigation = useNavigation();
     const [detail, setDetail] = useState<TransactionDetail>();
+    const [total, setTotal] = useState(0);
     const [subtotal, setSubtotal] = useState(0);
     const [deliveryFee, setDeliveryFee] = useState(0);
     const [subdiscount, setSubdiscount] = useState(0);
@@ -89,26 +90,7 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
 
 
 
-    const total = (parseInt((detail?.orderData[0]?.SubTotal ?? 0).toString()) + parseInt((detail?.orderData[0]?.DeliveryFee ?? 0).toString()) - parseInt((detail?.orderData[0]?.SubDiscount ?? 0).toString()));
-
-    const formattedTotal = new Intl.NumberFormat('id-ID', {
-      // style: 'currency',
-      currency: 'IDR'
-    }).format(total);
-    const formattedSubtotal = new Intl.NumberFormat('id-ID', {
-      // style: 'currency',
-      currency: 'IDR'
-    }).format(detail?.orderData[0]?.SubTotal ?? 0);
-
-    const formattedDeliveryFee = new Intl.NumberFormat('id-ID', {
-      // style: 'currency',
-      currency: 'IDR'
-    }).format(detail?.orderData[0]?.DeliveryFee ?? 0);
-
-    const formattedSubDiscount = new Intl.NumberFormat('id-ID', {
-      // style: 'currency',
-      currency: 'IDR'
-    }).format(detail?.orderData[0]?.SubDiscount ?? 0);
+    
 
   
 
@@ -125,7 +107,46 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
     const fetchDataDetail = async (token: string) => {
       const url = `https://ellafroze.com/api/external/getTransactionDetail?_cb=onCompleteFetchTransactionDetail&ID=${itemId}&_p=transactionDetailOrderList&_s=${token}`;
       const response = await axios.get(url);
-      setDetail(response.data.data);
+      const resData = response.data.data;
+      setDetail(resData);
+
+      let tempTotal = 0;
+      let tempSubTotal = 0;
+      let tempDeliveryFee = 0;
+      let tempDiscount = 0;
+      for (let index = 0; index < resData.orderData.length; index++) {
+        tempSubTotal += parseInt(resData.orderData[index].SubTotal);
+        tempDiscount += parseInt(resData.orderData[index].SubDiscount);
+      }
+      tempDeliveryFee = parseInt(resData.orderData[0].DeliveryFee);
+      tempTotal = (tempSubTotal + tempDeliveryFee) - tempDiscount;
+
+      setTotal(tempTotal);
+      setSubtotal(tempSubTotal);
+      setDeliveryFee(tempDeliveryFee);
+      setSubdiscount(tempDiscount);
+
+      //const total = (parseInt((detail?.orderData[0]?.SubTotal ?? 0).toString()) + parseInt((detail?.orderData[0]?.DeliveryFee ?? 0).toString()) - parseInt((detail?.orderData[0]?.SubDiscount ?? 0).toString()));
+
+    // const formattedTotal = new Intl.NumberFormat('id-ID', {
+    //   // style: 'currency',
+    //   currency: 'IDR'
+    // }).format(total);
+    // const formattedSubtotal = new Intl.NumberFormat('id-ID', {
+    //   // style: 'currency',
+    //   currency: 'IDR'
+    // }).format(detail?.orderData[0]?.SubTotal ?? 0);
+
+    // const formattedDeliveryFee = new Intl.NumberFormat('id-ID', {
+    //   // style: 'currency',
+    //   currency: 'IDR'
+    // }).format(detail?.orderData[0]?.DeliveryFee ?? 0);
+
+    // const formattedSubDiscount = new Intl.NumberFormat('id-ID', {
+    //   // style: 'currency',
+    //   currency: 'IDR'
+    // }).format(detail?.orderData[0]?.SubDiscount ?? 0);
+
       setLoading(false)
     }
 
@@ -335,22 +356,22 @@ const TransactionDetail = ({ route }: DetailScreenProps) => {
                 <View>
                <View style={{flexDirection:"row", justifyContent:"space-between", marginBottom:20}}>
                 <Text>SubTotal</Text>
-                <Text>Rp. {formattedSubtotal}</Text>
+                <Text>Rp.{new Intl.NumberFormat('id-ID', { currency: 'IDR'}).format(subtotal)}</Text>
                </View>
                <View style={{flexDirection:"row", justifyContent:"space-between", marginBottom:20}}>
                <Text>Ongkos Kirim</Text>
-               <Text>Rp. {formattedDeliveryFee} </Text>
+               <Text>Rp.{new Intl.NumberFormat('id-ID', { currency: 'IDR'}).format(deliveryFee)} </Text>
               </View>
               <View style={{flexDirection:"row", justifyContent:"space-between", marginBottom:20}}>
                <Text>Diskon total</Text>
-               <Text>- Rp. {formattedSubDiscount}</Text>
+               <Text>- Rp.{new Intl.NumberFormat('id-ID', { currency: 'IDR'}).format(subdiscount)}</Text>
               </View>
              
               </View>
                <View style={{flexDirection:"row", justifyContent:"space-between", marginBottom:20}}>
                <Text style={{fontWeight:"bold"}}>Total</Text>
                {/* <Text>{(order.SubTotal + order.DeliveryFee) - order.SubDiscount}</Text> */}
-               <Text>Rp. {formattedTotal}</Text>
+               <Text>Rp. {new Intl.NumberFormat('id-ID', { currency: 'IDR'}).format(total)}</Text>
               </View>
                 </View>
           </View> 
